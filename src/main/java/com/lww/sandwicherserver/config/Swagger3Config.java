@@ -17,11 +17,6 @@ public class Swagger3Config {
 
     @Bean
     public Docket docket() {
-        return new Docket(DocumentationType.OAS_30).apiInfo(
-                new ApiInfoBuilder()
-                        .contact(new Contact("lww", "", "1344382941@qq.com"))
-                        .title("Swagger3测试项目")
-                        .build()
-        );
+        return new Docket(DocumentationType.OAS_30).apiInfo(new ApiInfoBuilder().contact(new Contact("lww", "", "1344382941@qq.com")).title("Swagger3测试项目").build());
     }
 }
