@@ -15,9 +15,7 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 @EnableKnife4j
 @MapperScan("com.lww.sandwich.mapper")
 public class SandwichServerApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(SandwichServerApplication.class, args);
     }
-
 }

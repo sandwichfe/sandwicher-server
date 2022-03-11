@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 /**
  * 例子 服务实现类
  * @author lww
- * @since 2022-03-11 16:04:27
+ * @since 2022-03-11 16:18:29
  */
 @Service
 public class SimpleServiceImpl extends ServiceImpl<SimpleMapper, Simple> implements SimpleService {
