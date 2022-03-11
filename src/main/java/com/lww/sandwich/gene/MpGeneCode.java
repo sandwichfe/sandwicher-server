@@ -2,6 +2,7 @@ package com.lww.sandwich.gene;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
+import com.baomidou.mybatisplus.generator.config.TemplateType;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
 
@@ -13,27 +14,66 @@ import java.util.Collections;
  * @date 2022/3/10 13:30
  */
 public class MpGeneCode {
+
+    private static String url = "jdbc:mysql://localhost:3306/test";
+    private static String username = "root";
+    private static String password = "123456";
+
+
+    /**
+     * 输出模板
+     */
+    private static String XML_TEMPLATE = "templates/mapper.xml.ftl";
+    private static String MAPPER_TEMPLATE = "templates/mapper.java.ftl";
+    private static String SERVICE_TEMPLATE = "templates/service.java.ftl";
+    private static String CONTROLLER_TEMPLATE = "templates/controller.java.ftl";
+
+
     public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3306/test";
-        String username = "root";
-        String password = "123456";
         String baseOutPutDir = "F://sandwicher//sandwich-server//src//main//java//";
-        FastAutoGenerator.create(url, username, password).globalConfig(builder -> {
+        FastAutoGenerator.create(url, username, password)
+                // 全局配置
+                .globalConfig(builder -> {
                     builder.author("lww") // 设置作者
                             .enableSwagger() // 开启 swagger 模式
-                            .fileOverride() // 覆盖已生成文件
+                            .commentDate("yyyy-MM-dd HH:mm:ss").fileOverride() // 覆盖已生成文件
+                            .disableOpenDir() // 生成完不弹出对应目录
                             .outputDir(baseOutPutDir); // 指定输出目录
-                }).packageConfig(builder -> {
-                    builder.parent("com.lww.sandwich") // 设置父包名
-                            .moduleName("tt")// 设置父包模块名
-                            .pathInfo(Collections.singletonMap(OutputFile.xml,
-                                    "F://sandwicher//sandwich-server//src//main//resources//mapper//")); // 设置mapperXml生成路径
-                }).strategyConfig(builder -> {
-                    builder.addInclude("t_simple") // 设置需要生成的表名
-                            .addTablePrefix("t_", "c_"); // 设置过滤表前缀
                 })
-                .templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
-                .execute();
+                // 包配置相关
+                .packageConfig(builder -> {
+                    builder.parent("com.lww") // 设置父包名
+                            .moduleName("sandwich")// 设置父包模块名
+                            .pathInfo(Collections.singletonMap(OutputFile.xml, "F://sandwicher//sandwich-server//src//main//resources//mapper//")); // 设置mapperXml生成路径
+                })
+                // 策略配置
+                .strategyConfig(builder -> {
+                    builder.addInclude("t_simple") // 设置需要生成的表名
+                            .addTablePrefix("t_", "c_") // 设置过滤表前缀
+                            .serviceBuilder().formatServiceFileName("%sService") //service文件命名
+                            .formatServiceImplFileName("%sServiceImpl").entityBuilder()     //实体类相关 builder
+                            .enableLombok();     //开启lombok
+                })
+                //自定义模板
+                .templateConfig(builder -> {
+                            builder
+                            //.disable(TemplateType.ENTITY)   // 
+                            .controller("/templates/controller.java")    //
+                            .service("/templates/service.java")          //
+                            .serviceImpl("/templates/serviceImpl.java")  //
+                            .entity("/templates/entity.java")            //
+                            .mapper("/templates/mapper.java")            //
+                            .xml("/templates/mapper.xml")                //
+                            .build();
+                })
+                // 使用Freemarker引擎模板，默认的是Velocity引擎模板
+                .templateEngine(new FreemarkerTemplateEngine())
+                // 其他注入设置
+                .injectionConfig(builder -> {
+                    builder.beforeOutputFile((tableInfo, objectMap) -> {
+                        System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
+                    }).build();
+                }).execute();
     }
 
 }
