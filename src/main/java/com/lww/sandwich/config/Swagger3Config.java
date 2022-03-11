@@ -1,4 +1,4 @@
-package com.lww.sandwicherserver.config;
+package com.lww.sandwich.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
