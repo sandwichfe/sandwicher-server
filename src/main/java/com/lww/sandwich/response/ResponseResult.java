@@ -1,5 +1,8 @@
 package com.lww.sandwich.response;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * @author lww
  * @description 返回结果实体
@@ -12,6 +15,8 @@ public class ResponseResult<T> {
     private String msg;
 
     private T data;
+
+    private String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
     public ResponseResult<T> setCode(ResponseCode retCode) {
         this.code = retCode.code;
@@ -45,6 +50,9 @@ public class ResponseResult<T> {
         return this;
     }
 
+    public String getTime() {
+        return time;
+    }
 
 
 }

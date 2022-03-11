@@ -5,7 +5,7 @@ package com.lww.sandwich.response;
  * @description 返回结果工具类
  * @date 2022/3/11 16:33
  */
-public class ResResultUtil {
+public class ResultUtil {
 
     private final static String SUCCESS = "success";
 
