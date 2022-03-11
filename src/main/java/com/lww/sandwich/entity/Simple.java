@@ -8,17 +8,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <p>
- * 
- * </p>
- *
- * @authorgrhrtrthhrthrhrthr lww
- * @since 2022-03-11 13:13:35
+ * 例子
+ * @author lww
+ * @since 2022-03-11 16:04:27
  */
 @Getter
 @Setter
 @TableName("t_simple")
-@ApiModel(value = "Simple对象", description = "")
+@ApiModel(value = "Simple对象", description = "例子")
 public class Simple implements Serializable {
 
     private static final long serialVersionUID = 1L;

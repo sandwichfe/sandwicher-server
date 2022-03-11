@@ -14,20 +14,9 @@ import java.util.Collections;
  * @date 2022/3/10 13:30
  */
 public class MpGeneCode {
-
     private static String url = "jdbc:mysql://localhost:3306/test";
     private static String username = "root";
     private static String password = "123456";
-
-
-    /**
-     * 输出模板
-     */
-    private static String XML_TEMPLATE = "templates/mapper.xml.ftl";
-    private static String MAPPER_TEMPLATE = "templates/mapper.java.ftl";
-    private static String SERVICE_TEMPLATE = "templates/service.java.ftl";
-    private static String CONTROLLER_TEMPLATE = "templates/controller.java.ftl";
-
 
     public static void main(String[] args) {
         String baseOutPutDir = "F://sandwicher//sandwich-server//src//main//java//";
@@ -36,7 +25,8 @@ public class MpGeneCode {
                 .globalConfig(builder -> {
                     builder.author("lww") // 设置作者
                             .enableSwagger() // 开启 swagger 模式
-                            .commentDate("yyyy-MM-dd HH:mm:ss").fileOverride() // 覆盖已生成文件
+                            .commentDate("yyyy-MM-dd HH:mm:ss")
+                            //.fileOverride() // 覆盖已生成文件
                             .disableOpenDir() // 生成完不弹出对应目录
                             .outputDir(baseOutPutDir); // 指定输出目录
                 })
@@ -50,15 +40,22 @@ public class MpGeneCode {
                 .strategyConfig(builder -> {
                     builder.addInclude("t_simple") // 设置需要生成的表名
                             .addTablePrefix("t_", "c_") // 设置过滤表前缀
-                            .serviceBuilder().formatServiceFileName("%sService") //service文件命名
-                            .formatServiceImplFileName("%sServiceImpl").entityBuilder()     //实体类相关 builder
+                            // controller
+                            .controllerBuilder()
+                            .enableRestStyle()   // rest风格
+                            // service
+                            .serviceBuilder()
+                            .formatServiceFileName("%sService") //service文件命名
+                            .formatServiceImplFileName("%sServiceImpl")
+                            // entity
+                            .entityBuilder()     //实体类相关 builder
                             .enableLombok();     //开启lombok
                 })
                 //自定义模板
                 .templateConfig(builder -> {
-                            builder
-                            //.disable(TemplateType.ENTITY)   // 
-                            .controller("/templates/controller.java")    //
+                    builder
+                            //.disable(TemplateType.ENTITY)   //  暂时没发现有啥用
+                            .controller("/templates/controller.java")    //  模板位置
                             .service("/templates/service.java")          //
                             .serviceImpl("/templates/serviceImpl.java")  //
                             .entity("/templates/entity.java")            //
@@ -71,7 +68,7 @@ public class MpGeneCode {
                 // 其他注入设置
                 .injectionConfig(builder -> {
                     builder.beforeOutputFile((tableInfo, objectMap) -> {
-                        System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
+                        //System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
                     }).build();
                 }).execute();
     }

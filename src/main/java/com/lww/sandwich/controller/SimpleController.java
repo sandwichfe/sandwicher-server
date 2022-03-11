@@ -1,17 +1,17 @@
 package com.lww.sandwich.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
- * <p>
- *  前端控制器27878277252727527527527
- * </p>
+ * 例子 前端控制器
  *
  * @author lww
- * @since 2022-03-11 13:21:55
+ * @since 2022-03-11 16:14:43
  */
-@Controller
+@Api(tags = "例子")
+@RestController
 @RequestMapping("/sandwich/simple")
 public class SimpleController {
 

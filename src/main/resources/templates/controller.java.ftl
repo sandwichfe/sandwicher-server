@@ -1,5 +1,6 @@
 package ${package.Controller};
 
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 <#if restControllerStyle>
 import org.springframework.web.bind.annotation.RestController;
@@ -11,13 +12,11 @@ import ${superControllerClassPackage};
 </#if>
 
 /**
- * <p>
- * ${table.comment!} 前端控制器27878277252727527527527
- * </p>
- *
+ * ${table.comment!} 前端控制器
  * @author ${author}
  * @since ${date}
  */
+@Api(tags = "${table.comment!}")
 <#if restControllerStyle>
 @RestController
 <#else>

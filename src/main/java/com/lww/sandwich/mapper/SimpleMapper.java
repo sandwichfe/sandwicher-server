@@ -4,12 +4,9 @@ import com.lww.sandwich.entity.Simple;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * <p>
- *  Mapper 接口
- * </p>
- *
+ * 例子 Mapper 接口
  * @author lww
- * @since 2022-03-11 13:13:35
+ * @since 2022-03-11 16:04:27
  */
 public interface SimpleMapper extends BaseMapper<Simple> {
 
