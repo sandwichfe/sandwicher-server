@@ -26,7 +26,7 @@ public class MpGeneCode {
                     builder.author("lww") // 设置作者
                             .enableSwagger() // 开启 swagger 模式
                             .commentDate("yyyy-MM-dd HH:mm:ss")
-                            //.fileOverride() // 覆盖已生成文件
+                             //.fileOverride() // 覆盖已生成文件
                             .disableOpenDir() // 生成完不弹出对应目录
                             .outputDir(baseOutPutDir); // 指定输出目录
                 })
