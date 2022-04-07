@@ -4,13 +4,16 @@ server:
 # 数据库配置
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://120.26.91.154:3306/sandwich
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://120.26.91.154:3306/sandwich
+    # p6spy 监控数据库sql及性能  生产环境不建议使用
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    url: jdbc:p6spy:mysql://120.26.91.154:3306/sandwich
     username: lww
     password: 123456
   # spring security 配置
   security:
     user:
-      name: user
+      name: lww
       password: 123456
 
