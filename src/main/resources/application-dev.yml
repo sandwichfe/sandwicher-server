@@ -5,7 +5,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://120.26.91.154:3306/test
+    url: jdbc:mysql://120.26.91.154:3306/sandwich
     username: lww
     password: 123456
   # spring security 配置
