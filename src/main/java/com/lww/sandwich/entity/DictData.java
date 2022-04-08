@@ -1,4 +1,4 @@
-package com.lww.sandwich.entity;
+package com.lww.sandwich.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
