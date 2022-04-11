@@ -30,12 +30,12 @@
         </dependency>
 
         <!--spring security-->
-<!--
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
--->
+        <!--
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-security</artifactId>
+                </dependency>
+        -->
 
         <!--test-->
         <dependency>
@@ -73,7 +73,6 @@
         </dependency>
 
 
-
         <!--freemarker模板引擎 -->
         <dependency>
             <groupId>org.freemarker</groupId>
@@ -81,20 +80,25 @@
             <version>2.3.31</version>
         </dependency>
 
-        <!-- swagger-3 -->
+        <!--swagger-->
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>3.0.0</version>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.6.1</version>
         </dependency>
-
-        <!--swagger ui包-->
-        <!-- https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter -->
+        <!-- Swagger2 ui页面 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <!--配合Swagger2 形成一个knife4j页面 -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>
-            <version>3.0.3</version>
+            <version>2.0.4</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.projectlombok</groupId>
