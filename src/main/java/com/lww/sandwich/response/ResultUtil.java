@@ -21,11 +21,11 @@ public class ResultUtil {
         return new ResponseResult<T>().setCode(ResponseCode.FAILURE).setMsg(SUCCESS);
     }
 
-    public static <T> ResponseResult<T> response(int code, String msg) {
+    public static <T> ResponseResult<T> response(ResponseCode code, String msg) {
         return new ResponseResult<T>().setCode(code).setMsg(msg);
     }
 
-    public static <T> ResponseResult<T> response(int code, String msg, T data) {
+    public static <T> ResponseResult<T> response(ResponseCode code, String msg, T data) {
         return new ResponseResult<T>().setCode(code).setMsg(msg).setData(data);
     }
 }

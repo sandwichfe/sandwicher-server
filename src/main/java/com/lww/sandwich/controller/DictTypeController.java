@@ -1,11 +1,12 @@
 package com.lww.sandwich.controller;
 
-import com.lww.sandwich.entity.DictData;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.lww.sandwich.entity.DictType;
+import com.lww.sandwich.pojo.Vo.PageVo;
 import com.lww.sandwich.response.ResponseCode;
 import com.lww.sandwich.response.ResponseResult;
 import com.lww.sandwich.response.ResultUtil;
-import com.lww.sandwich.service.DictDataService;
 import com.lww.sandwich.service.DictTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,11 +38,19 @@ public class DictTypeController {
         return ResultUtil.success(data);
     }
 
+    @PostMapping("/listDictTypePage")
+    @ApiOperation("分页返回")
+    public ResponseResult<List<DictType>> listDictTypePage(PageVo pageVo) {
+
+        List<DictType> data = dictTypeService.getPage(pageVo);
+        return ResultUtil.success(data);
+    }
+
     @PostMapping("/addDictType")
     @ApiOperation("添加字典类型")
     public ResponseResult<Object> addDictType(DictType dictType) {
         boolean save = dictTypeService.save(dictType);
-        return ResultUtil.response(ResponseCode.SUCCESS.code, "添加成功!");
+        return ResultUtil.response(ResponseCode.SUCCESS, "添加成功!");
     }
 
 }
