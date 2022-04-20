@@ -2,7 +2,9 @@ package com.lww.sandwich.service;
 
 import com.lww.sandwich.entity.DictType;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lww.sandwich.pojo.Vo.PageDataVo;
 import com.lww.sandwich.pojo.Vo.PageVo;
+import com.lww.sandwich.response.ResponseResult;
 
 import java.util.List;
 
@@ -18,5 +20,5 @@ public interface DictTypeService extends IService<DictType> {
      * @param pageVo
      * @return
      */
-    List<DictType> getPage(PageVo pageVo);
+    ResponseResult<PageDataVo<List<DictType>>> getPage(PageVo pageVo);
 }

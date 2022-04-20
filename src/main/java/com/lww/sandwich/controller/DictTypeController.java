@@ -2,7 +2,11 @@ package com.lww.sandwich.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.lww.sandwich.entity.DictType;
+import com.lww.sandwich.pojo.Vo.PageDataVo;
 import com.lww.sandwich.pojo.Vo.PageVo;
 import com.lww.sandwich.response.ResponseCode;
 import com.lww.sandwich.response.ResponseResult;
@@ -32,7 +36,7 @@ public class DictTypeController {
     private DictTypeService dictTypeService;
 
     @GetMapping("/listAllDictType")
-    @ApiOperation("返回所有")
+    @ApiOperation(value = "返回所有")
     public ResponseResult<List<DictType>> listAllDictType() {
         List<DictType> data = dictTypeService.list();
         return ResultUtil.success(data);
@@ -40,10 +44,8 @@ public class DictTypeController {
 
     @PostMapping("/listDictTypePage")
     @ApiOperation("分页返回")
-    public ResponseResult<List<DictType>> listDictTypePage(PageVo pageVo) {
-
-        List<DictType> data = dictTypeService.getPage(pageVo);
-        return ResultUtil.success(data);
+    public ResponseResult<PageDataVo<List<DictType>>>  listDictTypePage(PageVo pageVo) {
+        return dictTypeService.getPage(pageVo);
     }
 
     @PostMapping("/addDictType")
