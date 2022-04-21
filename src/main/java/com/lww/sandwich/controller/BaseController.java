@@ -2,12 +2,15 @@ package com.lww.sandwich.controller;
 
 import com.lww.sandwich.response.ResponseResult;
 import com.lww.sandwich.response.ResultUtil;
+import com.lww.sandwich.utils.IpUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @description:
@@ -27,4 +30,12 @@ public class BaseController {
         System.out.println("enterBase...");
         return ResultUtil.success(ret);
     }
+
+    @GetMapping("/getRequestIp")
+    public ResponseResult getRequestIp(HttpServletRequest request){
+        String ipAddress = IpUtils.getIpAddress(request);
+        return ResultUtil.success(ipAddress);
+    }
+
+
 }
