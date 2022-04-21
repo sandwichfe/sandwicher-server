@@ -22,8 +22,8 @@ public class BaseController {
 
 
     @GetMapping("/getBase")
-    public ResponseResult getBase(String a1, String a2) {
-        String ret = "a1 is" + a1 + "- a2 is " + a2;
+    public ResponseResult getBase(String param1, String param2) {
+        String ret = "a1 is " + param1 + " - a2 is " + param2;
         System.out.println("enterBase...");
         return ResultUtil.success(ret);
     }
