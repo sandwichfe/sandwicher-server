@@ -14,7 +14,7 @@ import java.util.Collections;
  * @date 2022/3/10 13:30
  */
 public class MpGeneCode {
-    private static String url = "jdbc:mysql://120.26.91.154:3306/sandwich";
+    private static String url = "jdbc:mysql://localhost:3306/sandwich";
     private static String username = "lww";
     private static String password = "123456";
 
