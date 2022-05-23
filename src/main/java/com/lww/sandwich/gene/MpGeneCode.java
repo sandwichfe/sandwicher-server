@@ -14,9 +14,11 @@ import java.util.Collections;
  * @date 2022/3/10 13:30
  */
 public class MpGeneCode {
-    private static String url = "jdbc:mysql://localhost:3306/sandwich";
+    private static String url = "jdbc:mysql://120.26.91.154:3306/sandwich";
     private static String username = "lww";
     private static String password = "123456";
+
+    private static String tableNames = "t_view";
 
     public static void main(String[] args) {
         String baseOutPutDir = "F://sandwicher//sandwich-server//src//main//java//";
@@ -26,7 +28,7 @@ public class MpGeneCode {
                     builder.author("lww") // 设置作者
                             .enableSwagger() // 开启 swagger 模式
                             .commentDate("yyyy-MM-dd HH:mm:ss")
-//                             .fileOverride() // 覆盖已生成文件
+                            //                             .fileOverride() // 覆盖已生成文件
                             .disableOpenDir() // 生成完不弹出对应目录
                             .outputDir(baseOutPutDir); // 指定输出目录
                 })
@@ -38,14 +40,12 @@ public class MpGeneCode {
                 })
                 // 策略配置
                 .strategyConfig(builder -> {
-                    builder.addInclude("t_dict_data,t_dict_type") // 设置需要生成的表名
+                    builder.addInclude(tableNames) // 设置需要生成的表名
                             .addTablePrefix("t_", "c_") // 设置过滤表前缀
                             // controller
-                            .controllerBuilder()
-                            .enableRestStyle()   // rest风格
+                            .controllerBuilder().enableRestStyle()   // rest风格
                             // service
-                            .serviceBuilder()
-                            .formatServiceFileName("%sService") //service文件命名
+                            .serviceBuilder().formatServiceFileName("%sService") //service文件命名
                             .formatServiceImplFileName("%sServiceImpl")
                             // entity
                             .entityBuilder()     //实体类相关 builder
