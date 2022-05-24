@@ -19,6 +19,7 @@ import java.util.Date;
 @Service
 public class ViewServiceImpl extends ServiceImpl<ViewMapper, View> implements ViewService {
 
+
     @Override
     public void addViewRecord(String ipAddress) {
         String cityInfo = IpUtils.getCityInfo(ipAddress);
@@ -26,7 +27,7 @@ public class ViewServiceImpl extends ServiceImpl<ViewMapper, View> implements Vi
         view.setIp(ipAddress);
         view.setArea(cityInfo);
         view.setUserName("访客");
-        //view.setViewTime(new LocalDateTime());
-
+        view.setViewTime(LocalDateTime.now());
+        this.save(view);
     }
 }
