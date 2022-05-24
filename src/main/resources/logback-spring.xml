@@ -50,15 +50,10 @@
 
     <!-- Level: FATAL 0 ERROR 3 WARN 4 INFO 6 DEBUG 7 -->
     <root level="info">
-        <!--{dev.start}-->
-        <!--        <appender-ref ref="console" />-->
-        <!--{dev.end}-->
-        <!--{alpha.start}
+        <!--控制台打印-->
+        <appender-ref ref="console" />
+        <!--输出到文件-->
         <appender-ref ref="fileRolling_info" />
-        {alpha.end}-->
-        <!--        {release.start}-->
-        <appender-ref ref="fileRolling_info" />
-        <!--        {release.end}-->
         <appender-ref ref="fileRolling_error" />
     </root>
     <!-- Framework level setting -->
@@ -66,6 +61,7 @@
 
     <!-- Project level setting -->
     <!-- <logger name="your.package" level="DEBUG" /> -->
+     <logger name="com.lww" level="INFO" />
     <logger name="org.springframework" level="INFO"></logger>
     <logger name="org.mybatis" level="INFO"></logger>
 </configuration>

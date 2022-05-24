@@ -29,6 +29,7 @@ public class ViewServiceImpl extends ServiceImpl<ViewMapper, View> implements Vi
         view.setArea(cityInfo);
         view.setUserName("访客");
         view.setViewTime(LocalDateTime.now());
+        System.out.println("record： "+view);
         this.save(view);
     }
 }
