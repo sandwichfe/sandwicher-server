@@ -17,3 +17,7 @@ spring:
       name: lww
       password: 123456
 
+# springboot  logback 日志 输出
+  logging:
+    config:classpath:logback-spring.xml
+

@@ -22,6 +22,7 @@ public class ViewServiceImpl extends ServiceImpl<ViewMapper, View> implements Vi
 
     @Override
     public void addViewRecord(String ipAddress) {
+        ipAddress = "122.224.233.68";
         String cityInfo = IpUtils.getCityInfo(ipAddress);
         View view = new View();
         view.setIp(ipAddress);
