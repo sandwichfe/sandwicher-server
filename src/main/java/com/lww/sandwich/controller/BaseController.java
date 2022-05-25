@@ -39,7 +39,6 @@ public class BaseController {
 
     @GetMapping("/getRequestIp")
     public ResponseResult getRequestIp(HttpServletRequest request) {
-        log.info("ip:-----------------");
         String ipAddress = IpUtils.getIpAddress(request);
         viewService.addViewRecord(ipAddress);
         return ResultUtil.success(ipAddress);

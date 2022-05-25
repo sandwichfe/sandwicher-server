@@ -5,6 +5,7 @@ import com.lww.sandwich.mapper.ViewMapper;
 import com.lww.sandwich.service.ViewService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lww.sandwich.utils.IpUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.xml.crypto.Data;
@@ -16,6 +17,7 @@ import java.util.Date;
  * @author lww
  * @since 2022-04-26 09:38:22
  */
+@Slf4j
 @Service
 public class ViewServiceImpl extends ServiceImpl<ViewMapper, View> implements ViewService {
 
@@ -28,6 +30,7 @@ public class ViewServiceImpl extends ServiceImpl<ViewMapper, View> implements Vi
         view.setArea(cityInfo);
         view.setUserName("访客");
         view.setViewTime(LocalDateTime.now());
+        log.info("本次保存：" + view);
         this.save(view);
     }
 }

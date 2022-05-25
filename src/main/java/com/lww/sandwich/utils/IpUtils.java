@@ -78,9 +78,13 @@ public class IpUtils {
         // 新建一个文件，把流存放到这个文件，再从这个文件里面读取数据，就可以了
         File file = null;
         try {
-            // 这里createTempFile是为了不让file为空  不然下一步转换的时候会爆空指针异常
-            file = File.createTempFile(UUID.randomUUID().toString().replace("-", ""), UUID.randomUUID().toString().replace("-", ""));
+            // 这里赋值是为了不让file为空  不然下一步转换的时候会爆空指针异常
+            file = File.createTempFile("11111111111111111", "22222222222222222");
             FileUtils.inputStreamToFile(classPathResource.getInputStream(), file);
+
+            InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().
+                    getResourceAsStream("ip2region.db");
+            //file = new File(resourceAsStream.);
         } catch (Exception e) {
             log.error("resolve P2region.db failed,return empty address", e);
         }
@@ -113,11 +117,6 @@ public class IpUtils {
             return dataBlock.getRegion();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            // 删除临时文件
-            if (file.exists()) {
-                file.delete();
-            }
         }
         return null;
     }
