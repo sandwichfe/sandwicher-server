@@ -7,6 +7,7 @@ import com.lww.sandwich.utils.IpUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/base")
 @Api("base")
+@Slf4j
 public class BaseController {
 
     @Resource
@@ -37,6 +39,7 @@ public class BaseController {
 
     @GetMapping("/getRequestIp")
     public ResponseResult getRequestIp(HttpServletRequest request) {
+        log.info("ip:-----------------");
         String ipAddress = IpUtils.getIpAddress(request);
         viewService.addViewRecord(ipAddress);
         return ResultUtil.success(ipAddress);

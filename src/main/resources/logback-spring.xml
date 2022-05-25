@@ -12,7 +12,9 @@
         <encoder>
             <pattern>%d{MM-dd HH:mm:ss.SSS} %-5level [%logger{50}] - %msg%n
             </pattern>
+            <charset>UTF-8</charset>
         </encoder>
+        <target>System.out</target>
     </appender>
 
     <!-- Log file debug output 输出到文件  超过50M自动拆分为多个文件 -->
