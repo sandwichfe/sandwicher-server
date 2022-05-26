@@ -1,5 +1,8 @@
 package com.lww.sandwich.controller;
 
+import com.lww.sandwich.entity.View;
+import com.lww.sandwich.pojo.Vo.PageDataVo;
+import com.lww.sandwich.pojo.Vo.PageVo;
 import com.lww.sandwich.response.ResponseResult;
 import com.lww.sandwich.response.ResultUtil;
 import com.lww.sandwich.service.ViewService;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @description:
@@ -33,7 +37,6 @@ public class BaseController {
     @GetMapping("/getBase")
     public ResponseResult getBase(String param1, String param2) {
         String ret = "a1 is " + param1 + " - a2 is " + param2;
-        System.out.println("enterBase...");
         return ResultUtil.success(ret);
     }
 
@@ -42,6 +45,12 @@ public class BaseController {
         String ipAddress = IpUtils.getIpAddress(request);
         viewService.addViewRecord(ipAddress);
         return ResultUtil.success(ipAddress);
+    }
+
+    @GetMapping("/getViewList")
+    public ResponseResult<PageDataVo<List<View>>> getViewList(PageVo pageVo) {
+        PageDataVo<List<View>> pageDataVo = viewService.getViewList(pageVo);
+        return ResultUtil.success(pageDataVo);
     }
 
 

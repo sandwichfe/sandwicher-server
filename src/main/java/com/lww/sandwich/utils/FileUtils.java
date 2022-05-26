@@ -1,8 +1,6 @@
 package com.lww.sandwich.utils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * @description: 文件处理工具类
@@ -19,15 +17,33 @@ public class FileUtils {
      * @param is
      * @return File
      */
-    public static void inputStreamToFile(InputStream is,File file) throws Exception {
-        FileOutputStream fos = new FileOutputStream(file);
-        byte[] b = new byte[1024];
-        while ((is.read(b)) != -1) {
-            // 写入数据
-            fos.write(b);
+    public static void inputStreamToFile(InputStream is, File file) throws Exception {
+        FileReader fr = new FileReader(file);
+        InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+        StringBuffer sb = new StringBuffer();
+        while (isr.ready()) {
+            sb.append((char) isr.read());
         }
-        is.close();
-        fos.close();
-        // 保存数据
+        isr.close();
+        fr.close();
     }
+
+    /**
+     * @功能 读取流
+     * @param inStream
+     * @return 字节数组
+     * @throws Exception
+     */
+    public static byte[] readStream(InputStream inStream) throws Exception {
+        ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len = -1;
+        while ((len = inStream.read(buffer)) != -1) {
+            outSteam.write(buffer, 0, len);
+        }
+        outSteam.close();
+        inStream.close();
+        return outSteam.toByteArray();
+    }
+
 }
