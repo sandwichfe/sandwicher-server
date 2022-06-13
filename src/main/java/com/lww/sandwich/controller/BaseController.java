@@ -8,12 +8,12 @@ import com.lww.sandwich.response.ResultUtil;
 import com.lww.sandwich.service.ViewService;
 import com.lww.sandwich.utils.IpUtils;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +51,14 @@ public class BaseController {
     public ResponseResult<PageDataVo<List<View>>> getViewList(PageVo pageVo) {
         PageDataVo<List<View>> pageDataVo = viewService.getViewList(pageVo);
         return ResultUtil.success(pageDataVo);
+    }
+
+    @PostMapping("/uploadFile")
+    public ResponseResult uploadFile(MultipartFile file) {
+        if (file == null) {
+            return ResultUtil.error("文件为空！");
+        }
+        return ResultUtil.success(file.getOriginalFilename());
     }
 
 
