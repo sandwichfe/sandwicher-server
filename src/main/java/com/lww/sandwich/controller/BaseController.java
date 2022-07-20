@@ -9,6 +9,9 @@ import com.lww.sandwich.service.ViewService;
 import com.lww.sandwich.utils.IpUtils;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -61,5 +67,18 @@ public class BaseController {
         return ResultUtil.success(file.getOriginalFilename());
     }
 
+    @Test
+    public void test(){
+        List<View> views = new ArrayList<>();
+        views.add(new View());
+        System.out.println(CollectionUtils.isEmpty(views));
+
+        BigDecimal a = new BigDecimal("2.45");
+        double v = a.negate().doubleValue();
+        System.out.println(v);
+
+        //new Thread()
+
+    }
 
 }
