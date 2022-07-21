@@ -49,13 +49,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable();
 
         registry.and()
-                //.exceptionHandling()
-                //// 未登录时处理
-                //.authenticationEntryPoint(customizeAuthNoLoginEntryPoint)
-                //.accessDeniedHandler(accessNoPerissDeniedHandler)
-                //.and()
+                // EntryPoint屏蔽security自带的重定向login页面   异常处理(权限拒绝、登录失效等)
+                .exceptionHandling()
+                // 未登录时处理
+                .authenticationEntryPoint(customizeAuthNoLoginEntryPoint)
+                // 没有权限时处理
+                .accessDeniedHandler(accessNoPerissDeniedHandler)
+                .and()
                 //表单登录  登录方式
                 .formLogin()
+                .loginPage("/login.html")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/")
                 .permitAll()
                 // 登录成功处理类
                 .successHandler(authenticationSuccessHandler)
