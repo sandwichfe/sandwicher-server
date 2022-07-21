@@ -16,7 +16,6 @@ import java.util.Collection;
  */
 public class SecurityUserDetails extends User implements UserDetails {
 
-
     /**
      * 数据库User对象转换为UserDetails对象
      * @author lww
@@ -37,8 +36,15 @@ public class SecurityUserDetails extends User implements UserDetails {
         return AuthorityUtils.commaSeparatedStringToAuthorityList("admin");
     }
 
-    @Override
-    public String getUsername() {
+    /** 
+     * md 大坑  这里一直返回为null  结果导致还是所有的路径被拦截 可能这里的username是拿去校验的
+     * @author lww
+     * @since 2022/7/21 11:01
+     * @param
+     * @return
+     */
+    //@Override
+    public String getUsername11111() {
         return null;
     }
 

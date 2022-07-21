@@ -1,8 +1,12 @@
 package com.lww.sandwich.config.security.AuthenticationHandler;
 
 import com.alibaba.fastjson.JSON;
+import com.lww.sandwich.config.security.SecurityConstant;
 import com.lww.sandwich.response.ResponseCode;
 import com.lww.sandwich.response.ResultUtil;
+import com.lww.sandwich.utils.ResponseOutUtil;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
@@ -16,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,12 +43,16 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
             list.add(authority.getAuthority());
         }
         // 登录成功生成token
-        String token = UUID.randomUUID().toString().replace("-", "");
-        //  token 需要保存至服务器一份，实现方式：redis or jwt
+        String token = SecurityConstant.TOKEN_SPLIT + Jwts.builder()
+                //主题 放入用户名
+                .setSubject(username)
+                //自定义属性 放入用户拥有请求权限
+                .claim(SecurityConstant.AUTHORITIES, authorities)
+                //失效时间
+                .setExpiration(new Date(System.currentTimeMillis() + 7 * 60 * 1000))
+                //签名算法和密钥
+                .signWith(SignatureAlgorithm.HS512, SecurityConstant.JWT_SIGN_KEY).compact();
         // 响应
-        response.setCharacterEncoding("utf-8");
-        response.setContentType("application/json");
-        //输出结果
-        response.getWriter().write(JSON.toJSONString(ResultUtil.response(ResponseCode.SUCCESS,"登录成功！",token)));
+        ResponseOutUtil.out(response, ResultUtil.response(ResponseCode.SUCCESS, "登录成功",token));
     }
 }
