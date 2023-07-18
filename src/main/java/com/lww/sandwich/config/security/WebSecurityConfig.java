@@ -104,6 +104,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             // swagger-boostrap-ui
             "/doc.html",
-            "/druid/**"
+            "/druid/**",
+            "/formatConvert/**"
     };
 }
