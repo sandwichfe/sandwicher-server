@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 
 /**
  *
@@ -25,7 +23,7 @@ public class FormatConverterController
         String convertedYamlString = null;
         try {
             convertedYamlString = YamlPropertiesConverter.convertPropertiesToYaml(propStr);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return ResultUtil.success(convertedYamlString);
@@ -37,7 +35,7 @@ public class FormatConverterController
         String convertedPropertiesString = null;
         try {
             convertedPropertiesString = YamlPropertiesConverter.convertYamlToProperties(ymlStr);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return ResultUtil.success(convertedPropertiesString);

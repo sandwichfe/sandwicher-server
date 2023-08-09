@@ -81,7 +81,7 @@ public class YamlPropertiesConverter {
         //保存yml的行内容
         StringBuilder ymlLines = new StringBuilder();
         List<String> lines = new ArrayList<>();
-        lines.addAll(Arrays.asList(propertiesStr.split("\r\n")));
+        lines.addAll(Arrays.asList(propertiesStr.split(lineSplit)));
         //使用treemap排好序
         Map<String,String> sourceMap = new LinkedHashMap<>();
         Long commentLine = 0L;
@@ -139,13 +139,13 @@ public class YamlPropertiesConverter {
                     if (i==keys.length-1){
                         // 如果是注释或者空行
                         if (line.startsWith("comment-text")||line.startsWith("empty-text")){
-                            ymlLines.append(sourceMap.get(key)+"\n");
+                            ymlLines.append(sourceMap.get(key)+lineSplit);
                         }else{
-                            ymlLines.append(line+sourceMap.get(key)).append("\n");
+                            ymlLines.append(line+sourceMap.get(key)).append(lineSplit);
                         }
                         parent = "";
                     }else{
-                        ymlLines.append(line).append("\n");
+                        ymlLines.append(line).append(lineSplit);
                     }
                 }
             }
@@ -193,26 +193,26 @@ public class YamlPropertiesConverter {
             }
             if (node.getEmptyLine().equals(Boolean.TRUE)) {
                 System.out.println();
-                sb.append("\r\n");
+                sb.append(lineSplit);
                 continue;
             }
             // 判断是否有行级注释
             if (node.getHeadRemark().length() > 0) {
                 String s = "# " + node.getHeadRemark();
                 //System.out.println(s);
-                sb.append(s).append("\r\n");
+                sb.append(s).append(lineSplit);
                 continue;
             }
             // 判断是否有行末注释 (properties中注释不允许末尾注释，故而放在上面)
             if (node.getTailRemark().length() > 0) {
                 String s = "# " + node.getTailRemark();
                 //System.out.println(s);
-                sb.append(s).append("\r\n");
+                sb.append(s).append(lineSplit);
             }
             //
             String kv = node.getKey() + "=" + node.getValue();
             //System.out.println(kv);
-            sb.append(kv).append("\r\n");
+            sb.append(kv).append(lineSplit);
         }
         return sb.toString();
     }
