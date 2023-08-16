@@ -1,6 +1,8 @@
 package com.lww.sandwich.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.sandwich.entity.User;
+import com.lww.sandwich.entity.View;
 import org.springframework.stereotype.Service;
 
 /**
@@ -8,7 +10,7 @@ import org.springframework.stereotype.Service;
  * @author lww
  * @since 2022/7/20 14:58
  */
-public interface UserService {
+public interface UserService extends IService<User> {
     /** 
      * 根据用户名查询用户信息
      * @author lww

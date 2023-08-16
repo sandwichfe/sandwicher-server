@@ -30,7 +30,7 @@ public class SecurityUserDetails extends User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        //理想型返回 admin 权限，可自已处理这块
+        //理想型返回 admin 权限，可自己处理这块
         return AuthorityUtils.commaSeparatedStringToAuthorityList("admin");
     }
 

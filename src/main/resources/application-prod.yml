@@ -1,6 +1,6 @@
 #生产环境
 server:
-  port: 8089
+  port: 8080
 
 # 数据库配置
 spring:
@@ -36,4 +36,4 @@ spring:
 
   # springboot  logback 日志 输出
   logging:
-    config: classpath:logback-spring.xml
+    config: classpath:logback.xml

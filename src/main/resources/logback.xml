@@ -58,12 +58,14 @@
         <appender-ref ref="fileRolling_info" />
         <appender-ref ref="fileRolling_error" />
     </root>
-    <!-- Framework level setting -->
-    <include resource="config/logger-core.xml" />
-
     <!-- Project level setting -->
-    <!-- <logger name="your.package" level="DEBUG" /> -->
-     <logger name="com.lww" level="INFO" />
+    <logger name="com.lww" level="INFO" />
     <logger name="org.springframework" level="INFO"></logger>
     <logger name="org.mybatis" level="INFO"></logger>
+
+    <!-- 控制台看sql -->
+    <logger name="com.lww.sandwich.mapper" level="DEBUG" additivity="false" >
+        <appender-ref ref="console"/>
+    </logger>
+
 </configuration>

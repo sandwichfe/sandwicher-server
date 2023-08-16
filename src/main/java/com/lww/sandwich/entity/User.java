@@ -1,5 +1,6 @@
 package com.lww.sandwich.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,11 +14,20 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("t_user")
 public class User {
+
+    @ApiModelProperty("id")
+    private String id;
 
     @ApiModelProperty("用户名")
     private String username;
 
     @ApiModelProperty("密码")
     private String password;
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }
