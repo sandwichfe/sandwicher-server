@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.sandwich.pojo.Vo.PageDataVo;
 import com.lww.sandwich.pojo.Vo.PageVo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public interface ViewService extends IService<View> {
      * @param ipAddress
      * @return
      */
-    void addViewRecord(String ipAddress);
+    void addViewRecord(String ipAddress, HttpServletRequest request);
 
     /**
      * 访问列表

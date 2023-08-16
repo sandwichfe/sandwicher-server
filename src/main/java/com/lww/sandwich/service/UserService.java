@@ -3,6 +3,7 @@ package com.lww.sandwich.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.sandwich.entity.User;
 import com.lww.sandwich.entity.View;
+import com.lww.sandwich.response.ResponseResult;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,4 +20,11 @@ public interface UserService extends IService<User> {
      * @return
      */
     User getUserByUserName(String username);
+
+    /**
+     * 注册
+     * @author lww
+     * @since 2023/8/16 13:59
+     */
+    ResponseResult registerUser(User user);
 }

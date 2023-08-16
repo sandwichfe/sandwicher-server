@@ -105,6 +105,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // swagger-boostrap-ui
             "/doc.html",
             "/druid/**",
-            "/formatConvert/**"
+            "/formatConvert/**",
+            "/user/registerUser"
     };
 }

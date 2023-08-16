@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lww.sandwich.entity.User;
 import com.lww.sandwich.mapper.UserMapper;
+import com.lww.sandwich.response.ResponseResult;
+import com.lww.sandwich.response.ResultUtil;
 import com.lww.sandwich.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -37,5 +40,36 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         wrapper.eq("username",username);
         User user = userMapper.selectOne(wrapper);
         return user;
+    }
+
+    /**
+     * 注册
+     * @author lww
+     * @since 2023/8/16 13:59
+     * @param user
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseResult registerUser(User user) {
+        String username = user.getUsername();
+        String password = user.getPassword();
+        if (!StringUtils.hasText(username)){
+            return ResultUtil.error("用户名不能为空！");
+        }
+        if (!StringUtils.hasText(password)){
+            return ResultUtil.error("密码不能为空！");
+        }
+        // 此用户名是否已存在
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username",username);
+        boolean existsUserName = userMapper.exists(wrapper);
+        if (existsUserName){
+            return ResultUtil.error("用户名已存在！");
+        }
+        User addUser = new User();
+        addUser.setUsername(username);
+        addUser.setPassword(new BCryptPasswordEncoder().encode(password));
+        userMapper.insert(addUser);
+        return ResultUtil.success("注册成功！");
     }
 }
