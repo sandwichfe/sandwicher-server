@@ -37,5 +37,4 @@ build/
 #重要文件
 AppConstants.java
 AppConstantsBak.java
-application-prod.yml
-application-prod-bak.yml
+application-dev.yml
