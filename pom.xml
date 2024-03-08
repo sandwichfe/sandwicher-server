@@ -60,7 +60,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.1.21</version>
+            <version>1.1.24</version>
         </dependency>
 
         <!--MP 代码生成器-->
@@ -192,6 +192,7 @@
         <artifactId>commons-lang3</artifactId>
         <version>3.9</version>
         </dependency>
+
 
         <dependency>
             <groupId>com.alibaba</groupId>
