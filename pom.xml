@@ -206,6 +206,14 @@
             <version>5.4.0</version>
         </dependency>
 
+        <!--activiti7 工作流11-->
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-spring-boot-starter</artifactId>
+            <version>7.1.0.M2</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
