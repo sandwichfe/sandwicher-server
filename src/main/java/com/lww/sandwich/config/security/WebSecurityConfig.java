@@ -89,8 +89,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         //ignore
-        web.ignoring().antMatchers("/base/getRequestIp","/base/test", "/css", "/html")
-                .antMatchers(AUTH_WHITELIST);
+        web.ignoring().antMatchers("/base/getRequestIp","/base/test","/css", "/html")
+                .antMatchers(AUTH_WHITELIST)
+                .antMatchers(AUTH_TEST_LIST);
     }
 
     /**
@@ -104,8 +105,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             // swagger-boostrap-ui
             "/doc.html",
+            // druid
             "/druid/**",
-            "/formatConvert/**",
+            "/user/registerUser"
+    };
+
+
+    /**
+     * swagger ui忽略
+     */
+    private static final String[] AUTH_TEST_LIST = {
+            "/test/**",
             "/user/registerUser"
     };
 }
