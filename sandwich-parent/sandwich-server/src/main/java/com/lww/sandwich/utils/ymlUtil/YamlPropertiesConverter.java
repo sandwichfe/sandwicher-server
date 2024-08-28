@@ -94,7 +94,7 @@ public class YamlPropertiesConverter {
                 value = line;
                 sourceMap.put(key,value);
             }
-            else if (StringUtils.isEmpty(line)){
+            else if (!StringUtils.hasText(line)){
                 key = "empty-text-"+emptyLine++;
                 value = line;
                 sourceMap.put(key,value);
