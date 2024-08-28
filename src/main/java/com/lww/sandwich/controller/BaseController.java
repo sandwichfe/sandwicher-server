@@ -1,8 +1,8 @@
 package com.lww.sandwich.controller;
 
 import com.lww.sandwich.entity.View;
-import com.lww.sandwich.pojo.Vo.PageDataVo;
-import com.lww.sandwich.pojo.Vo.PageVo;
+import com.lww.sandwich.Vo.PageDataVo;
+import com.lww.sandwich.Vo.PageVo;
 import com.lww.sandwich.response.ResponseResult;
 import com.lww.sandwich.response.ResultUtil;
 import com.lww.sandwich.service.ViewService;

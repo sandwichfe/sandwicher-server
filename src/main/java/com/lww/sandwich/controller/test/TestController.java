@@ -1,4 +1,4 @@
-package com.lww.sandwich.controller;
+package com.lww.sandwich.controller.test;
 
 import com.lww.sandwich.entity.DictType;
 import com.lww.sandwich.response.ResponseResult;

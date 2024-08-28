@@ -1,4 +1,4 @@
-package com.lww.sandwich.controller;
+package com.lww.sandwich.controller.test;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

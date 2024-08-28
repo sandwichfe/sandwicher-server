@@ -1,0 +1,11 @@
+#启动模式
+spring:
+  profiles:
+    active: dev
+  #banner
+  banner:
+    location: classpath:/banner/banner.txt
+  # swagger 集成 高版本springboot   策略变化设置
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
