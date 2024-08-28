@@ -206,14 +206,6 @@
             <version>5.4.0</version>
         </dependency>
 
-        <!--activiti7 工作流11-->
-        <dependency>
-            <groupId>org.activiti</groupId>
-            <artifactId>activiti-spring-boot-starter</artifactId>
-            <version>7.1.0.M2</version>
-        </dependency>
-
-
     </dependencies>
 
     <build>
@@ -242,6 +234,14 @@
                         <nonFilteredFileExtension>xls</nonFilteredFileExtension>
                         <nonFilteredFileExtension>db</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>9</source>
+                    <target>9</target>
                 </configuration>
             </plugin>
         </plugins>

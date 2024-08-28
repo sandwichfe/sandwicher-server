@@ -112,7 +112,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     /**
-     * swagger ui忽略
+     * test忽略
      */
     private static final String[] AUTH_TEST_LIST = {
             "/test/**",
