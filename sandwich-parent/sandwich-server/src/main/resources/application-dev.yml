@@ -1,0 +1,9 @@
+#开发环境
+server:
+  port: 8080
+
+# springboot  logback 日志 输出
+  logging:
+    config: classpath:logback-spring.xml
+
+

@@ -32,9 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-/logs
+**/logs/
 
 #重要文件
-AppConstants.java
-AppConstantsBak.java
-application-dev.yml
