@@ -6,4 +6,17 @@ server:
   logging:
     config: classpath:logback-spring.xml
 
+spring:
+  redis:
+    host:
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-idle: 500
+        min-idle: 50
+        max-active: 2000
+        max-wait: 1000
+    timeout: 5000
+
 

@@ -108,12 +108,6 @@
             <version>2.6.3</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-
         <!-- fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -159,12 +153,6 @@
             <version>4.5.14</version>
         </dependency>
 
-        <!--redis-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-            <version>2.5.4</version>
-        </dependency>
 
         <!--spring-boot-test-->
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
@@ -201,6 +189,12 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.4.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.lww</groupId>
+            <artifactId>sandwich-starter-redis</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
     </dependencies>

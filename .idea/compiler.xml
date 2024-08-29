@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="sandwich-server" />
+        <module name="sandwich-starter-redis" />
         <module name="sandwich-common" />
       </profile>
     </annotationProcessing>
@@ -19,6 +20,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="sandwich-common" options="-parameters" />
       <module name="sandwich-server" options="-parameters" />
+      <module name="sandwich-starter-redis" options="-parameters" />
       <module name="tttw" options="-parameters" />
     </option>
   </component>
