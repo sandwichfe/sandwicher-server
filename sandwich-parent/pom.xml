@@ -25,7 +25,34 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <!-- 规范依赖版本作用    -->
+    <dependencyManagement>
+     <dependencies>
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter</artifactId>
+             <!-- 去掉springboot自带日志依赖 -->
+             <exclusions>
+                 <exclusion>
+                     <groupId>org.springframework.boot</groupId>
+                     <artifactId>spring-boot-starter-logging</artifactId>
+                 </exclusion>
+             </exclusions>
+         </dependency>
+     </dependencies>
+
+
+    </dependencyManagement>
+
+
     <dependencies>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-log4j2</artifactId>
+            </dependency>
+
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

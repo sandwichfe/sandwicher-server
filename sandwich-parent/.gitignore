@@ -1,8 +1,11 @@
 HELP.md
-sandwich-server/target/
+**/target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+
+
+**/logs
+
+*
 
 ### STS ###
 .apt_generated
@@ -18,6 +21,7 @@ sandwich-server/target/
 *.iws
 *.iml
 *.ipr
+.idea/inspectionProfiles/**
 
 ### NetBeans ###
 /nbproject/private/
@@ -32,6 +36,5 @@ build/
 ### VS Code ###
 .vscode/
 
-**/logs/
 
 #重要文件
