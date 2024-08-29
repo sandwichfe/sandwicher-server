@@ -1,20 +1,8 @@
 HELP.md
 **/target/
-!.mvn/wrapper/maven-wrapper.jar
 
 
 **/logs
-
-*
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
 
 ### IntelliJ IDEA ###
 .idea
@@ -22,19 +10,9 @@ HELP.md
 *.iml
 *.ipr
 .idea/inspectionProfiles/**
+!.mvn/wrapper/maven-wrapper.jar
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
-.vscode/
 
 
 #重要文件
