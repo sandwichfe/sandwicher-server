@@ -5,7 +5,7 @@
     <!--变量配置-->
     <Properties>
         <!-- 格式化输出：%date表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
-        <property name="LOG_PATTERN" value="%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+        <property name="LOG_PATTERN" value="%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
         <property name="LOG_PATTERN_COLOR" value="%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{%5p} %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n%xwEx"/>
         <!-- 存储路径 -->
         <property name="BASE_DIR" value="./sandwich-parent/sandwich-server/logs"/>
@@ -18,6 +18,7 @@
             <!--输出日志的格式-->
             <PatternLayout pattern="${LOG_PATTERN_COLOR}"/>
         </console>
+
         <!-- info级别日志文件输出 -->
         <RollingFile name="InfoAppender" fileName="${BASE_DIR}/info.log"
                      filePattern="${BASE_DIR}/$${date:yyyy-MM-dd}/info_%i.%d{yyyy-MM-dd-HH}.log" append="true">
@@ -37,26 +38,6 @@
                 <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
             <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件开始自动清理-->
-            <DefaultRolloverStrategy max="10">
-                <Delete basePath="${BASE_DIR}/$${date:yyyy-MM-dd}/" maxDepth="2">
-                    <IfFileName glob="*/*.log" />
-                    <!--7天-->
-                    <IfLastModified age="168H" />
-                </Delete>
-            </DefaultRolloverStrategy>
-        </RollingFile>
-
-        <!-- error级别日志文件输出 -->
-        <RollingFile name="ErrorAppender" fileName="${BASE_DIR}/error.log"
-                     filePattern="${BASE_DIR}/$${date:yyyy-MM-dd}/error_%i.%d{yyyy-MM-dd-HH}.log" append="true">
-            <Filters>
-                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
-            </Filters>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
-                <SizeBasedTriggeringPolicy size="100 MB"/>
-            </Policies>
             <DefaultRolloverStrategy max="10">
                 <Delete basePath="${BASE_DIR}/$${date:yyyy-MM-dd}/" maxDepth="2">
                     <IfFileName glob="*/*.log" />
@@ -86,12 +67,31 @@
             </DefaultRolloverStrategy>
         </RollingFile>
 
+        <!-- error级别日志文件输出 -->
+        <RollingFile name="ErrorAppender" fileName="${BASE_DIR}/error.log"
+                     filePattern="${BASE_DIR}/$${date:yyyy-MM-dd}/error_%i.%d{yyyy-MM-dd-HH}.log" append="true">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10">
+                <Delete basePath="${BASE_DIR}/$${date:yyyy-MM-dd}/" maxDepth="2">
+                    <IfFileName glob="*/*.log" />
+                    <!--7天-->
+                    <IfLastModified age="168H" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
 
         <!--异步appender-->
         <Async name="AsyncAppender" includeLocation="true">
             <AppenderRef ref="InfoAppender"/>
-            <AppenderRef ref="ErrorAppender"/>
             <AppenderRef ref="DebugAppender"/>
+            <AppenderRef ref="ErrorAppender"/>
         </Async>
 
     </appenders>

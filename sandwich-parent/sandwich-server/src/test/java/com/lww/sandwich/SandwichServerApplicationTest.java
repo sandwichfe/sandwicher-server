@@ -3,6 +3,8 @@ package com.lww.sandwich;
 import com.lww.sandwich.constant.AppConstants;
 import com.lww.sandwich.utils.RedisUtil;
 import com.lww.sandwich.utils.wxUtil.WxAppUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.jasypt.encryption.StringEncryptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +18,7 @@ import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Slf4j
 public class SandwichServerApplicationTest {
 
     @Resource
@@ -23,6 +26,9 @@ public class SandwichServerApplicationTest {
 
     @Resource
     private WxAppUtil wxAppUtil;
+
+    @Resource
+    private StringEncryptor stringEncryptor;
 
     @Test
     public void Test(){
@@ -46,5 +52,13 @@ public class SandwichServerApplicationTest {
         String telId = "5oP0dFBcEpixmI6tahxCiC1CKvlG2eWXIs0jDO6lu-Y";
         wxAppUtil.sendMsg(AppConstants.WX_USER_OPEN_ID, telId,data,"pages/home/home");
     }
+
+    @Test
+    public void testJayspy() {
+        String username = stringEncryptor.encrypt("test");
+        log.info("username 密文: " + username);
+    }
+
+
 
 }
