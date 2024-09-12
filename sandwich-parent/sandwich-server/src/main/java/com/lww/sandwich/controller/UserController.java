@@ -1,8 +1,7 @@
 package com.lww.sandwich.controller;
 
+import com.lww.response.ResponseResult;
 import com.lww.sandwich.entity.User;
-import com.lww.sandwich.response.ResponseResult;
-import com.lww.sandwich.response.ResultUtil;
 import com.lww.sandwich.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;

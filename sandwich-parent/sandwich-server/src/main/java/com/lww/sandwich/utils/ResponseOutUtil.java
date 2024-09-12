@@ -1,7 +1,7 @@
 package com.lww.sandwich.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.lww.sandwich.response.ResponseResult;
+import com.lww.response.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletOutputStream;

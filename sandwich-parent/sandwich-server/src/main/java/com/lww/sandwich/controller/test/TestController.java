@@ -1,8 +1,8 @@
 package com.lww.sandwich.controller.test;
 
 import com.lww.sandwich.entity.DictType;
-import com.lww.sandwich.response.ResponseResult;
-import com.lww.sandwich.response.ResultUtil;
+import com.lww.response.ResponseResult;
+import com.lww.response.ResultUtil;
 import com.lww.sandwich.service.DictTypeService;
 import com.lww.sandwich.utils.IpUtils;
 import io.swagger.annotations.Api;

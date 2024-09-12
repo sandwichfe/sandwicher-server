@@ -2,8 +2,8 @@ package com.lww.sandwich.config.security;
 
 import com.github.xiaoymin.knife4j.core.util.StrUtil;
 import com.lww.sandwich.entity.User;
-import com.lww.sandwich.response.ResponseCode;
-import com.lww.sandwich.response.ResultUtil;
+import com.lww.response.ResponseCode;
+import com.lww.response.ResultUtil;
 import com.lww.sandwich.utils.ResponseOutUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

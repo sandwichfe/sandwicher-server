@@ -1,7 +1,7 @@
 package com.lww.sandwich.controller;
 
-import com.lww.sandwich.response.ResponseResult;
-import com.lww.sandwich.response.ResultUtil;
+import com.lww.response.ResponseResult;
+import com.lww.response.ResultUtil;
 import com.lww.sandwich.utils.ymlUtil.YamlPropertiesConverter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

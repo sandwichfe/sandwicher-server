@@ -64,7 +64,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseResult handleException(Exception e) {
         log.error("异常信息：", e);
-        ResponseResult<Object> result = new ResponseResult<>();
+        ResponseResult result = new ResponseResult();
         result.setCode(HttpStatusCodes.INTERNAL_SERVER_ERROR);
         result.setMsg("服务器内部错误");
         return result;

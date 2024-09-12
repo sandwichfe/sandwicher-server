@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.Vo.PageDataVo;
 import com.lww.Vo.PageVo;
 import com.lww.sandwich.entity.DictType;
-import com.lww.sandwich.response.ResponseResult;
+import com.lww.response.ResponseResult;
 
 import java.util.List;
 

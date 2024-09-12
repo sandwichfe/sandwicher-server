@@ -1,7 +1,7 @@
 package com.lww.sandwich.config.security.AuthenticationHandler;
 
-import com.lww.sandwich.response.ResponseCode;
-import com.lww.sandwich.response.ResultUtil;
+import com.lww.response.ResponseCode;
+import com.lww.response.ResultUtil;
 import com.lww.sandwich.utils.ResponseOutUtil;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;

@@ -33,7 +33,7 @@ public class DictInitComponent implements ApplicationRunner {
         m2.put("2","女");
         DicDataStore.putValue(sexType,m2);
 
-        log.info("----------------- load dict cache success -----------------");
+        log.info("load dict cache success");
     }
 
 }
