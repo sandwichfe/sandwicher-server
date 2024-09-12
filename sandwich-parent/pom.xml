@@ -114,12 +114,12 @@
             <version>8.0.28</version>
         </dependency>
 
-        <!--引入druid数据源-->
+        <!--连接池-->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.1.24</version>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
         </dependency>
+
 
         <!--MP 代码生成器-->
         <dependency>
