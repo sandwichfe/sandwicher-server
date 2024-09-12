@@ -1,8 +1,9 @@
 package com.lww.sandwich.controller;
 
+import com.lww.Vo.PageDataVo;
+import com.lww.Vo.PageVo;
+import com.lww.sandwich.Vo.ViewVO;
 import com.lww.sandwich.entity.View;
-import com.lww.sandwich.Vo.PageDataVo;
-import com.lww.sandwich.Vo.PageVo;
 import com.lww.sandwich.response.ResponseResult;
 import com.lww.sandwich.response.ResultUtil;
 import com.lww.sandwich.service.ViewService;
@@ -50,8 +51,8 @@ public class BaseController {
     }
 
     @GetMapping("/getViewList")
-    public ResponseResult<PageDataVo<List<View>>> getViewList(PageVo pageVo) {
-        PageDataVo<List<View>> pageDataVo = viewService.getViewList(pageVo);
+    public ResponseResult<PageDataVo<List<ViewVO>>> getViewList(PageVo pageVo) {
+        PageDataVo<List<ViewVO>> pageDataVo = viewService.getViewList(pageVo);
         return ResultUtil.success(pageDataVo);
     }
 

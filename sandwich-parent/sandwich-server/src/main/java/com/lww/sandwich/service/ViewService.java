@@ -1,9 +1,10 @@
 package com.lww.sandwich.service;
 
+import com.lww.Vo.PageDataVo;
+import com.lww.Vo.PageVo;
+import com.lww.sandwich.Vo.ViewVO;
 import com.lww.sandwich.entity.View;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lww.sandwich.Vo.PageDataVo;
-import com.lww.sandwich.Vo.PageVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -31,5 +32,5 @@ public interface ViewService extends IService<View> {
      * @param pageVo
      * @return
      */
-    PageDataVo<List<View>> getViewList(PageVo pageVo);
+    PageDataVo<List<ViewVO>> getViewList(PageVo pageVo);
 }

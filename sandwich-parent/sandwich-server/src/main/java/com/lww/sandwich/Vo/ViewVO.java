@@ -1,13 +1,9 @@
-package com.lww.sandwich.entity;
+package com.lww.sandwich.Vo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lww.dict.Dic;
 import io.swagger.annotations.ApiModel;
@@ -15,6 +11,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -24,13 +23,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@TableName("t_view")
-@ApiModel(value = "View对象", description = "")
-public class View implements Serializable {
+@ApiModel(value = "View对象VO", description = "")
+public class ViewVO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2781951723978392659L;
 
-    @TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty("id")
     private String id;
 
@@ -46,5 +43,13 @@ public class View implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty("访问时间")
     private LocalDateTime viewTime;
+
+
+    @Dic(code = "sexType")
+    @ApiModelProperty("测试字段名")
+    private String testDictType;
+
+    @ApiModelProperty("测试字典值")
+    private String testDictTypeValue;
 
 }

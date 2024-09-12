@@ -1,8 +1,10 @@
-package com.lww.sandwich.Vo;
+package com.lww.Vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @description: 分页数据对象Vo

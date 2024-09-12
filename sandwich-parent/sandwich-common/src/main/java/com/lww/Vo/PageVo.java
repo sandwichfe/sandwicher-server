@@ -1,4 +1,4 @@
-package com.lww.sandwich.Vo;
+package com.lww.Vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

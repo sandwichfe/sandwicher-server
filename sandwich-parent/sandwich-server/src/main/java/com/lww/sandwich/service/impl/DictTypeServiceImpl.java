@@ -1,10 +1,10 @@
 package com.lww.sandwich.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lww.Vo.PageDataVo;
+import com.lww.Vo.PageVo;
 import com.lww.sandwich.entity.DictType;
 import com.lww.sandwich.mapper.DictTypeMapper;
-import com.lww.sandwich.Vo.PageDataVo;
-import com.lww.sandwich.Vo.PageVo;
 import com.lww.sandwich.response.ResponseResult;
 import com.lww.sandwich.response.ResultUtil;
 import com.lww.sandwich.service.DictTypeService;
