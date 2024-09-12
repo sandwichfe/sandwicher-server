@@ -20,8 +20,8 @@ public class DicInitComponent implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        log.info("-----------------开始缓存字典数据-----------------");
-        // 查数据库放进去 暂时todo
+        log.info("----------------- load dict cache start -----------------");
+        // 查所有字典数据库放进去 暂时todo
 
         String statusType = "statusType";
         Map<Object,String> m1 = new HashMap(2);
@@ -34,7 +34,7 @@ public class DicInitComponent implements ApplicationRunner {
         m2.put("2","女");
         DicDataStore.putValue(sexType,m2);
 
-        log.info("-----------------缓存字典数据完成-----------------");
+        log.info("----------------- load dict cache end -------------------");
     }
 
 }
