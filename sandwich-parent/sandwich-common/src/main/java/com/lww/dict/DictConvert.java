@@ -13,12 +13,12 @@ import java.lang.annotation.*;
 
 @JacksonAnnotationsInside
 @JsonSerialize(
-        using = DicSerializer.class
+        using = DictConvertSerializer.class
 )
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Dic {
+public @interface DictConvert {
     String code();
 
     String fieldName() default "";

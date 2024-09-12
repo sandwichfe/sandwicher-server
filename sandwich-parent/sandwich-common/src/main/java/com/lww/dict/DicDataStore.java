@@ -24,12 +24,10 @@ public class DicDataStore {
 
     public static void putValue(String type, Map<Object, String> map) {
         dicData.put(type, map);
-        System.out.println(map);
     }
 
 
     public static String getNameByCodeAndValue(String code, String value) {
-        System.out.println(dicData);
         return dicData.get(code).get(value);
     }
 

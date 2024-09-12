@@ -1,11 +1,7 @@
 package com.lww.sandwich.Vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lww.dict.Dic;
+import com.lww.dict.DictConvert;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -45,7 +41,7 @@ public class ViewVO implements Serializable {
     private LocalDateTime viewTime;
 
 
-    @Dic(code = "sexType")
+    @DictConvert(code = "sexType")
     @ApiModelProperty("测试字段名")
     private String testDictType;
 

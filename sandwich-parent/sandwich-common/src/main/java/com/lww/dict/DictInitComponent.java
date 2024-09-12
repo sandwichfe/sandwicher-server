@@ -14,13 +14,12 @@ import java.util.Map;
  * @author lww
  * @since 2024-9-12
  **/
-@Component
 @Slf4j
-public class DicInitComponent implements ApplicationRunner {
+public class DictInitComponent implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        log.info("----------------- load dict cache start -----------------");
+
         // 查所有字典数据库放进去 暂时todo
 
         String statusType = "statusType";
@@ -34,7 +33,7 @@ public class DicInitComponent implements ApplicationRunner {
         m2.put("2","女");
         DicDataStore.putValue(sexType,m2);
 
-        log.info("----------------- load dict cache end -------------------");
+        log.info("----------------- load dict cache success -----------------");
     }
 
 }
