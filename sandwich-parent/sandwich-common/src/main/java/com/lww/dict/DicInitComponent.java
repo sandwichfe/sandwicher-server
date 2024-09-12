@@ -5,7 +5,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +16,7 @@ import java.util.Map;
  **/
 @Component
 @Slf4j
-public class DicInitComponet implements ApplicationRunner {
+public class DicInitComponent implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {

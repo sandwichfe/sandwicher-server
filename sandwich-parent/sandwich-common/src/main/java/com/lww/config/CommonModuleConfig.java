@@ -1,6 +1,6 @@
 package com.lww.config;
 
-import com.lww.dict.DicInitComponet;
+import com.lww.dict.DicInitComponent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,16 +13,16 @@ import org.springframework.context.annotation.Configuration;
 public class CommonModuleConfig {
 
     /** 
-     * 字典转化 Componet
+     * 字典转化 Component
      *
      * @return      
      * @author lww
      * @since 
      */
     @Bean
-    public DicInitComponet dicInitComponet() {
-        DicInitComponet dicInitComponet = new DicInitComponet();
-        return dicInitComponet;
+    public DicInitComponent dicInitComponent() {
+        DicInitComponent dicInitComponent = new DicInitComponent();
+        return dicInitComponent;
     }
 
 }
