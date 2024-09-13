@@ -66,6 +66,16 @@ public class DictConvertSerializer extends JsonSerializer<String> implements Con
         jsonGenerator.writeObject(String.join(",", list));
     }
 
+    /**
+     *
+     * createContextual 可以获得字段的类型以及注解。
+     * createContextual 方法只会在第一次序列化字段时调用（因为字段的上下文信息在运行期不会改变），所以不用担心影响性能。
+     * @param serializerProvider
+     * @param beanProperty
+     * @return
+     * @author lww
+     * @since
+     */
     @Override
     public JsonSerializer<?> createContextual(SerializerProvider serializerProvider, BeanProperty beanProperty) throws JsonMappingException {
         if (beanProperty != null) {
