@@ -1,6 +1,8 @@
 package com.lww.sandwich.Vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.lww.dict.DictConvert;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,7 +14,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- *
  * @author lww
  * @since 2022-04-26 09:38:22
  */
@@ -45,7 +46,9 @@ public class ViewVO implements Serializable {
     @ApiModelProperty("测试字段名")
     private String testDictType;
 
-    @ApiModelProperty("测试字典值")
-    private String testDictTypeValue;
+
+    // 打开了字典转化不生效 后续再开
+    // @ApiModelProperty("测试字典值")
+    // private String testDictTypeValue;
 
 }

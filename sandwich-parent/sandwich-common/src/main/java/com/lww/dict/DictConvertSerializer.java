@@ -26,16 +26,24 @@ import java.util.Objects;
  * @author lww 2024-09-13
  * 在系列化成json可以做相关操作
  * 例如 字段脱敏  处理数字类型小数点位  这里的字段转换功能 等等
- *
  */
 
 public class DictConvertSerializer extends JsonSerializer<String> implements ContextualSerializer {
 
+    /**
+     * 字典类型code
+     */
     private String code;
 
+    /**
+     * 字典code
+     */
+    private String dictName;
 
-    public DictConvertSerializer(String code) {
+
+    public DictConvertSerializer(String code, String dictName) {
         this.code = code;
+        this.dictName = dictName;
     }
 
     public DictConvertSerializer() {
@@ -50,27 +58,29 @@ public class DictConvertSerializer extends JsonSerializer<String> implements Con
      * @since
      */
     @Override
-    public void serialize(String field, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(String fieldValue, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         // 被打了dictConvert注解的字段 序列化时会进入到这里
-        if (!StringUtils.hasLength(field)){
-            jsonGenerator.writeString(field);
+        if (!StringUtils.hasLength(fieldValue)) {
+            jsonGenerator.writeString(fieldValue);
             return;
         }
         // 处理 传了多个字典值 逗号分割的情况
-        String[] split = field.split(PunctuationConstants.COMMA);
+        String[] split = fieldValue.split(PunctuationConstants.COMMA);
         List<String> list = new ArrayList(split.length);
         for (int i = 0; i < split.length; i++) {
             String s = split[i];
             list.add(DicDataStore.getNameByCodeAndValue(this.code, s));
         }
         // 序列化的值要要写入json中
-        jsonGenerator.writeObject(String.join(",", list));
+        jsonGenerator.writeString(fieldValue);
+        // 写入翻译的值
+        jsonGenerator.writeStringField(dictName,String.join(",", list));
     }
 
     /**
-     *
      * createContextual 可以获得字段的类型以及注解。
      * createContextual 方法只会在第一次序列化字段时调用（因为字段的上下文信息在运行期不会改变），所以不用担心影响性能。
+     *
      * @param serializerProvider
      * @param beanProperty
      * @return
@@ -88,7 +98,10 @@ public class DictConvertSerializer extends JsonSerializer<String> implements Con
                 }
                 if (dictConvert != null) {
                     // 将注解的值设置进 自定义系列化器中
-                    return new DictConvertSerializer(dictConvert.code());
+                    String filedName = beanProperty.getName();
+                    // 没有指定中文字段名 则默认 采用类型字段+Value后缀
+                    String textFiledName = StringUtils.hasText(dictConvert.fieldName()) ? dictConvert.fieldName() : filedName+ "Value";
+                    return new DictConvertSerializer(dictConvert.code(), textFiledName);
                 }
             }
             return serializerProvider.findValueSerializer(beanProperty.getType(), beanProperty);
