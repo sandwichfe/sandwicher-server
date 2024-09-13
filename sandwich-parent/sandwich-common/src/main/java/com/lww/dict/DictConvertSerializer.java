@@ -24,8 +24,9 @@ import java.util.Objects;
 
 /**
  * @author lww 2024-09-13
- * createContextual 可以获得字段的类型以及注解。
- * createContextual 方法只会在第一次序列化字段时调用（因为字段的上下文信息在运行期不会改变），所以不用担心影响性能。
+ * 在系列化成json可以做相关操作
+ * 例如 字段脱敏  处理数字类型小数点位  这里的字段转换功能 等等
+ *
  */
 
 public class DictConvertSerializer extends JsonSerializer<String> implements ContextualSerializer {
