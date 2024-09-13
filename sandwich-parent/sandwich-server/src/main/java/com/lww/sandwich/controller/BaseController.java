@@ -1,19 +1,14 @@
 package com.lww.sandwich.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lww.Vo.PageDataVo;
 import com.lww.Vo.PageVo;
-import com.lww.sandwich.Vo.ViewVO;
-import com.lww.sandwich.entity.View;
 import com.lww.response.ResponseResult;
 import com.lww.response.ResultUtil;
+import com.lww.sandwich.Vo.ViewVO;
 import com.lww.sandwich.service.ViewService;
 import com.lww.sandwich.utils.IpUtils;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.List;
 
 /**
