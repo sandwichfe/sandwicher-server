@@ -21,6 +21,10 @@ public class ResultUtil {
         return new ResponseResult<T>().setCode(ResponseCode.FAILURE).setMsg(message);
     }
 
+    public static <T> ResponseResult<T> error(ResponseCode code, String message) {
+        return new ResponseResult<T>().setCode(code).setMsg(message);
+    }
+
     public static <T> ResponseResult<T> response(ResponseCode code, String msg) {
         return new ResponseResult<T>().setCode(code).setMsg(msg);
     }

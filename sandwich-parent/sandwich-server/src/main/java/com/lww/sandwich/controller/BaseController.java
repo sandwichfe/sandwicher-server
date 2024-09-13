@@ -9,6 +9,7 @@ import com.lww.sandwich.service.ViewService;
 import com.lww.sandwich.utils.IpUtils;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -29,13 +32,14 @@ import java.util.List;
 @RequestMapping("/base")
 @Api("base")
 @Slf4j
+@Validated
 public class BaseController {
 
     @Resource
     private ViewService viewService;
 
     @GetMapping("/getBase")
-    public ResponseResult getBase(String param1, String param2) {
+    public ResponseResult getBase(@NotBlank(message = "p1为空") String param1, @NotBlank(message = "p2为空") String param2) {
         String ret = "a1 is " + param1 + " - a2 is " + param2;
         return ResultUtil.success(ret);
     }
@@ -48,7 +52,7 @@ public class BaseController {
     }
 
     @GetMapping("/getViewList")
-    public ResponseResult<PageDataVo<List<ViewVO>>> getViewList(PageVo pageVo) {
+    public ResponseResult<PageDataVo<List<ViewVO>>> getViewList(@Valid PageVo pageVo) {
         PageDataVo<List<ViewVO>> pageDataVo = viewService.getViewList(pageVo);
         return ResultUtil.success(pageDataVo);
     }
