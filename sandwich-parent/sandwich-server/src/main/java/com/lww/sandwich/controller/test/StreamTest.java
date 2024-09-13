@@ -49,5 +49,14 @@ public class StreamTest {
     }
 
 
+    @Test
+    public void test1() {
+        // stream
+        // 从员工集合中筛选出salary大于8000的员工，并放置到新的集合里。
+
+
+    }
+
+
 
 }

@@ -64,28 +64,4 @@ public class BaseController {
         return ResultUtil.success(file.getOriginalFilename());
     }
 
-    @Test
-    public void test() {
-
-        List<String> sentences = Arrays.asList("hello world", "Jia Gou Wu Dao");
-        // 单独peek操作不会执行
-        sentences.stream().peek(sentence -> System.out.println(sentences));
-
-        sentences.stream().forEach(s -> System.out.println(s));
-
-        System.out.println("peek 加终止操作 .count");
-        long l = sentences.stream().peek(sentence -> System.out.println(sentence)).count();
-        System.out.println(l);
-
-    }
-
-    @Test
-    public void test1() {
-        // stream
-        // 从员工集合中筛选出salary大于8000的员工，并放置到新的集合里。
-
-
-    }
-
-
 }

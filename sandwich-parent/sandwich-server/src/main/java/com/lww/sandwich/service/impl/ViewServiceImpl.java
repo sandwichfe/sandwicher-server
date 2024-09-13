@@ -65,7 +65,7 @@ public class ViewServiceImpl extends ServiceImpl<ViewMapper, View> implements Vi
         IPage<ViewVO> pageConvert = viewPage.convert(view -> {
             ViewVO viewVO = new ViewVO();
             BeanUtils.copyProperties(view,viewVO);
-            viewVO.setTestDictType("1");
+            viewVO.setTestDictType("1,2");
             return viewVO;
         });
         PageDataVo<List<ViewVO>> pageDataVo = new PageDataVo<>(pageConvert.getCurrent(), pageConvert.getTotal(), pageConvert.getRecords());
