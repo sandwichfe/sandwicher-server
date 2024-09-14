@@ -47,15 +47,6 @@ public class DefaultWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     private DefaultUserDetailsServiceImpl defaultUserDetailsService;
 
-    @Override
-    @Bean
-    public UserDetailsService userDetailsService(){
-        //这里配置用户信息,这里暂时使用这种方式将用户存储在内存中
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("lww").password("lww").authorities("*").build());
-        return manager;
-    }
-
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
