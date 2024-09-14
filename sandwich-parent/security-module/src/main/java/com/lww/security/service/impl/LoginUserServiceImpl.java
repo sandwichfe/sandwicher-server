@@ -2,11 +2,11 @@ package com.lww.security.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lww.security.entity.User;
-import com.lww.security.mapper.UserMapper;
+import com.lww.security.entity.LoginUser;
+import com.lww.security.mapper.LoginUserMapper;
 import com.lww.response.ResponseResult;
 import com.lww.response.ResultUtil;
-import com.lww.security.service.UserService;
+import com.lww.security.service.LoginUserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,13 +20,13 @@ import javax.annotation.Resource;
  * @since 2022/7/20 14:59
  */
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+public class LoginUserServiceImpl extends ServiceImpl<LoginUserMapper, LoginUser> implements LoginUserService {
 
     @Resource
-    private UserMapper userMapper;
+    private LoginUserMapper loginUserMapper;
 
     @Override
-    public User getUserByUserName(String username) {
+    public LoginUser getUserByUserName(String username) {
         if (!StringUtils.hasLength(username)) {
             return null;
         }
@@ -36,9 +36,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //    return new User("aaa", passwordEncoder.encode("aaa"));
         //}
         // 查询此用户名
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        QueryWrapper<LoginUser> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
-        User user = userMapper.selectOne(wrapper);
+        LoginUser user = loginUserMapper.selectOne(wrapper);
         return user;
     }
 
@@ -50,7 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResponseResult registerUser(User user) {
+    public ResponseResult registerUser(LoginUser user) {
         String username = user.getUsername();
         String password = user.getPassword();
         if (!StringUtils.hasText(username)){
@@ -60,16 +60,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return ResultUtil.error("密码不能为空！");
         }
         // 此用户名是否已存在
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        QueryWrapper<LoginUser> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
-        boolean existsUserName = userMapper.exists(wrapper);
+        boolean existsUserName = loginUserMapper.exists(wrapper);
         if (existsUserName){
             return ResultUtil.error("用户名已存在！");
         }
-        User addUser = new User();
+        LoginUser addUser = new LoginUser();
         addUser.setUsername(username);
         addUser.setPassword(new BCryptPasswordEncoder().encode(password));
-        userMapper.insert(addUser);
+        loginUserMapper.insert(addUser);
         return ResultUtil.success("注册成功！");
     }
 }

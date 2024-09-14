@@ -1,7 +1,7 @@
 package com.lww.security.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lww.security.entity.User;
+import com.lww.security.entity.LoginUser;
 import com.lww.response.ResponseResult;
 
 /**
@@ -9,7 +9,7 @@ import com.lww.response.ResponseResult;
  * @author lww
  * @since 2022/7/20 14:58
  */
-public interface UserService extends IService<User> {
+public interface LoginUserService extends IService<LoginUser> {
     /** 
      * 根据用户名查询用户信息
      * @author lww
@@ -17,12 +17,12 @@ public interface UserService extends IService<User> {
      * @param username
      * @return
      */
-    User getUserByUserName(String username);
+    LoginUser getUserByUserName(String username);
 
     /**
      * 注册
      * @author lww
      * @since 2023/8/16 13:59
      */
-    ResponseResult registerUser(User user);
+    ResponseResult registerUser(LoginUser user);
 }

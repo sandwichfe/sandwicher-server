@@ -1,7 +1,7 @@
 package com.lww.security.config;
 
 import com.github.xiaoymin.knife4j.core.util.StrUtil;
-import com.lww.security.entity.User;
+import com.lww.security.entity.LoginUser;
 import com.lww.response.ResponseCode;
 import com.lww.response.ResultUtil;
 import com.lww.utils.ResponseOutUtil;
@@ -99,7 +99,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
 
         if (StringUtils.hasLength(username)) {
             //踩坑提醒 此处password不能为null
-            User principal = new User(username, "");
+            LoginUser principal = new LoginUser(username, "");
             return new UsernamePasswordAuthenticationToken(principal, null, authorities);
         }
         return null;

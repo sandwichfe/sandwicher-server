@@ -1,7 +1,7 @@
 package com.lww.security.config;
 
-import com.lww.security.entity.User;
-import com.lww.security.service.UserService;
+import com.lww.security.entity.LoginUser;
+import com.lww.security.service.LoginUserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
-    private UserService userService;
+    private LoginUserService userService;
 
     /**
      * 从数据库中获取用户信息  返回一个userDetails对象
@@ -29,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user  = userService.getUserByUserName(username);
+        LoginUser user  = userService.getUserByUserName(username);
         // 将数据库的user对象 转换为 userDetails对象
         return new SecurityUserDetails(user);
     }

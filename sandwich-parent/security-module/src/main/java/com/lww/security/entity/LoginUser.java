@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("t_user")
-public class User {
+public class LoginUser {
 
     @TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty("id")
@@ -29,7 +29,7 @@ public class User {
     @ApiModelProperty("密码")
     private String password;
 
-    public User(String username, String password) {
+    public LoginUser(String username, String password) {
         this.username = username;
         this.password = password;
     }

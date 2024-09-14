@@ -17,11 +17,11 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>sandwich-server</module>
         <module>sandwich-common</module>
         <module>sandwich-starter-redis</module>
         <module>little-note-server</module>
         <module>security-module</module>
+        <module>sandwich-server</module>
     </modules>
 
     <properties>

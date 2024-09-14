@@ -1,6 +1,6 @@
 package com.lww.security.config;
 
-import com.lww.security.entity.User;
+import com.lww.security.entity.LoginUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +12,7 @@ import java.util.Collection;
  * @author lww
  * @since 2022/7/20 15:11
  */
-public class SecurityUserDetails extends User implements UserDetails {
+public class SecurityUserDetails extends LoginUser implements UserDetails {
 
     /**
      * 数据库User对象转换为UserDetails对象
@@ -21,7 +21,7 @@ public class SecurityUserDetails extends User implements UserDetails {
      * @param user
      * @return
      */
-    public SecurityUserDetails(User user) {
+    public SecurityUserDetails(LoginUser user) {
         if(user!=null) {
             this.setUsername(user.getUsername());
             this.setPassword(user.getPassword());
