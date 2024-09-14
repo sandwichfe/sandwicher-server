@@ -7,12 +7,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lww.Vo.PageDataVo;
 import com.lww.Vo.PageVo;
 import com.lww.sandwich.Vo.ViewVO;
-import com.lww.sandwich.config.security.SecurityConstant;
+// import com.lww.sandwich.config.security.SecurityConstant;
 import com.lww.sandwich.entity.View;
 import com.lww.sandwich.mapper.ViewMapper;
 import com.lww.sandwich.service.ViewService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+// import io.jsonwebtoken.Claims;
+// import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import net.dreamlu.mica.ip2region.core.Ip2regionSearcher;
 import org.springframework.beans.BeanUtils;
@@ -39,16 +39,16 @@ public class ViewServiceImpl extends ServiceImpl<ViewMapper, View> implements Vi
     @Override
     public void addViewRecord(String ipAddress,HttpServletRequest request) {
         // 登录用户名
-        String header = request.getHeader(SecurityConstant.HEADER);
-        Claims claims = Jwts.parser().setSigningKey(SecurityConstant.JWT_SIGN_KEY).parseClaimsJws(header.replace(SecurityConstant.TOKEN_SPLIT, "")).getBody();
-        String subject = claims.getSubject();
-        String username = StringUtils.hasText(subject)?subject:"访客";
+        // String header = request.getHeader(SecurityConstant.HEADER);
+        // Claims claims = Jwts.parser().setSigningKey(SecurityConstant.JWT_SIGN_KEY).parseClaimsJws(header.replace(SecurityConstant.TOKEN_SPLIT, "")).getBody();
+        // String subject = claims.getSubject();
+        // String username = StringUtils.hasText(subject)?subject:"访客";
 
         String cityInfo = regionSearcher.getAddress(ipAddress);
         View view = new View();
         view.setIp(ipAddress);
         view.setArea(cityInfo);
-        view.setUserName(username);
+        // view.setUserName(username);
         view.setViewTime(LocalDateTime.now());
         log.info("本次保存：" + view);
         this.save(view);

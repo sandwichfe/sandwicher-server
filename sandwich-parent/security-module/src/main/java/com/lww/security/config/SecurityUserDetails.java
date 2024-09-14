@@ -1,6 +1,6 @@
-package com.lww.sandwich.config.security;
+package com.lww.security.config;
 
-import com.lww.sandwich.entity.User;
+import com.lww.security.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;

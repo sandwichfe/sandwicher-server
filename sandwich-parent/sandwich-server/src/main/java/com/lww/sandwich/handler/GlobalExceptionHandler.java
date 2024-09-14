@@ -1,14 +1,11 @@
 package com.lww.sandwich.handler;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
-import com.lww.constant.HttpStatusCodes;
 import com.lww.response.ResponseCode;
 import com.lww.response.ResponseResult;
 import com.lww.response.ResultUtil;
 import com.lww.sandwich.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -21,7 +18,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import javax.validation.Path;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -120,27 +116,12 @@ public class GlobalExceptionHandler {
         return ResultUtil.error(ResponseCode.FAILURE,e.getMessage());
     }
 
-
-    /**
-     * 认证异常
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseResult UnNoException(AuthenticationException e) {
-        return ResultUtil.error(ResponseCode.FAILURE,e.getMessage());
-    }
-
-
     /**
      * 其他未知异常(拦截的是全局最底层异常,兜底)
      */
     @ExceptionHandler(value = Exception.class)
     public ResponseResult handleException(Exception e) {
         log.error("异常信息：", e);
-        ResponseResult result = new ResponseResult();
-        result.setCode(HttpStatusCodes.INTERNAL_SERVER_ERROR);
-        result.setMsg("服务器内部错误");
-        return result;
+        return ResultUtil.error(ResponseCode.FAILURE,"服务器内部错误");
     }
 }

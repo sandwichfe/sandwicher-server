@@ -1,8 +1,8 @@
-package com.lww.sandwich.config.security.AuthenticationHandler;
+package com.lww.security.config.AuthenticationHandler;
 
 import com.lww.response.ResponseCode;
 import com.lww.response.ResultUtil;
-import com.lww.sandwich.utils.ResponseOutUtil;
+import com.lww.utils.ResponseOutUtil;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

@@ -1,13 +1,13 @@
-package com.lww.sandwich.service.impl;
+package com.lww.security.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lww.sandwich.entity.User;
-import com.lww.sandwich.mapper.UserMapper;
+import com.lww.security.entity.User;
+import com.lww.security.mapper.UserMapper;
 import com.lww.response.ResponseResult;
 import com.lww.response.ResultUtil;
-import com.lww.sandwich.service.UserService;
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.lww.security.service.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -31,7 +31,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;
         }
         // 模拟存在数据库里面的密码是加密过后的
-        // BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         //if ("aaa".equals(username)) {
         //    return new User("aaa", passwordEncoder.encode("aaa"));
         //}
@@ -68,7 +68,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         User addUser = new User();
         addUser.setUsername(username);
-        // addUser.setPassword(new BCryptPasswordEncoder().encode(password));
+        addUser.setPassword(new BCryptPasswordEncoder().encode(password));
         userMapper.insert(addUser);
         return ResultUtil.success("注册成功！");
     }

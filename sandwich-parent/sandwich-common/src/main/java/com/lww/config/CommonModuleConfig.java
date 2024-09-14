@@ -3,6 +3,7 @@ package com.lww.config;
 import com.lww.dict.DictInitComponent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * starter自动注入配置类
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.4.0
  */
 @Configuration
+@Import(CorsConfig.class)
 public class CommonModuleConfig {
 
     /**

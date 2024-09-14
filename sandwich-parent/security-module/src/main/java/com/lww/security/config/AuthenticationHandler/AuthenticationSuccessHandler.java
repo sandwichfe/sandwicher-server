@@ -1,9 +1,9 @@
-package com.lww.sandwich.config.security.AuthenticationHandler;
+package com.lww.security.config.AuthenticationHandler;
 
 import com.lww.response.ResponseCode;
 import com.lww.response.ResultUtil;
-import com.lww.sandwich.config.security.SecurityConstant;
-import com.lww.sandwich.utils.ResponseOutUtil;
+import com.lww.security.config.SecurityConstant;
+import com.lww.utils.ResponseOutUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.Authentication;

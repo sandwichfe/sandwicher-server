@@ -13,7 +13,7 @@
     <artifactId>sandwich-server</artifactId>
     <name>sandwich-server</name>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <properties>
         <java.version>1.8</java.version>
@@ -25,6 +25,13 @@
             <artifactId>sandwich-starter-redis</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>com.lww</groupId>-->
+<!--            <artifactId>security-module</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>com.lww</groupId>
             <artifactId>sandwich-common</artifactId>

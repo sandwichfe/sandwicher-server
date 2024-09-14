@@ -1,9 +1,9 @@
-package com.lww.sandwich.config.security;
+package com.lww.security.config;
 
-import com.lww.sandwich.config.security.AuthenticationHandler.AuthenticationFailHandler;
-import com.lww.sandwich.config.security.AuthenticationHandler.AuthenticationSuccessHandler;
-import com.lww.sandwich.config.security.AuthenticationHandler.CustomizeAccessNoPerissDeniedHandler;
-import com.lww.sandwich.config.security.AuthenticationHandler.CustomizeAuthNoLoginEntryPoint;
+import com.lww.security.config.AuthenticationHandler.AuthenticationFailHandler;
+import com.lww.security.config.AuthenticationHandler.AuthenticationSuccessHandler;
+import com.lww.security.config.AuthenticationHandler.CustomizeAccessNoPerissDeniedHandler;
+import com.lww.security.config.AuthenticationHandler.CustomizeAuthNoLoginEntryPoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

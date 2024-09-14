@@ -1,4 +1,4 @@
-package com.lww.sandwich.config.security;
+package com.lww.security.config;
 
 /**
  * @description:

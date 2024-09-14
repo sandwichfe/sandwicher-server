@@ -1,4 +1,4 @@
-package com.lww.sandwich.utils;
+package com.lww.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.lww.response.ResponseResult;
@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * @description:  使用response输出JSON

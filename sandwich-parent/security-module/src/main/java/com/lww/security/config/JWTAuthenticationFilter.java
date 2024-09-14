@@ -1,18 +1,16 @@
-package com.lww.sandwich.config.security;
+package com.lww.security.config;
 
 import com.github.xiaoymin.knife4j.core.util.StrUtil;
-import com.lww.sandwich.entity.User;
+import com.lww.security.entity.User;
 import com.lww.response.ResponseCode;
 import com.lww.response.ResultUtil;
-import com.lww.sandwich.utils.ResponseOutUtil;
+import com.lww.utils.ResponseOutUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

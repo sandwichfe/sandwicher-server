@@ -1,7 +1,7 @@
-package com.lww.sandwich.config.security;
+package com.lww.security.config;
 
-import com.lww.sandwich.entity.User;
-import com.lww.sandwich.service.UserService;
+import com.lww.security.entity.User;
+import com.lww.security.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
