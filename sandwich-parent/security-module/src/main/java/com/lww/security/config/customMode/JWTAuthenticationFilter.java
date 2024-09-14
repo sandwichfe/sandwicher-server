@@ -1,4 +1,4 @@
-package com.lww.security.config;
+package com.lww.security.config.customMode;
 
 import com.github.xiaoymin.knife4j.core.util.StrUtil;
 import com.lww.security.entity.LoginUser;

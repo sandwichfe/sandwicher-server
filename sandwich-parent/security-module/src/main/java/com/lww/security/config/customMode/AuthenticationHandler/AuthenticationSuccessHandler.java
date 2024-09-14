@@ -1,8 +1,8 @@
-package com.lww.security.config.AuthenticationHandler;
+package com.lww.security.config.customMode.AuthenticationHandler;
 
 import com.lww.response.ResponseCode;
 import com.lww.response.ResultUtil;
-import com.lww.security.config.SecurityConstant;
+import com.lww.security.config.customMode.SecurityConstant;
 import com.lww.utils.ResponseOutUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

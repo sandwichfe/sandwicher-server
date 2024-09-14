@@ -1,4 +1,4 @@
-package com.lww.security.config.AuthenticationHandler;
+package com.lww.security.config.customMode.AuthenticationHandler;
 
 import com.lww.response.ResponseCode;
 import com.lww.response.ResultUtil;

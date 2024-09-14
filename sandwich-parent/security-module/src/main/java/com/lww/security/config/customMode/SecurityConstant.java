@@ -1,4 +1,4 @@
-package com.lww.security.config;
+package com.lww.security.config.customMode;
 
 /**
  * @description:
