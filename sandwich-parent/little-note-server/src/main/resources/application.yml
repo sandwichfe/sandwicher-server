@@ -1,0 +1,18 @@
+server:
+  port: 1666
+
+
+#启动模式
+spring:
+  profiles:
+    active: dev
+  # swagger 集成 高版本springboot   策略变化设置
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+
+jasypt:
+  encryptor:
+    # password就是盐值
+    #password: start input

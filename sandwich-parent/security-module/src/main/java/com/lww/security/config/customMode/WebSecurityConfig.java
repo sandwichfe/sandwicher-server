@@ -1,12 +1,11 @@
-package com.lww.security.config.customMode;
+package com.lww.security.config;
 
-import com.lww.security.config.customMode.AuthenticationHandler.AuthenticationFailHandler;
-import com.lww.security.config.customMode.AuthenticationHandler.AuthenticationSuccessHandler;
-import com.lww.security.config.customMode.AuthenticationHandler.CustomizeAccessNoPerissDeniedHandler;
-import com.lww.security.config.customMode.AuthenticationHandler.CustomizeAuthNoLoginEntryPoint;
+import com.lww.security.config.authentication.handler.AuthenticationFailHandler;
+import com.lww.security.config.authentication.handler.AuthenticationSuccessHandler;
+import com.lww.security.config.authentication.handler.CustomizeAccessNoPerissDeniedHandler;
+import com.lww.security.config.authentication.handler.CustomizeAuthNoLoginEntryPoint;
 import lombok.extern.slf4j.Slf4j;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -27,7 +26,6 @@ import javax.annotation.Resource;
 @Slf4j
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@ConditionalOnProperty(name = "security.default-mode", havingValue = "false")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
@@ -46,6 +44,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**无权限时处理*/
     @Resource
     private CustomizeAccessNoPerissDeniedHandler accessNoPerissDeniedHandler;
+
+    @Value("${security.permit-urls:/default/value/**}")
+    private String[] permitUrls;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -92,9 +93,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         //ignore
-        web.ignoring().antMatchers("/base/getRequestIp","/base/test","/css", "/html")
+        web.ignoring()
                 .antMatchers(AUTH_WHITELIST)
-                .antMatchers(AUTH_TEST_LIST);
+                .antMatchers(AUTH_TEST_LIST)
+                .antMatchers(permitUrls);
     }
 
     /**
@@ -108,7 +110,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             // swagger-boostrap-ui
             "/doc.html",
-            // druid
             "/druid/**",
             "/user/registerUser"
     };
@@ -118,7 +119,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * test忽略
      */
     private static final String[] AUTH_TEST_LIST = {
-            "/test/**",
-            "/user/registerUser"
+            "/css",
+            "/html"
     };
 }

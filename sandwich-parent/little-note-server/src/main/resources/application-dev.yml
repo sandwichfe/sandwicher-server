@@ -1,7 +1,4 @@
 #开发环境
-server:
-  port: 1241
-
 spring:
 
   datasource:
@@ -25,10 +22,4 @@ spring:
         max-wait: 1000
     timeout: 5000
 
-# 忽略权限控制
-security:
-  permit-urls:
-    - /base/getRequestIp
-    - /base/test
-    - /test/**
-    - /user/registerUser
+

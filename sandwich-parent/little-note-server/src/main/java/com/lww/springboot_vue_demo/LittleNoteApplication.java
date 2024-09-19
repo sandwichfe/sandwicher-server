@@ -7,12 +7,10 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 
 /**
- * 暂时禁用数据库
+ *
+ * @author lww
  */
-@SpringBootApplication(exclude = {
-        DataSourceAutoConfiguration.class,
-        DataSourceTransactionManagerAutoConfiguration.class,
-        HibernateJpaAutoConfiguration.class})
+@SpringBootApplication
 public class LittleNoteApplication {
 
     public static void main(String[] args) {
