@@ -1,12 +1,8 @@
-<<<<<<<< HEAD:sandwich-parent/security-module/src/main/java/com/lww/security/config/customMode/AuthenticationHandler/AuthenticationSuccessHandler.java
-package com.lww.security.config.customMode.AuthenticationHandler;
-========
 package com.lww.security.config.authentication.handler;
->>>>>>>> 42d49d6 (security完善):sandwich-parent/security-module/src/main/java/com/lww/security/config/authentication/handler/AuthenticationSuccessHandler.java
 
 import com.lww.response.ResponseCode;
 import com.lww.response.ResultUtil;
-import com.lww.security.config.customMode.SecurityConstant;
+import com.lww.security.config.SecurityConstant;
 import com.lww.utils.ResponseOutUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

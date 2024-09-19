@@ -1,4 +1,4 @@
-package com.lww.security.config.customMode;
+package com.lww.security.config;
 
 import com.lww.security.entity.LoginUser;
 import org.springframework.security.core.GrantedAuthority;

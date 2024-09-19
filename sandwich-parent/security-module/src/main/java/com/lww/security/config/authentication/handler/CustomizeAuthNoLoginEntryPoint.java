@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:sandwich-parent/security-module/src/main/java/com/lww/security/config/customMode/AuthenticationHandler/CustomizeAuthNoLoginEntryPoint.java
-package com.lww.security.config.customMode.AuthenticationHandler;
-========
 package com.lww.security.config.authentication.handler;
->>>>>>>> 42d49d6 (security完善):sandwich-parent/security-module/src/main/java/com/lww/security/config/authentication/handler/CustomizeAuthNoLoginEntryPoint.java
 
 import com.lww.response.ResponseCode;
 import com.lww.response.ResultUtil;
