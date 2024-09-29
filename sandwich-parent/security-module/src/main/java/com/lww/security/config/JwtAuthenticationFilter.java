@@ -36,16 +36,16 @@ import java.util.List;
 @Slf4j
 @Getter
 @Setter
-public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
+public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
     private Integer tokenExpireTime;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, Integer tokenExpireTime) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, Integer tokenExpireTime) {
         super(authenticationManager);
         this.tokenExpireTime = tokenExpireTime;
     }
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint authenticationEntryPoint) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint authenticationEntryPoint) {
         super(authenticationManager, authenticationEntryPoint);
     }
 

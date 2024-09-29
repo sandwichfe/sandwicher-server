@@ -80,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //使用jwt进行登录验证 不需要session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(),7));
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(),7));
     }
 
 
