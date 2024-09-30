@@ -1,4 +1,4 @@
-package com.lww.common.Vo;
+package com.lww.common.web.Vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

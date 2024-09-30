@@ -2,7 +2,7 @@ package com.lww.littlenote.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lww.common.Vo.PageVo;
+import com.lww.common.web.Vo.PageVo;
 import com.lww.littlenote.entity.Note;
 
 /**

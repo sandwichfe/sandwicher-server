@@ -1,7 +1,7 @@
 package com.lww.sandwich.controller;
 
-import com.lww.common.Vo.PageDataVo;
-import com.lww.common.Vo.PageVo;
+import com.lww.common.web.Vo.PageDataVo;
+import com.lww.common.web.Vo.PageVo;
 import com.lww.sandwich.entity.DictType;
 import com.lww.common.web.response.ResponseCode;
 import com.lww.common.web.response.ResponseResult;

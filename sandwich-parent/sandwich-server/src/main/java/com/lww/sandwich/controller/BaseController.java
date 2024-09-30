@@ -1,7 +1,7 @@
 package com.lww.sandwich.controller;
 
-import com.lww.common.Vo.PageDataVo;
-import com.lww.common.Vo.PageVo;
+import com.lww.common.web.Vo.PageDataVo;
+import com.lww.common.web.Vo.PageVo;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.sandwich.Vo.ViewVO;
