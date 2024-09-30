@@ -1,25 +1,24 @@
 #开发环境
 spring:
-
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://yiruserene.top:3306/littleNote?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
-    username: ENC(jelC1fjDfZ5PG7c8uG/0iRjx/HGJgbHI1A4CtgFF09TPiBe+YyflAxb+hVHY/SOm)
-    password: ENC(p5067+1TCj3uIYyTXp5unyyitXAI0q1h5IhxNWNcc0SdiMLm9Xik1ZwtcOPYG78l)
-    hikari:
-      connection-timeout: 30000
-      maximum-pool-size: 10
-
-  redis:
-    host: 49.235.149.110
-    port: 6379
-    password: ENC(uJjGYgAuROdH+xJKEyeznHV8RL2zz1I/58iwtDQ8KlPHMuW4qNRkNHFaw0m2EnRE)
-    jedis:
-      pool:
-        max-idle: 500
-        min-idle: 50
-        max-active: 2000
-        max-wait: 1000
-    timeout: 5000
+  data:
+    redis:
+      host: 49.235.149.110
+      port: 6379
+      password: ENC(uJjGYgAuROdH+xJKEyeznHV8RL2zz1I/58iwtDQ8KlPHMuW4qNRkNHFaw0m2EnRE)
+      jedis:
+        pool:
+          max-idle: 500
+          min-idle: 50
+          max-active: 2000
+          max-wait: 1000
+      timeout: 5000
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://yiruserene.top:3306/littleNote?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
+      username: ENC(jelC1fjDfZ5PG7c8uG/0iRjx/HGJgbHI1A4CtgFF09TPiBe+YyflAxb+hVHY/SOm)
+      password: ENC(p5067+1TCj3uIYyTXp5unyyitXAI0q1h5IhxNWNcc0SdiMLm9Xik1ZwtcOPYG78l)
+      hikari:
+        connection-timeout: 30000
+        maximum-pool-size: 10
 
 
