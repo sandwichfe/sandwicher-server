@@ -7,7 +7,7 @@ import com.lww.common.web.response.ResultUtil;
 import com.lww.sandwich.Vo.ViewVO;
 import com.lww.sandwich.service.ViewService;
 import com.lww.sandwich.utils.IpUtils;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -30,7 +30,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/base")
-@Api("base")
+@Tag(name = "base")
 @Slf4j
 @Validated
 public class BaseController {

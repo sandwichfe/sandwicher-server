@@ -7,12 +7,11 @@ import com.lww.sandwich.mapper.UserMapper;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.sandwich.service.UserService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import jakarta.annotation.Resource;
+// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import javax.annotation.Resource;
 
 /**
  *  
@@ -31,7 +30,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;
         }
         // 模拟存在数据库里面的密码是加密过后的
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        // BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         //if ("aaa".equals(username)) {
         //    return new User("aaa", passwordEncoder.encode("aaa"));
         //}
@@ -68,7 +67,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         User addUser = new User();
         addUser.setUsername(username);
-        addUser.setPassword(new BCryptPasswordEncoder().encode(password));
+        // addUser.setPassword(new BCryptPasswordEncoder().encode(password));
         userMapper.insert(addUser);
         return ResultUtil.success("注册成功！");
     }

@@ -2,12 +2,11 @@ package com.lww.security.config;
 
 import com.lww.security.entity.LoginUser;
 import com.lww.security.service.LoginUserService;
+import jakarta.annotation.Resource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  *   security用户信息校验相关

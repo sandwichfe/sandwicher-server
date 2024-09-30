@@ -3,6 +3,7 @@ package com.lww.sandwich;
 import com.lww.sandwich.constant.AppConstants;
 import com.lww.sandwich.utils.RedisUtil;
 import com.lww.sandwich.utils.wxUtil.WxAppUtil;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.Test;
@@ -10,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;

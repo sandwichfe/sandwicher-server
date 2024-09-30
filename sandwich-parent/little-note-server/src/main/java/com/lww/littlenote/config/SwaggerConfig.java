@@ -1,4 +1,4 @@
-package com.lww.sandwich.config;
+package com.lww.littlenote.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -25,7 +25,7 @@ public class SwaggerConfig {
     public GroupedOpenApi adminApi() {
         return GroupedOpenApi.builder()
                 // 分组名称
-                .group("sandwich文档")
+                .group("littlenote文档")
                 // 接口请求路径规则
                 .pathsToMatch("/**")
                 .build();
@@ -41,7 +41,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info()
                         // 标题
-                        .title("sandwich文档")
+                        .title("littlenote文档")
                         // 描述Api接口文档的基本信息
                         .description("平台管理服务api")
                         // 版本
@@ -52,7 +52,6 @@ public class SwaggerConfig {
                         .license(new License().name("Apache 2.0").url("http://springdoc.org"))
                 );
     }
-
 
 
 }

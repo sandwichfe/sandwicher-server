@@ -3,8 +3,8 @@ package com.lww.sandwich.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,39 +16,39 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("t_dict_data")
-@ApiModel(value = "DictData对象", description = "字典数据表")
+@Tag(name = "DictData对象", description = "字典数据表")
 public class DictData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("id主键")
+    @Schema(description = "id主键")
     private String id;
 
-    @ApiModelProperty("排序")
+    @Schema(description = "排序")
     private Integer sort;
 
-    @ApiModelProperty("字典数据值")
+    @Schema(description = "字典数据值")
     private String value;
 
-    @ApiModelProperty("字典类型")
+    @Schema(description = "字典类型")
     private String type;
 
-    @ApiModelProperty("状态（0正常 1停用）")
+    @Schema(description = "状态（0正常 1停用）")
     private Integer status;
 
-    @ApiModelProperty("创建人")
+    @Schema(description = "创建人")
     private String createBy;
 
-    @ApiModelProperty("创建时间")
+    @Schema(description = "创建时间")
     private LocalDateTime createTime;
 
-    @ApiModelProperty("修改人")
+    @Schema(description = "修改人")
     private String updateBy;
 
-    @ApiModelProperty("修改时间")
+    @Schema(description = "修改时间")
     private LocalDateTime updateTime;
 
-    @ApiModelProperty("备注")
+    @Schema(description = "备注")
     private String remark;
 
 

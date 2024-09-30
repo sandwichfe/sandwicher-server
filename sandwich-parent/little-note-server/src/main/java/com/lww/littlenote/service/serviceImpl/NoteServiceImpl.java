@@ -9,7 +9,7 @@ import com.lww.littlenote.mapper.NoteMapper;
 import com.lww.littlenote.service.NoteService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * <p>

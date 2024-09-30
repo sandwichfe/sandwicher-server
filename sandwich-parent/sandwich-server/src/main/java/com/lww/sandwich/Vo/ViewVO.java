@@ -2,8 +2,7 @@ package com.lww.sandwich.Vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lww.common.dict.DictConvert;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,30 +17,30 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@ApiModel(value = "View对象VO", description = "")
+@Schema(description =  "View对象VO")
 public class ViewVO implements Serializable {
 
     private static final long serialVersionUID = 2781951723978392659L;
 
-    @ApiModelProperty("id")
+    @Schema(description = "id")
     private String id;
 
-    @ApiModelProperty("用户名")
+    @Schema(description = "用户名")
     private String userName;
 
-    @ApiModelProperty("ip")
+    @Schema(description = "ip")
     private String ip;
 
-    @ApiModelProperty("地区")
+    @Schema(description = "地区")
     private String area;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @ApiModelProperty("访问时间")
+    @Schema(description = "访问时间")
     private LocalDateTime viewTime;
 
 
     @DictConvert(code = "sexType")
-    @ApiModelProperty("测试字段名")
+    @Schema(description = "测试字段名")
     private String testDictType;
 
 

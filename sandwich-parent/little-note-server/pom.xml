@@ -13,9 +13,7 @@
 
 
     <properties>
-        <java.version>17</java.version>
-        <guli.version>0.0.1-SNAPSHOT</guli.version>
-
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>

@@ -3,7 +3,7 @@ package com.lww.sandwich.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,13 +20,13 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @TableId(type = IdType.ASSIGN_ID)
-    @ApiModelProperty("id")
+    @Schema(description = "id")
     private String id;
 
-    @ApiModelProperty("用户名")
+    @Schema(description = "用户名")
     private String username;
 
-    @ApiModelProperty("密码")
+    @Schema(description = "密码")
     private String password;
 
     public User(String username, String password) {

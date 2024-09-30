@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,41 +19,41 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("t_dict_type")
-@ApiModel(value = "DictType对象", description = "字典类型表")
+@Tag(name = "DictType对象", description = "字典类型表")
 public class DictType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(type = IdType.ASSIGN_ID)
-    @ApiModelProperty("id主键")
+    @Schema(description = "id主键")
     private String dictId;
 
-    @ApiModelProperty("字典名称")
+    @Schema(description = "字典名称")
     private String dictName;
 
-    @ApiModelProperty("子典类型")
+    @Schema(description = "子典类型")
     private String dictType;
 
-    @ApiModelProperty("状态（0正常 1停用）")
+    @Schema(description = "状态（0正常 1停用）")
     private Integer status;
 
-    @ApiModelProperty("创建人")
+    @Schema(description = "创建人")
     private String createBy;
 
     @TableField(fill = FieldFill.INSERT)
-    @ApiModelProperty("创建时间")
+    @Schema(description = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private LocalDateTime createTime;
 
-    @ApiModelProperty("修改人")
+    @Schema(description = "修改人")
     private String updateBy;
 
     @TableField(fill = FieldFill.UPDATE)
-    @ApiModelProperty("修改时间")
+    @Schema(description = "修改时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private LocalDateTime updateTime;
 
-    @ApiModelProperty("备注")
+    @Schema(description = "备注")
     private String remark;
 
 

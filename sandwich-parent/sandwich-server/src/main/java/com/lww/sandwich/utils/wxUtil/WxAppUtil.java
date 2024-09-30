@@ -3,13 +3,12 @@ package com.lww.sandwich.utils.wxUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.lww.sandwich.constant.AppConstants;
 import com.lww.sandwich.utils.AesUtil;
-import com.lww.sandwich.utils.HttpClientUtil;
 import com.lww.sandwich.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +57,8 @@ public class WxAppUtil {
     private String getWxAccessTokenInterface(String appId, String appSecret) {
         log.info("开始获取AccessToken:");
         String tokenUrl = AppConstants.WX_GET_TOKEN_URL + "&appid=" + appId + "&secret=" + appSecret;
-        String data = HttpClientUtil.doGet(tokenUrl);
+        // String data = HttpClientUtil.doGet(tokenUrl);
+        String data=null;
         JSONObject jsonObject = JSONObject.parseObject(data);
         String accessToken = jsonObject.getString("access_token");
         if (!StringUtils.hasText(accessToken)) {
@@ -100,7 +100,8 @@ public class WxAppUtil {
         if (StringUtils.hasText(page)){
             jsonObjectReq.put("page",page);
         }
-        String response = HttpClientUtil.doPostJson(subMsgUrl, jsonObjectReq.toJSONString());
+        // String response = HttpClientUtil.doPostJson(subMsgUrl, jsonObjectReq.toJSONString());
+        String response = null;
         JSONObject ret = JSONObject.parseObject(response);
         Integer errcode = (Integer) ret.get("errcode");
         if (errcode == 0) {

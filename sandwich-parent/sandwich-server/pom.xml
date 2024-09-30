@@ -25,11 +25,11 @@
             <version>1.0.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.lww</groupId>
-            <artifactId>security-module</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.lww</groupId>-->
+<!--            <artifactId>security-module</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>com.lww</groupId>
@@ -49,13 +49,6 @@
             <groupId>net.dreamlu</groupId>
             <artifactId>mica-ip2region</artifactId>
             <version>2.6.3</version>
-        </dependency>
-
-        <!--freemarker模板引擎 -->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.31</version>
         </dependency>
 
     </dependencies>

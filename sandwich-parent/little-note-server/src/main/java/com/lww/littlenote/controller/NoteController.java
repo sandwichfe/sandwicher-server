@@ -6,10 +6,10 @@ import com.lww.littlenote.entity.Note;
 import com.lww.littlenote.service.NoteService;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 

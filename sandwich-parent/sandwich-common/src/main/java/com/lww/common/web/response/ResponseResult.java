@@ -1,7 +1,6 @@
 package com.lww.common.web.response;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,19 +10,19 @@ import java.util.Date;
  *   返回结果实体
  * @date 2022/3/11 16:28
  */
-@ApiModel("返回结果实体")
+@Schema(description = "返回结果实体")
 public class ResponseResult<T> {
 
-    @ApiModelProperty("响应码")
+    @Schema(description = "响应码")
     public int code;
 
-    @ApiModelProperty("响应消息")
+    @Schema(description = "响应消息")
     private String msg;
 
-    @ApiModelProperty("响应数据")
+    @Schema(description = "响应数据")
     private T data;
 
-    @ApiModelProperty("响应时间")
+    @Schema(description = "响应时间")
     private String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
     public ResponseResult<T> setCode(ResponseCode retCode) {

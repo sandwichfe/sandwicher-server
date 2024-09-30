@@ -13,13 +13,13 @@ import com.lww.sandwich.mapper.ViewMapper;
 import com.lww.sandwich.service.ViewService;
 // import io.jsonwebtoken.Claims;
 // import io.jsonwebtoken.Jwts;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import net.dreamlu.mica.ip2region.core.Ip2regionSearcher;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
