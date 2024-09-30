@@ -15,3 +15,16 @@ jasypt:
   encryptor:
     # password就是盐值
     #password: start input
+
+# springdoc
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  default-flat-param-object: true
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+    swagger-model-name: 实体类列表
