@@ -5,7 +5,7 @@ import com.lww.security.entity.LoginUser;
 import com.lww.response.ResponseResult;
 
 /**
- * @description 用户Service
+ *   用户Service
  * @author lww
  * @since 2022/7/20 14:58
  */

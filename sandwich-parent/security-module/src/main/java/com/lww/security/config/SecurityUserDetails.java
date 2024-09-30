@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 /**
- * @description 数据库User对象转换为UserDetails对象
+ *   数据库User对象转换为UserDetails对象
  * @author lww
  * @since 2022/7/20 15:11
  */

@@ -7,7 +7,7 @@ import com.lww.response.ResponseResult;
 import org.springframework.stereotype.Service;
 
 /**
- * @description 用户Service
+ *   用户Service
  * @author lww
  * @since 2022/7/20 14:58
  */

@@ -2,7 +2,7 @@ package com.lww.response;
 
 /**
  * @author lww
- * @description 返回结果工具类
+ *   返回结果工具类
  * @date 2022/3/11 16:33
  */
 public class ResultUtil {

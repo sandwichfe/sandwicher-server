@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.io.UnsupportedEncodingException;
 
 /**
- * @description 编码转换工具类
+ *   编码转换工具类
  * @author lww
  * @since 2022/5/25 11:03
  */

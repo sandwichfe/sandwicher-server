@@ -10,7 +10,7 @@ import java.util.Collections;
 
 /**
  * @author lww
- * @description 代码生成器
+ *   代码生成器
  * @date 2022/3/10 13:30
  */
 public class MpGeneCode {

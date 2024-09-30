@@ -2,7 +2,7 @@ package com.lww.sandwich.constant;
 
 /**
  * @author lww
- * @description 常量类
+ *   常量类
  * @since 2023/7/14 16:07
  */
 public class AppConstants {

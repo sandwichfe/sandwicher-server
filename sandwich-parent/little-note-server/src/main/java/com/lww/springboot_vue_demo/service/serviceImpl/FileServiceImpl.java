@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.*;
 
 /**
- * @description
+ *  
  * @author lww
  * @since 2022/9/5 14:59
  */
@@ -103,7 +103,7 @@ public class FileServiceImpl implements FileService {
 
     /**
      * @Author：
-     * @Description：获取某个目录下所有直接下级文件，不包括目录下的子目录的下的文件，所以不用递归获取
+     *  ：获取某个目录下所有直接下级文件，不包括目录下的子目录的下的文件，所以不用递归获取
      * @Date：
      */
     public List<Map<String, String>> getContents(String path) {

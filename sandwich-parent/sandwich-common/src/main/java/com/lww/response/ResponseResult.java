@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @author lww
- * @description 返回结果实体
+ *   返回结果实体
  * @date 2022/3/11 16:28
  */
 @ApiModel("返回结果实体")
