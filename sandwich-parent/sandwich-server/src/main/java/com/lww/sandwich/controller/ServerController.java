@@ -1,7 +1,7 @@
 package com.lww.sandwich.controller;
 
-import com.lww.response.ResponseResult;
-import com.lww.response.ResultUtil;
+import com.lww.common.web.response.ResponseResult;
+import com.lww.common.web.response.ResultUtil;
 import com.lww.sandwich.entity.Server;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

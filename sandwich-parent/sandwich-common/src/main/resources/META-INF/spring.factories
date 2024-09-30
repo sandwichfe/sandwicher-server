@@ -1,2 +1,2 @@
 #???????
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.lww.config.CommonModuleConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.lww.common.config.CommonModuleConfig

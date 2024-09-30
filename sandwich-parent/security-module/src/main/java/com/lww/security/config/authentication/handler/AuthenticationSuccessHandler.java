@@ -1,9 +1,9 @@
 package com.lww.security.config.authentication.handler;
 
-import com.lww.response.ResponseCode;
-import com.lww.response.ResultUtil;
+import com.lww.common.web.response.ResponseCode;
+import com.lww.common.web.response.ResultUtil;
 import com.lww.security.config.SecurityConstant;
-import com.lww.utils.ResponseOutUtil;
+import com.lww.common.utils.ResponseOutUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.Authentication;

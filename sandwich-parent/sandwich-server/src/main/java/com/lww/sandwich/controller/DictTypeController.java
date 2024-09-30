@@ -1,11 +1,11 @@
 package com.lww.sandwich.controller;
 
-import com.lww.Vo.PageDataVo;
-import com.lww.Vo.PageVo;
+import com.lww.common.Vo.PageDataVo;
+import com.lww.common.Vo.PageVo;
 import com.lww.sandwich.entity.DictType;
-import com.lww.response.ResponseCode;
-import com.lww.response.ResponseResult;
-import com.lww.response.ResultUtil;
+import com.lww.common.web.response.ResponseCode;
+import com.lww.common.web.response.ResponseResult;
+import com.lww.common.web.response.ResultUtil;
 import com.lww.sandwich.service.DictTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

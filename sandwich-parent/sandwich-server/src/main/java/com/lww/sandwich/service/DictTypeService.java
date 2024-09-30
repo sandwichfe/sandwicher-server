@@ -1,10 +1,10 @@
 package com.lww.sandwich.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lww.Vo.PageDataVo;
-import com.lww.Vo.PageVo;
+import com.lww.common.Vo.PageDataVo;
+import com.lww.common.Vo.PageVo;
 import com.lww.sandwich.entity.DictType;
-import com.lww.response.ResponseResult;
+import com.lww.common.web.response.ResponseResult;
 
 import java.util.List;
 

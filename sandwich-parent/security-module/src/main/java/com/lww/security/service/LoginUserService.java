@@ -2,7 +2,7 @@ package com.lww.security.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.security.entity.LoginUser;
-import com.lww.response.ResponseResult;
+import com.lww.common.web.response.ResponseResult;
 
 /**
  *   用户Service

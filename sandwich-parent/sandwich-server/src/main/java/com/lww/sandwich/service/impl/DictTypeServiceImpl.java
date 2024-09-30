@@ -1,12 +1,12 @@
 package com.lww.sandwich.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lww.Vo.PageDataVo;
-import com.lww.Vo.PageVo;
+import com.lww.common.Vo.PageDataVo;
+import com.lww.common.Vo.PageVo;
 import com.lww.sandwich.entity.DictType;
 import com.lww.sandwich.mapper.DictTypeMapper;
-import com.lww.response.ResponseResult;
-import com.lww.response.ResultUtil;
+import com.lww.common.web.response.ResponseResult;
+import com.lww.common.web.response.ResultUtil;
 import com.lww.sandwich.service.DictTypeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

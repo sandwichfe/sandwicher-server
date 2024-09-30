@@ -2,9 +2,9 @@ package com.lww.security.config;
 
 import com.github.xiaoymin.knife4j.core.util.StrUtil;
 import com.lww.security.entity.LoginUser;
-import com.lww.response.ResponseCode;
-import com.lww.response.ResultUtil;
-import com.lww.utils.ResponseOutUtil;
+import com.lww.common.web.response.ResponseCode;
+import com.lww.common.web.response.ResultUtil;
+import com.lww.common.utils.ResponseOutUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

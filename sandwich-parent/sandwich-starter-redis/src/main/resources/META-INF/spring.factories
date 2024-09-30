@@ -1,2 +1,2 @@
 #???????
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.lww.conf.RedisConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.lww.redis.conf.RedisConfig
