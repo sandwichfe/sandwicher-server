@@ -3,6 +3,14 @@ server:
   port: 1241
 
 spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://yiruserene.top:3306/sandwich?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
+    username: ENC(jelC1fjDfZ5PG7c8uG/0iRjx/HGJgbHI1A4CtgFF09TPiBe+YyflAxb+hVHY/SOm)
+    password: ENC(p5067+1TCj3uIYyTXp5unyyitXAI0q1h5IhxNWNcc0SdiMLm9Xik1ZwtcOPYG78l)
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
   data:
     redis:
       host: 49.235.149.110
@@ -15,14 +23,7 @@ spring:
           max-active: 2000
           max-wait: 1000
       timeout: 5000
-    datasource:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://yiruserene.top:3306/sandwich?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
-      username: ENC(jelC1fjDfZ5PG7c8uG/0iRjx/HGJgbHI1A4CtgFF09TPiBe+YyflAxb+hVHY/SOm)
-      password: ENC(p5067+1TCj3uIYyTXp5unyyitXAI0q1h5IhxNWNcc0SdiMLm9Xik1ZwtcOPYG78l)
-      hikari:
-        connection-timeout: 30000
-        maximum-pool-size: 10
+
 
 # 忽略权限控制
 security:
