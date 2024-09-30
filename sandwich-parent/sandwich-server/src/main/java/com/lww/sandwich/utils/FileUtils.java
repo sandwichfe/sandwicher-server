@@ -3,7 +3,7 @@ package com.lww.sandwich.utils;
 import java.io.*;
 
 /**
- * @description: 文件处理工具类
+ * @description 文件处理工具类
  * @author lww
  * @since 2022/5/25 10:29
  */

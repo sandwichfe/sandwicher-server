@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 
 /**
- * @description:
+ * @description
  * @author lww
  * @since 2022/7/21 13:51
  */

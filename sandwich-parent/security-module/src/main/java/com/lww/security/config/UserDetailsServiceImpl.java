@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 /**
- * @description: security用户信息校验相关
+ * @description security用户信息校验相关
  * @author lww
  * @since 2022/7/20 14:43
  */

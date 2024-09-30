@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @description:   mp分页插件
+ * @description   mp分页插件
  * @author lww
  * @date 2022/4/8 15:07
  */

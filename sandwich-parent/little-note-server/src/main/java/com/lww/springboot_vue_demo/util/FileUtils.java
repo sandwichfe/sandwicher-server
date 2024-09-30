@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 
 /**
- * @description: 文件操作相关工具类
+ * @description 文件操作相关工具类
  * @author lww
  * @since 2022/9/5 15:57
  */

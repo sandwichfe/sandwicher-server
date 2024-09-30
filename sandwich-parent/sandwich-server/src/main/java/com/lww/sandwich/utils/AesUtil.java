@@ -12,7 +12,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @description: AES加解密工具类
+ * @description AES加解密工具类
  * @author lww
  * @since 2023/7/17 13:13
  */

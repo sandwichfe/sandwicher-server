@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @description: 登录失败处理
+ * @description 登录失败处理
  * @author lww
  * @since 2022/7/20 16:54
  */

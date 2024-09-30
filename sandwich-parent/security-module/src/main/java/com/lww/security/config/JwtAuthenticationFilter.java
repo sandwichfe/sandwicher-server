@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description: JWT登录用户效验拦截器
+ * @description JWT登录用户效验拦截器
  * @author lww
  * @since 2022/7/21 9:13
  */

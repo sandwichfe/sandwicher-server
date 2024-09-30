@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @description:  使用response输出JSON
+ * @description  使用response输出JSON
  * @author lww
  * @since 2022/7/20 16:58
  */

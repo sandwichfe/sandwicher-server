@@ -1,7 +1,7 @@
 package com.lww.security.config;
 
 /**
- * @description:
+ * @description
  * @author lww
  * @since 2022/7/21 10:01
  */

@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @description: 登录成功的处理类
+ * @description 登录成功的处理类
  * @author lww
  * @since 2022/7/20 16:41
  */

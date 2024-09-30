@@ -1,7 +1,7 @@
 package com.lww.sandwich.utils;
 
 /**
- * @description:
+ * @description
  * @author lww
  * @since 2023/7/17 13:16
  */

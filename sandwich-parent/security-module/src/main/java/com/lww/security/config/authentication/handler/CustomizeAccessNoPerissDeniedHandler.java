@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @description: 无权限接口处理
+ * @description 无权限接口处理
  * @author lww
  * @since 2022/7/21 10:46
  */

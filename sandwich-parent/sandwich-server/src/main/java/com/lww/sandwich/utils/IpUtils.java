@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @description: ip相关工具类
+ * @description ip相关工具类
  * @author lww
  * @since 2022/4/21 15:59
  */

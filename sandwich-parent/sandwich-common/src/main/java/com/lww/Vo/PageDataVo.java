@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @description: 分页数据对象Vo
+ * @description 分页数据对象Vo
  * @author lww
  * @since 2022/4/20 15:11
  */

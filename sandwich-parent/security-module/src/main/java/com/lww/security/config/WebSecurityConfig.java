@@ -19,7 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.annotation.Resource;
 
 /**
- * @description: security权限拦截相关配置类
+ * @description security权限拦截相关配置类
  * @author lww
  * @since 2022/7/20 14:20
  */

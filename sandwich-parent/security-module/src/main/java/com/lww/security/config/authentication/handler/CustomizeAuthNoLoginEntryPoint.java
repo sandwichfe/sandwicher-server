@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @description:   用户未登录时的处理
+ * @description   用户未登录时的处理
  * @author lww
  * @since 2022/7/21 10:35
  */

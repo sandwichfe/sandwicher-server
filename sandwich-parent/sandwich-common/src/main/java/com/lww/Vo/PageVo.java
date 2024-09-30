@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * @description: 分页接受对象
+ * @description 分页接受对象
  * @author lww
  * @date 2022/4/8 15:06
  */
