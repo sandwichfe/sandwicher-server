@@ -3,6 +3,7 @@ package com.lww.sandwich.utils.yml;
 import com.lww.common.web.exception.AppException;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
@@ -17,7 +18,7 @@ import java.util.*;
  * @author <a href="https://zyqok.blog.csdn.net/">作者</a>
  * @since 2021/08/24
  */
-
+@Slf4j
 public class YamlPropertiesConverter {
     private static final String LINE_SPLIT = "\n";
 
@@ -51,14 +52,14 @@ public class YamlPropertiesConverter {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.info("error",e);
             }
         }
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(str);
             writer.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info("error",e);
         }
         return nodeList;
     }
@@ -180,7 +181,7 @@ public class YamlPropertiesConverter {
             fis.read(b);
             return new String(b, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info("error",e);
         }
         return "";
     }

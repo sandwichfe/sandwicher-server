@@ -80,7 +80,7 @@ public class AesUtil {
             cipher.init(Cipher.DECRYPT_MODE, key);
             return cipher.doFinal(content);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info("error",e);
         }
         return new byte[0];
     }

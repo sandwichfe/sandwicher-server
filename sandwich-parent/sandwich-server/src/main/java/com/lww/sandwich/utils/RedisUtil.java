@@ -1,5 +1,6 @@
 package com.lww.sandwich.utils;
 
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,8 +19,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisUtil {
 
-    @Autowired
-    private RedisTemplate redisTemplate;
+    @Resource
+    private RedisTemplate<String,Object> redisTemplate;
 
         /**
          * 设置过期时间
@@ -103,7 +104,7 @@ public class RedisUtil {
          */
         public  boolean set(String key, Object value) {
             try {
-                if (!hasKey(key)){
+                if (Boolean.FALSE.equals(hasKey(key))){
                     redisTemplate.opsForValue().set(key, value);
                 }
                 return true;

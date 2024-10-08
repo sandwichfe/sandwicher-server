@@ -24,7 +24,7 @@ public class ResponseOutUtil {
      * @param response
      * @param resultMap
      */
-    public static void out(HttpServletResponse response, ResponseResult<Void> resultMap){
+    public static void out(HttpServletResponse response, ResponseResult<Object> resultMap){
 
         ServletOutputStream out = null;
         try {
@@ -40,7 +40,7 @@ public class ResponseOutUtil {
                     out.flush();
                     out.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.info("error",e);
                 }
             }
         }
