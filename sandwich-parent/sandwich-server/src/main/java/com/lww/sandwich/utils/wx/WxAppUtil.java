@@ -1,4 +1,4 @@
-package com.lww.sandwich.utils.wxUtil;
+package com.lww.sandwich.utils.wx;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lww.sandwich.constant.AppConstants;

@@ -1,6 +1,8 @@
-package com.lww.sandwich.utils.ymlUtil;
+package com.lww.sandwich.utils.yml;
 
-import org.junit.Test;
+import com.lww.common.web.exception.AppException;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
@@ -12,12 +14,15 @@ import java.util.*;
 
 /**
  * Yaml 配置文件转 Properties 配置文件工具类
- * @author https://zyqok.blog.csdn.net/
+ * @author <a href="https://zyqok.blog.csdn.net/">作者</a>
  * @since 2021/08/24
  */
-public class YamlPropertiesConverter {
-    private static final String lineSplit = "\n";
 
+public class YamlPropertiesConverter {
+    private static final String LINE_SPLIT = "\n";
+
+    private YamlPropertiesConverter(){
+    }
 
     /**
      * 将 yml 文件转化为 properties 文件
@@ -26,12 +31,12 @@ public class YamlPropertiesConverter {
      * @return List<Node> 每个Nyml 文件中每行对应解析的数据
      */
     public static List<YmlNode> castProperties(String ymlFileName) {
-        if (ymlFileName == null || ymlFileName.isEmpty() || !ymlFileName.endsWith(".yml")) {
-            throw new RuntimeException("请输入yml文件名称！！");
+        if (ymlFileName == null || !ymlFileName.endsWith(".yml")) {
+            throw new AppException("请输入yml文件名称！！");
         }
         File ymlFile = new File(ymlFileName);
         if (!ymlFile.exists()) {
-            throw new RuntimeException("工程根目录下不存在 " + ymlFileName + "文件！！");
+            throw new AppException("工程根目录下不存在 " + ymlFileName + "文件！！");
         }
         String fileName = ymlFileName.split(".yml", 2)[0];
         // 获取文件数据
@@ -62,32 +67,30 @@ public class YamlPropertiesConverter {
      * yml转properties
      * @author lww
      * @since 2023/8/3 16:23
-     * @param ymlStr
-     * @return
+     * @param ymlStr ymlStr
      */
    public static String convertYamlToProperties(String ymlStr){
        List<YmlNode> nodeList = getNodeList(ymlStr);
        // 去掉多余数据，并打印
-       String str = printNodeList(nodeList);
-       return str;
+       return printNodeList(nodeList);
     }
 
     /**
      * properties转yml
-     * @param propertiesStr
-     * @return
+     * @param propertiesStr propertiesStr
+     * @return String
      */
     public static String convertPropertiesToYaml(String propertiesStr){
         //保存yml的行内容
         StringBuilder ymlLines = new StringBuilder();
-        List<String> lines = new ArrayList<>();
-        lines.addAll(Arrays.asList(propertiesStr.split(lineSplit)));
+        List<String> lines = new ArrayList<>(Arrays.asList(propertiesStr.split(LINE_SPLIT)));
         //使用treemap排好序
         Map<String,String> sourceMap = new LinkedHashMap<>();
-        Long commentLine = 0L;
-        Long emptyLine = 0L;
+        long commentLine = 0L;
+        long emptyLine = 0L;
         for (String line:lines){
-            String key,value;
+            String key;
+            String value;
             // 注释
             if (line.startsWith("#")){
                 key = "comment-text-"+commentLine++;
@@ -127,9 +130,7 @@ public class YamlPropertiesConverter {
                     prefix += tab;
                 }
                 String line = prefix + keys[i]+ ": ";
-                if (treeMap.get(parent)==null) {
-                    treeMap.put(parent, new ArrayList<>());
-                }
+                treeMap.computeIfAbsent(parent, k -> new ArrayList<>());
                 if(!treeMap.get(parent).contains(line)){
                     element = treeMap.get(parent)==null? new ArrayList<>():treeMap.get(parent);
                     if (!element.contains(line)){
@@ -139,18 +140,17 @@ public class YamlPropertiesConverter {
                     if (i==keys.length-1){
                         // 如果是注释或者空行
                         if (line.startsWith("comment-text")||line.startsWith("empty-text")){
-                            ymlLines.append(sourceMap.get(key)+lineSplit);
+                            ymlLines.append(sourceMap.get(key)).append(LINE_SPLIT);
                         }else{
-                            ymlLines.append(line+sourceMap.get(key)).append(lineSplit);
+                            ymlLines.append(line+sourceMap.get(key)).append(LINE_SPLIT);
                         }
                         parent = "";
                     }else{
-                        ymlLines.append(line).append(lineSplit);
+                        ymlLines.append(line).append(LINE_SPLIT);
                     }
                 }
             }
         }
-        //System.out.println(ymlLines);
         return ymlLines.toString();
     }
     
@@ -164,7 +164,7 @@ public class YamlPropertiesConverter {
         Map<String, String> map = new HashMap<>();
         List<YmlNode> list = castProperties(ymlFileName);
         for (YmlNode node : list) {
-            if (node.getKey().length() > 0) {
+            if (!node.getKey().isEmpty()) {
                 map.put(node.getKey(), node.getValue());
             }
         }
@@ -192,39 +192,34 @@ public class YamlPropertiesConverter {
                 continue;
             }
             if (node.getEmptyLine().equals(Boolean.TRUE)) {
-                System.out.println();
-                sb.append(lineSplit);
+                sb.append(LINE_SPLIT);
                 continue;
             }
             // 判断是否有行级注释
-            if (node.getHeadRemark().length() > 0) {
+            if (!node.getHeadRemark().isEmpty()) {
                 String s = "# " + node.getHeadRemark();
-                //System.out.println(s);
-                sb.append(s).append(lineSplit);
+                sb.append(s).append(LINE_SPLIT);
                 continue;
             }
             // 判断是否有行末注释 (properties中注释不允许末尾注释，故而放在上面)
-            if (node.getTailRemark().length() > 0) {
+            if (!node.getTailRemark().isEmpty()) {
                 String s = "# " + node.getTailRemark();
-                //System.out.println(s);
-                sb.append(s).append(lineSplit);
+                sb.append(s).append(LINE_SPLIT);
             }
-            //
             String kv = node.getKey() + "=" + node.getValue();
-            //System.out.println(kv);
-            sb.append(kv).append(lineSplit);
+            sb.append(kv).append(LINE_SPLIT);
         }
         return sb.toString();
     }
 
     private static List<YmlNode> getNodeList(String yml) {
-        String[] lines = yml.split(lineSplit);
+        String[] lines = yml.split(LINE_SPLIT);
         List<YmlNode> nodeList = new ArrayList<>();
         Map<Integer, String> keyMap = new HashMap<>();
         Set<String> keySet = new HashSet<>();
         for (String line : lines) {
             YmlNode node = getNode(line);
-            if (node.getKey() != null && node.getKey().length() > 0) {
+            if (node.getKey() != null && !node.getKey().isEmpty()) {
                 int level = node.getLevel();
                 if (level == 0) {
                     keyMap.clear();
@@ -332,7 +327,9 @@ public class YamlPropertiesConverter {
     }
 }
 
-class YmlNode {
+@Setter
+@Getter
+ class YmlNode {
 
     /** 层级关系 */
     private Integer level;
@@ -350,69 +347,5 @@ class YmlNode {
     private String tailRemark;
     /** 是否为最后一层配置 */
     private Boolean last;
-
-    public Boolean getLast() {
-        return last;
-    }
-
-    public void setLast(Boolean last) {
-        this.last = last;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public Boolean getEmptyLine() {
-        return emptyLine;
-    }
-
-    public void setEmptyLine(Boolean emptyLine) {
-        this.emptyLine = emptyLine;
-    }
-
-    public Boolean getEffective() {
-        return effective;
-    }
-
-    public void setEffective(Boolean effective) {
-        this.effective = effective;
-    }
-
-    public String getHeadRemark() {
-        return headRemark;
-    }
-
-    public void setHeadRemark(String headRemark) {
-        this.headRemark = headRemark;
-    }
-
-    public String getTailRemark() {
-        return tailRemark;
-    }
-
-    public void setTailRemark(String tailRemark) {
-        this.tailRemark = tailRemark;
-    }
 
 }

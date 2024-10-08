@@ -1,4 +1,4 @@
-package com.lww.littlenote.service.serviceImpl;
+package com.lww.littlenote.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -31,7 +31,6 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
         LambdaQueryWrapper<Note> wrapper = new LambdaQueryWrapper<>();
         wrapper.select(Note::getId, Note::getTitle, Note::getCreateTime, Note::getUpdateTime);
         wrapper.orderByDesc(Note::getUpdateTime);
-        Page<Note> notes = noteMapper.selectPage(new Page<>(pageVo.getPageNum(), pageVo.getPageSize()), wrapper);
-        return notes;
+        return noteMapper.selectPage(new Page<>(pageVo.getPageNum(), pageVo.getPageSize()), wrapper);
     }
 }

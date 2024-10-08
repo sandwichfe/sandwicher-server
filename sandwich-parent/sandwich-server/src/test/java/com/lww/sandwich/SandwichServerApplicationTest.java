@@ -2,7 +2,7 @@ package com.lww.sandwich;
 
 import com.lww.sandwich.constant.AppConstants;
 import com.lww.sandwich.utils.RedisUtil;
-import com.lww.sandwich.utils.wxUtil.WxAppUtil;
+import com.lww.sandwich.utils.wx.WxAppUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.StringEncryptor;

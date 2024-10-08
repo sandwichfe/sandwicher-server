@@ -2,7 +2,7 @@ package com.lww.sandwich.controller;
 
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
-import com.lww.sandwich.utils.ymlUtil.YamlPropertiesConverter;
+import com.lww.sandwich.utils.yml.YamlPropertiesConverter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,5 +1,6 @@
-package com.lww.littlenote.service.serviceImpl;
+package com.lww.littlenote.service.impl;
 
+import com.lww.common.web.exception.AppException;
 import com.lww.littlenote.service.FileService;
 import com.lww.littlenote.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public void deleteFile(String path) {
         if (!StringUtils.hasText(path) || !new File(path).exists()) {
-            throw new RuntimeException("此路径不存在！");
+            throw new AppException("此路径不存在！");
         }
         //删除文件
         FileUtils.delFiles(new File(path));
@@ -48,7 +49,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public void renameFile(String path,String newName) {
         if (!StringUtils.hasText(path) || !new File(path).exists()) {
-            throw new RuntimeException("此路径不存在！");
+            throw new AppException("此路径不存在！");
         }
         File file = new File(path);
         String newPathName = path.substring(0,path.lastIndexOf(File.separator))+File.separator+newName;
@@ -71,13 +72,12 @@ public class FileServiceImpl implements FileService {
         List<Map<String, String>> ret = new ArrayList<>();
         File[] files = File.listRoots();
         Map<String, String> cont;
-        if (files != null && files.length > 0) {
+        if (files != null) {
             for (File file : files) {
                 cont = new HashMap<>();
                 cont.put("type", "folder");
                 cont.put("path", file.toString().replace(File.separator, ""));
                 cont.put("preName", file.toString().replace(File.separator, ""));
-                System.out.println(cont);
                 ret.add(cont);
             }
         }
@@ -86,8 +86,8 @@ public class FileServiceImpl implements FileService {
 
 
     private List<Map<String, String>> queryByKeyWord(String keyword, List<Map<String, String>> contents) {
-        if (contents == null || contents.size() == 0) {
-            return null;
+        if (contents == null || contents.isEmpty()) {
+            return Collections.emptyList();
         }
         List<Map<String, String>> ret = new ArrayList<>();
         StringBuilder stringBuilder;
@@ -108,7 +108,7 @@ public class FileServiceImpl implements FileService {
      */
     public List<Map<String, String>> getContents(String path) {
         // 盘符根路径 处理
-        if (Arrays.asList(new String[]{"A:", "B:", "C:", "D:", "E:", "F:", "G:", "H:", "I:", "J:", "K:", "L:", "M:", "N:", "O:", "P:", "Q:", "R:", "S:", "T:", "U:", "V:", "W:", "X:", "Y:", "Z:"}).contains(path)) {
+        if (Arrays.asList("A:", "B:", "C:", "D:", "E:", "F:", "G:", "H:", "I:", "J:", "K:", "L:", "M:", "N:", "O:", "P:", "Q:", "R:", "S:", "T:", "U:", "V:", "W:", "X:", "Y:", "Z:").contains(path)) {
             path = path + "/";
         }
         List<Map<String, String>> contents = new ArrayList<>();
@@ -119,7 +119,7 @@ public class FileServiceImpl implements FileService {
         }
         File[] tempList = file.listFiles();
         Map<String, String> cont;
-        for (int i = 0; i < tempList.length; i++) {
+        for (int i = 0; i < Objects.requireNonNull(tempList).length; i++) {
             cont = new HashMap<>();
             if (tempList[i].isFile()) {
                 cont.put("type", "file");
@@ -139,17 +139,17 @@ public class FileServiceImpl implements FileService {
     @Override
     public void mkdir(String path, String dirName) {
         if (!StringUtils.hasText(path)|| !StringUtils.hasText(dirName)){
-            throw new RuntimeException("传个空参数干哈勒！");
+            throw new AppException("传个空参数干哈勒！");
         }
         String dirPath = path+File.separator+dirName;
         File file = new File(dirPath);
         if (file.exists()){
             String fileType = file.isDirectory()?"文件夹":"文件";
-            throw new RuntimeException("当前目录已存在此"+fileType+"!");
+            throw new AppException("当前目录已存在此"+fileType+"!");
         }
         boolean ret = file.mkdir();
         if (!ret){
-            throw new RuntimeException("创建失败！");
+            throw new AppException("创建失败！");
         }
     }
 }

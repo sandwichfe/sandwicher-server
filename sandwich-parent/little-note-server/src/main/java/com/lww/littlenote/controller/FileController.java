@@ -2,7 +2,7 @@ package com.lww.littlenote.controller;
 
 
 import com.lww.littlenote.service.FileService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -17,11 +17,11 @@ import java.util.Map;
 @RequestMapping("/file")
 public class FileController {
 
-    @Autowired
+    @Resource
     private FileService fileService;
 
     @PostMapping("/list1")
-    public Map<String, Object> Hello(String path, String keyword) {
+    public Map<String, Object> hello(String path, String keyword) {
         List<Map<String, String>> fileList = fileService.getFileList(path, keyword);
         Map<String, Object> map = new HashMap<>();
         map.put("data", fileList);
