@@ -12,7 +12,7 @@ spring:
           max-active: 2000
           max-wait: 1000
       timeout: 5000
-    datasource:
+  datasource:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://yiruserene.top:3306/littleNote?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
       username: ENC(jelC1fjDfZ5PG7c8uG/0iRjx/HGJgbHI1A4CtgFF09TPiBe+YyflAxb+hVHY/SOm)
