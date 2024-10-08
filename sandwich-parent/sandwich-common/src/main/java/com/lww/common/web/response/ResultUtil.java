@@ -7,7 +7,7 @@ package com.lww.common.web.response;
  */
 public class ResultUtil {
 
-    private final static String SUCCESS = "success";
+    private static final String SUCCESS = "success";
 
     public static <T> ResponseResult<T> success() {
         return new ResponseResult<T>().setCode(ResponseCode.SUCCESS).setMsg(SUCCESS);

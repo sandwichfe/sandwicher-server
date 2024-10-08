@@ -16,12 +16,15 @@ import java.io.IOException;
 @Slf4j
 public class ResponseOutUtil {
 
+    private ResponseOutUtil(){
+    }
+
     /**
      *  使用response输出JSON
      * @param response
      * @param resultMap
      */
-    public static void out(HttpServletResponse response, ResponseResult resultMap){
+    public static void out(HttpServletResponse response, ResponseResult<Void> resultMap){
 
         ServletOutputStream out = null;
         try {

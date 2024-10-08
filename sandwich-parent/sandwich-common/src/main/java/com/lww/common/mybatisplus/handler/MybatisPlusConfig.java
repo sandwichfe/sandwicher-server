@@ -1,4 +1,4 @@
-package com.lww.common.mybatisplus.mpHandler;
+package com.lww.common.mybatisplus.handler;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

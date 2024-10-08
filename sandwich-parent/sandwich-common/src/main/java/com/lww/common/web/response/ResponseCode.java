@@ -33,7 +33,7 @@ public enum ResponseCode {
     // 网关超时
     GATEWAY_TIMEOUT(504);
 
-    public int code;
+    public final int code;
 
     ResponseCode(int code) {
         this.code = code;

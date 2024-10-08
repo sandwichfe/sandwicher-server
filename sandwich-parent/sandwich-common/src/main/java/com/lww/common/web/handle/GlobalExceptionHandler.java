@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 /**
  * 全局异常处理类
  * RestControllerAdvice 监管所有RestController
+ * @author sandw
  */
 @Slf4j
 @RestControllerAdvice
@@ -35,9 +36,9 @@ public class GlobalExceptionHandler {
      * 处理自定义异常  处理特定异常
      */
     @ExceptionHandler(AppException.class)
-    public ResponseResult handleBizException(AppException e) {
+    public ResponseResult<Void> handleBizException(AppException e) {
         log.error("异常信息：", e);
-        ResponseResult<Object> result = new ResponseResult<>();
+        ResponseResult<Void> result = new ResponseResult<>();
         result.setCode(e.getCode());
         result.setMsg(e.getMessage());
         return result;
@@ -47,7 +48,7 @@ public class GlobalExceptionHandler {
      * 处理 json 请求体调用接口对象参数校验失败抛出的异常
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseResult jsonParamsException(MethodArgumentNotValidException e) {
+    public ResponseResult<Void> jsonParamsException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
         List errorList = CollectionUtil.newArrayList();
 
@@ -63,7 +64,7 @@ public class GlobalExceptionHandler {
      * 处理单个参数校验失败抛出的异常
      */
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseResult ParamsException(ConstraintViolationException e) {
+    public ResponseResult<Void> paramsException(ConstraintViolationException e) {
 
         List<String> errorList = CollectionUtil.newArrayList();
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
@@ -78,11 +79,11 @@ public class GlobalExceptionHandler {
      * @return 处理 form data方式调用接口对象参数校验失败抛出的异常
      */
     @ExceptionHandler(BindException.class)
-    public ResponseResult formDaraParamsException(BindException e) {
+    public ResponseResult<Void> formDaraParamsException(BindException e) {
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         List<String> collect = fieldErrors.stream()
                 .map(o -> o.getField() +":"+ o.getDefaultMessage())
-                .collect(Collectors.toList());
+                .toList();
         return ResultUtil.error(ResponseCode.FAILURE,collect.toString());
     }
 
@@ -90,7 +91,7 @@ public class GlobalExceptionHandler {
      * 请求方法不被允许异常
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseResult httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+    public ResponseResult<Void> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         return ResultUtil.error(ResponseCode.FAILURE,e.getMessage());
     }
 
@@ -101,7 +102,7 @@ public class GlobalExceptionHandler {
      * application/x-www-form-urlencoded
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ResponseResult httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
+    public ResponseResult<Void> httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
         return ResultUtil.error(ResponseCode.FAILURE,e.getMessage());
     }
 
@@ -112,7 +113,7 @@ public class GlobalExceptionHandler {
      * @return
      */
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseResult noHandlerFoundException(NoHandlerFoundException e) {
+    public ResponseResult<Void> noHandlerFoundException(NoHandlerFoundException e) {
         return ResultUtil.error(ResponseCode.FAILURE,e.getMessage());
     }
 
@@ -120,7 +121,7 @@ public class GlobalExceptionHandler {
      * 其他未知异常(拦截的是全局最底层异常,兜底)
      */
     @ExceptionHandler(value = Exception.class)
-    public ResponseResult handleException(Exception e) {
+    public ResponseResult<Void> handleException(Exception e) {
         log.error("异常信息：", e);
         return ResultUtil.error(ResponseCode.FAILURE,"服务器内部错误");
     }

@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class DicDataStore {
 
-    public static final Map<String, Map<Object, String>> dicData = new HashMap<>();
+    protected static final Map<String, Map<Object, String>> DIC_DATA = new HashMap<>();
 
     static {
         // 1.可在spring启动时 放入
@@ -23,12 +23,12 @@ public class DicDataStore {
     }
 
     public static void putValue(String type, Map<Object, String> map) {
-        dicData.put(type, map);
+        DIC_DATA.put(type, map);
     }
 
 
     public static String getNameByCodeAndValue(String code, String value) {
-        return dicData.get(code).get(value);
+        return DIC_DATA.get(code).get(value);
     }
 
 }

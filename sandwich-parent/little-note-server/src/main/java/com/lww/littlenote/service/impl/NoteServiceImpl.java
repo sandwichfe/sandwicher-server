@@ -3,7 +3,7 @@ package com.lww.littlenote.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lww.common.web.Vo.PageVo;
+import com.lww.common.web.vo.PageVo;
 import com.lww.littlenote.entity.Note;
 import com.lww.littlenote.mapper.NoteMapper;
 import com.lww.littlenote.service.NoteService;

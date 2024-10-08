@@ -1,4 +1,4 @@
-package com.lww.common.web.Vo;
+package com.lww.common.web.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

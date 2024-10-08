@@ -1,10 +1,10 @@
 # 基础镜像
 FROM openjdk:8-jdk-alpine
-MAINTAINER "维护者 <1344382941@qq.com>"
+LABEL maintainer="维护者 <1344382941@qq.com>"
 LABEL description="描述"
-WORKDIR app
-ADD yourApp.jar /app/app.jar
-ADD application.yml /app/application.yml
+WORKDIR /app
+COPY yourApp.jar /app/app.jar
+COPY application.yml /app/application.yml
 # 开放端口8000
 EXPOSE 8000
 # 执行命令

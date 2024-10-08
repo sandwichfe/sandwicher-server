@@ -1,7 +1,7 @@
 package com.lww.sandwich.controller;
 
-import com.lww.common.web.Vo.PageDataVo;
-import com.lww.common.web.Vo.PageVo;
+import com.lww.common.web.vo.PageDataVo;
+import com.lww.common.web.vo.PageVo;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.sandwich.Vo.ViewVO;
@@ -39,13 +39,13 @@ public class BaseController {
     private ViewService viewService;
 
     @GetMapping("/getBase")
-    public ResponseResult getBase(@NotBlank(message = "p1为空") String param1, @NotBlank(message = "p2为空") String param2) {
+    public ResponseResult<String> getBase(@NotBlank(message = "p1为空") String param1, @NotBlank(message = "p2为空") String param2) {
         String ret = "a1 is " + param1 + " - a2 is " + param2;
         return ResultUtil.success(ret);
     }
 
     @GetMapping("/getRequestIp")
-    public ResponseResult getRequestIp(HttpServletRequest request) {
+    public ResponseResult<String> getRequestIp(HttpServletRequest request) {
         String ipAddress = IpUtils.getIpAddress(request);
         viewService.addViewRecord(ipAddress,request);
         return ResultUtil.success(ipAddress);
@@ -58,7 +58,7 @@ public class BaseController {
     }
 
     @PostMapping("/uploadFile")
-    public ResponseResult uploadFile(MultipartFile file) {
+    public ResponseResult<String> uploadFile(MultipartFile file) {
         if (file == null) {
             return ResultUtil.error("文件为空！");
         }

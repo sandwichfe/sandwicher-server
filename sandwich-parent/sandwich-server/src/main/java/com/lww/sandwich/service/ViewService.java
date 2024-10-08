@@ -1,7 +1,7 @@
 package com.lww.sandwich.service;
 
-import com.lww.common.web.Vo.PageDataVo;
-import com.lww.common.web.Vo.PageVo;
+import com.lww.common.web.vo.PageDataVo;
+import com.lww.common.web.vo.PageVo;
 import com.lww.sandwich.Vo.ViewVO;
 import com.lww.sandwich.entity.View;
 import com.baomidou.mybatisplus.extension.service.IService;

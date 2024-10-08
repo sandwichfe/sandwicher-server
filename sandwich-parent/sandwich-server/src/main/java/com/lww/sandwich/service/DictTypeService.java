@@ -1,8 +1,8 @@
 package com.lww.sandwich.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lww.common.web.Vo.PageDataVo;
-import com.lww.common.web.Vo.PageVo;
+import com.lww.common.web.vo.PageDataVo;
+import com.lww.common.web.vo.PageVo;
 import com.lww.sandwich.entity.DictType;
 import com.lww.common.web.response.ResponseResult;
 

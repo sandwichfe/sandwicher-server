@@ -1,7 +1,7 @@
 package com.lww.littlenote.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lww.common.web.Vo.PageVo;
+import com.lww.common.web.vo.PageVo;
 import com.lww.littlenote.entity.Note;
 import com.lww.littlenote.service.NoteService;
 import com.lww.common.web.response.ResponseResult;

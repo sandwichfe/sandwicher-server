@@ -22,12 +22,12 @@ public class DictInitComponent implements ApplicationRunner {
         // 查所有字典数据库放进去 暂时todo
 
         String statusType = "statusType";
-        Map<Object,String> m1 = new HashMap(2);
+        Map<Object,String> m1 = new HashMap<>(2);
         m1.put("0","初始化");
         DicDataStore.putValue(statusType,m1);
 
         String sexType = "sexType";
-        Map<Object,String> m2 = new HashMap(2);
+        Map<Object,String> m2 = new HashMap<>(2);
         m2.put("1","男");
         m2.put("2","女");
         DicDataStore.putValue(sexType,m2);

@@ -26,8 +26,7 @@ public class CommonModuleConfig {
      */
     @Bean
     public DictInitComponent dicInitComponent() {
-        DictInitComponent dicInitComponent = new DictInitComponent();
-        return dicInitComponent;
+        return new DictInitComponent();
     }
 
 }
