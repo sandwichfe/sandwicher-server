@@ -1,4 +1,4 @@
-package com.lww.sandwich.utils.easyExcelUtils;
+package com.lww.sandwich.utils.easyexcel;
 
 import cn.hutool.core.convert.Convert;
 import com.alibaba.excel.converters.Converter;
@@ -54,7 +54,6 @@ public class MyStringImageConverterUtil implements Converter<List<String>> {
             } catch (Exception e) {
                 //图片异常展示的图片
                 data.add(new CellData(IoUtils.toByteArray(new FileInputStream("D:\\easyexcel\\err.png"))));
-                continue;
             } finally {
                 if (inputStream != null){
                     inputStream.close();

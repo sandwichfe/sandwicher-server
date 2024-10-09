@@ -1,4 +1,4 @@
-package com.lww.sandwich.utils.easyExcelUtils;
+package com.lww.sandwich.utils.easyexcel;
 
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.enums.CellDataTypeEnum;
@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,13 +35,13 @@ public class MyUrlConverterUtil implements Converter<List<URL>> {
 
     @Override
     public List convertToJavaData(CellData cellData, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) throws Exception {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public CellData convertToExcelData(List<URL> value, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) throws Exception {
         // 这里进行对数据实体类URL集合处理
-        List<CellData> data = new ArrayList<>();
+        List<CellData<byte[]>> data = new ArrayList<>();
         // for 循环一次读取
         for (URL url : value) {
             InputStream inputStream = null;
@@ -51,7 +52,6 @@ public class MyUrlConverterUtil implements Converter<List<URL>> {
             } catch (Exception e) {
                 //图片异常展示的图片
                 data.add(new CellData(IoUtils.toByteArray(new FileInputStream("C:\\Users\\Administrator\\Desktop\\测试ds\\1.jpg"))));
-                continue;
             } finally {
                 if (inputStream != null){
                     inputStream.close();

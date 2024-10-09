@@ -2,9 +2,7 @@ package com.lww.sandwich.gene;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
-import com.baomidou.mybatisplus.generator.config.TemplateType;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
 
 import java.util.Collections;
 
@@ -24,22 +22,22 @@ public class MpGeneCode {
         String baseOutPutDir = "F://sandwicher//sandwich-server//src//main//java//";
         FastAutoGenerator.create(url, username, password)
                 // 全局配置
-                .globalConfig(builder -> {
+                .globalConfig(builder ->
                     builder.author("lww") // 设置作者
                             .enableSwagger() // 开启 swagger 模式
                             .commentDate("yyyy-MM-dd HH:mm:ss")
                             //                             .fileOverride() // 覆盖已生成文件
                             .disableOpenDir() // 生成完不弹出对应目录
-                            .outputDir(baseOutPutDir); // 指定输出目录
-                })
+                            .outputDir(baseOutPutDir) // 指定输出目录
+                )
                 // 包配置相关
-                .packageConfig(builder -> {
+                .packageConfig(builder ->
                     builder.parent("com.lww") // 设置父包名
                             .moduleName("sandwich")// 设置父包模块名
-                            .pathInfo(Collections.singletonMap(OutputFile.xml, "F://sandwicher//sandwich-server//src//main//resources//mapper//")); // 设置mapperXml生成路径
-                })
+                            .pathInfo(Collections.singletonMap(OutputFile.xml, "F://sandwicher//sandwich-server//src//main//resources//mapper//")) // 设置mapperXml生成路径
+                )
                 // 策略配置
-                .strategyConfig(builder -> {
+                .strategyConfig(builder ->
                     builder.addInclude(tableNames) // 设置需要生成的表名
                             .addTablePrefix("t_", "c_") // 设置过滤表前缀
                             // controller
@@ -49,8 +47,8 @@ public class MpGeneCode {
                             .formatServiceImplFileName("%sServiceImpl")
                             // entity
                             .entityBuilder()     //实体类相关 builder
-                            .enableLombok();     //开启lombok
-                })
+                            .enableLombok()    //开启lombok
+                )
                 //自定义模板
                 .templateConfig(builder -> {
                     builder
@@ -66,11 +64,11 @@ public class MpGeneCode {
                 // 使用Freemarker引擎模板，默认的是Velocity引擎模板
                 .templateEngine(new FreemarkerTemplateEngine())
                 // 其他注入设置
-                .injectionConfig(builder -> {
+                .injectionConfig(builder ->
                     builder.beforeOutputFile((tableInfo, objectMap) -> {
                         //System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
-                    }).build();
-                }).execute();
+                    }).build()
+                ).execute();
     }
 
 }

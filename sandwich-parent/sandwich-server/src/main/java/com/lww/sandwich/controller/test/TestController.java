@@ -37,7 +37,7 @@ public class TestController {
     private Ip2regionSearcher regionSearcher;
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String,Object> redisTemplate;
 
     @GetMapping("/listAllDictType")
     public ResponseResult<List<DictType>> listAllDictType() {
@@ -46,7 +46,7 @@ public class TestController {
     }
 
     @GetMapping("/testGetIp")
-    public ResponseResult testGetIp(HttpServletRequest request) {
+    public ResponseResult<Object> testGetIp(HttpServletRequest request) {
         String ipAddress = IpUtils.getIpAddress(request);
         String cityInfo = regionSearcher.getAddress("49.235.149.110");
 

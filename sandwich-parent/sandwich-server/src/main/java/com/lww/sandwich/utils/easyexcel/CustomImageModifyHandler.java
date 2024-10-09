@@ -1,4 +1,4 @@
-package com.lww.sandwich.utils.easyExcelUtils;
+package com.lww.sandwich.utils.easyexcel;
 
 import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.metadata.CellData;
