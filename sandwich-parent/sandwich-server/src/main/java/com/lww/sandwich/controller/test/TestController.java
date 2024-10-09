@@ -2,6 +2,7 @@ package com.lww.sandwich.controller.test;
 
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
+import com.lww.redis.util.RedisUtil;
 import com.lww.sandwich.entity.DictType;
 import com.lww.sandwich.service.DictTypeService;
 import com.lww.sandwich.utils.IpUtils;
@@ -37,7 +38,7 @@ public class TestController {
     private Ip2regionSearcher regionSearcher;
 
     @Resource
-    private RedisTemplate<String,Object> redisTemplate;
+    private RedisUtil redisUtil;
 
     @GetMapping("/listAllDictType")
     public ResponseResult<List<DictType>> listAllDictType() {
@@ -50,8 +51,7 @@ public class TestController {
         String ipAddress = IpUtils.getIpAddress(request);
         String cityInfo = regionSearcher.getAddress("49.235.149.110");
 
-        redisTemplate.opsForValue().set("cityInfo", cityInfo);
-        Object str = redisTemplate.opsForValue().get("cityInfo");
+        Object str = redisUtil.get("cityInfo");
         System.out.println(str);
 
         return ResultUtil.success(Map.of("cityInfo", cityInfo, "ipAddress", ipAddress));

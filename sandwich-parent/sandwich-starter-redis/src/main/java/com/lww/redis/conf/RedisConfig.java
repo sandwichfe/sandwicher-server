@@ -39,7 +39,7 @@ public class RedisConfig {
     public RedisUtil redisUtil(RedisTemplate<String, Object> redisTemplate) {
         RedisUtil redisUtil = new RedisUtil();
         redisUtil.setRedisTemplate(redisTemplate);
-        return new RedisUtil();
+        return redisUtil;
     }
 
 }
