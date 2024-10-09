@@ -1,4 +1,4 @@
-package com.lww.sandwich.Vo;
+package com.lww.sandwich.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lww.common.dict.DictConvert;

@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServerController
 {
     @GetMapping()
-    public ResponseResult getInfo() throws Exception
-    {
+    public ResponseResult getInfo() {
         Server server = new Server();
         server.copyTo();
         return ResultUtil.success(server);

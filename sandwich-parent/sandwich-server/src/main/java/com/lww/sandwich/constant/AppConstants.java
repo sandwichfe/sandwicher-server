@@ -6,6 +6,7 @@ package com.lww.sandwich.constant;
  * @since 2023/7/14 16:07
  */
 public class AppConstants {
+    private AppConstants() {}
 
     public static final String WX_APP_ID = "";
     public static final String WX_APP_SECRET = "";

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lww.common.web.vo.PageDataVo;
 import com.lww.common.web.vo.PageVo;
-import com.lww.sandwich.Vo.ViewVO;
+import com.lww.sandwich.vo.ViewVO;
 // import com.lww.sandwich.config.security.SecurityConstant;
 import com.lww.sandwich.entity.View;
 import com.lww.sandwich.mapper.ViewMapper;

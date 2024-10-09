@@ -1,6 +1,6 @@
 package com.lww.common.web.handle;
 
-import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.lww.common.web.exception.AppException;
 import com.lww.common.web.response.ResponseCode;
 import com.lww.common.web.response.ResponseResult;
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseResult<Void> jsonParamsException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
-        List errorList = CollectionUtil.newArrayList();
+        List<String> errorList = CollUtil.newArrayList();
 
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
             String msg = String.format("%s%s；", fieldError.getField(), fieldError.getDefaultMessage());
@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseResult<Void> paramsException(ConstraintViolationException e) {
 
-        List<String> errorList = CollectionUtil.newArrayList();
+        List<String> errorList = CollUtil.newArrayList();
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         for (ConstraintViolation<?> violation : violations) {
             errorList.add(violation.getMessageTemplate());
