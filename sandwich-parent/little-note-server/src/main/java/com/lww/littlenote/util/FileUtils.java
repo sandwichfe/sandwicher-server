@@ -28,7 +28,7 @@ public class FileUtils {
         }
         //删除 文件、空目录
         file.delete();
-        log.info(file.getPath() + "  delete success!");
+        log.info("{}  delete success!", file.getPath());
     }
 
     

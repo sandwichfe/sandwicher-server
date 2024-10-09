@@ -109,7 +109,7 @@ public class FileServiceImpl implements FileService {
     public List<Map<String, String>> getContents(String path) {
         // 盘符根路径 处理
         if (Arrays.asList("A:", "B:", "C:", "D:", "E:", "F:", "G:", "H:", "I:", "J:", "K:", "L:", "M:", "N:", "O:", "P:", "Q:", "R:", "S:", "T:", "U:", "V:", "W:", "X:", "Y:", "Z:").contains(path)) {
-            path = path + "/";
+            path = path + File.separator;
         }
         List<Map<String, String>> contents = new ArrayList<>();
         File file = new File(path);

@@ -1,6 +1,8 @@
 package com.lww.sandwich.controller;
 
+import com.lww.common.web.response.ResponseCode;
 import com.lww.common.web.response.ResponseResult;
+import com.lww.common.web.response.ResultUtil;
 import com.lww.sandwich.entity.User;
 import com.lww.sandwich.service.UserService;
 import jakarta.annotation.Resource;
@@ -10,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *  
  * @author lww
  * @since 2022/7/21 13:51
  */
@@ -22,8 +23,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/registerUser")
-    public ResponseResult registerUser(@RequestBody User user) {
-        return userService.registerUser(user);
+    public ResponseResult<Void> registerUser(@RequestBody User user) {
+        userService.registerUser(user);
+        return ResultUtil.response(ResponseCode.SUCCESS, "注册成功！");
     }
 
 }

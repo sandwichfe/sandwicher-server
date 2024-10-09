@@ -40,28 +40,25 @@ public class NoteController {
 
 
     @PostMapping("/addNote")
-    public HashMap addNote(Note note) {
+    public ResponseResult<Long> addNote(Note note) {
         note.setUpdateTime(LocalDateTime.now());
         noteService.save(note);
         Long id = note.getId();
-        HashMap<String, Long> ret = new HashMap<>();
-        ret.put("code", 200L);
-        ret.put("id", id);
-        return ret;
+        return ResultUtil.success(id);
 
     }
 
     @PostMapping("/editNote")
-    public String listNote(Note note) {
+    public ResponseResult<Void> listNote(Note note) {
         noteService.saveOrUpdate(note);
-        return "ok";
+        return ResultUtil.success();
     }
 
 
     @PostMapping("/deleteNote")
-    public String deleteNote(Note note) {
+    public ResponseResult<Void> deleteNote(Note note) {
         noteService.removeById(note);
-        return "ok";
+        return ResultUtil.success();
     }
 
 }

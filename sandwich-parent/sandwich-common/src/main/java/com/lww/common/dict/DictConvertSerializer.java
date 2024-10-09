@@ -66,7 +66,7 @@ public class DictConvertSerializer extends JsonSerializer<String> implements Con
         }
         // 处理 传了多个字典值 逗号分割的情况
         String[] split = fieldValue.split(PunctuationConstants.COMMA);
-        List<String> list = new ArrayList(split.length);
+        List<String> list = new ArrayList<>(split.length);
         for (String s : split) {
             list.add(DicDataStore.getNameByCodeAndValue(this.code, s));
         }

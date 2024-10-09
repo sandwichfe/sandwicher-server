@@ -7,6 +7,9 @@ package com.lww.common.web.response;
  */
 public class ResultUtil {
 
+    private ResultUtil() {
+    }
+
     private static final String SUCCESS = "success";
 
     public static <T> ResponseResult<T> success() {
