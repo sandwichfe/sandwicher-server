@@ -2,7 +2,7 @@ package com.lww.sandwich.entity;
 
 import com.lww.sandwich.entity.server.*;
 import com.lww.sandwich.utils.Arith;
-import com.lww.sandwich.utils.ip.IpUtils;
+import com.lww.sandwich.utils.IpUtils;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.CentralProcessor.TickType;
@@ -50,7 +50,7 @@ public class Server
     /**
      * 磁盘相关信息
      */
-    private List<SysFile> sysFiles = new LinkedList<SysFile>();
+    private List<SysFile> sysFiles = new LinkedList<>();
 
     public Cpu getCpu()
     {
@@ -102,8 +102,7 @@ public class Server
         this.sysFiles = sysFiles;
     }
 
-    public void copyTo() throws Exception
-    {
+    public void copyTo() {
         SystemInfo si = new SystemInfo();
         HardwareAbstractionLayer hal = si.getHardware();
 
@@ -170,8 +169,7 @@ public class Server
     /**
      * 设置Java虚拟机
      */
-    private void setJvmInfo() throws UnknownHostException
-    {
+    private void setJvmInfo() {
         Properties props = System.getProperties();
         jvm.setTotal(Runtime.getRuntime().totalMemory());
         jvm.setMax(Runtime.getRuntime().maxMemory());

@@ -1,24 +1,25 @@
 package com.lww.littlenote.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lww.common.web.response.ResponseResult;
+import com.lww.common.web.response.ResultUtil;
 import com.lww.common.web.vo.PageVo;
 import com.lww.littlenote.entity.Note;
 import com.lww.littlenote.service.NoteService;
-import com.lww.common.web.response.ResponseResult;
-import com.lww.common.web.response.ResultUtil;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.*;
-
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.time.LocalDateTime;
-import java.util.HashMap;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/note")
 public class NoteController {
 
-    private final String key = "8F6B2CK33DZE20A08O74C231B47AC8F9";
 
     @Resource
     private NoteService noteService;
@@ -30,12 +31,8 @@ public class NoteController {
     }
 
     @PostMapping("/getNote")
-    public Note getNote(Long id) throws Exception {
-
-        Note note = noteService.getById(id);
-
-        // note.setContent(AESUtil.encrypt(note.getContent(), key));
-        return note;
+    public Note getNote(Long id) {
+        return noteService.getById(id);
     }
 
 

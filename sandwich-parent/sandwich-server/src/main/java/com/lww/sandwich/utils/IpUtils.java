@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
  *   ip相关工具类
  * @author lww
@@ -51,6 +54,45 @@ public class IpUtils {
         }
         return XFor;
     }
+
+
+
+    /**
+     * 获取IP地址
+     *
+     * @return 本地IP地址
+     */
+    public static String getHostIp()
+    {
+        try
+        {
+            return InetAddress.getLocalHost().getHostAddress();
+        }
+        catch (UnknownHostException e)
+        {
+        }
+        return "127.0.0.1";
+    }
+
+    /**
+     * 获取主机名
+     *
+     * @return 本地主机名
+     */
+    public static String getHostName()
+    {
+        try
+        {
+            return InetAddress.getLocalHost().getHostName();
+        }
+        catch (UnknownHostException e)
+        {
+        }
+        return "未知";
+    }
+
+
+
 
     /**
      * 根据IP地址获取城市

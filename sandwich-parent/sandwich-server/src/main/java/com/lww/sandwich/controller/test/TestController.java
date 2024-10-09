@@ -1,13 +1,13 @@
 package com.lww.sandwich.controller.test;
 
-import com.lww.sandwich.entity.DictType;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
+import com.lww.sandwich.entity.DictType;
 import com.lww.sandwich.service.DictTypeService;
 import com.lww.sandwich.utils.IpUtils;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import net.dreamlu.mica.ip2region.core.Ip2regionSearcher;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 

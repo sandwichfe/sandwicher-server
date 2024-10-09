@@ -46,7 +46,7 @@ public class DictTypeController {
     @PostMapping("/addDictType")
     @Schema(description = "添加字典类型")
     public ResponseResult<Object> addDictType(DictType dictType) {
-        boolean save = dictTypeService.save(dictType);
+        dictTypeService.save(dictType);
         return ResultUtil.response(ResponseCode.SUCCESS, "添加成功!");
     }
 

@@ -2,7 +2,6 @@ package com.lww.sandwich.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lww.sandwich.entity.User;
-import com.lww.sandwich.entity.View;
 
 /**
  *  Mapper 接口

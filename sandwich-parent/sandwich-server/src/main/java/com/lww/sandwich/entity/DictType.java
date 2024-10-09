@@ -29,10 +29,10 @@ public class DictType implements Serializable {
     private String dictId;
 
     @Schema(description = "字典名称")
-    private String dictName;
+    private String name;
 
     @Schema(description = "子典类型")
-    private String dictType;
+    private String type;
 
     @Schema(description = "状态（0正常 1停用）")
     private Integer status;

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FormatConverterController
 {
     @PostMapping("/propToYml")
-    public ResponseResult propToYml(String propStr)
+    public ResponseResult<String> propToYml(String propStr)
     {
         String convertedYamlString = null;
         try {
@@ -32,7 +32,7 @@ public class FormatConverterController
     }
 
     @PostMapping("/ymlToProp")
-    public ResponseResult ymlToProp(String ymlStr)
+    public ResponseResult<String> ymlToProp(String ymlStr)
     {
         String convertedPropertiesString = null;
         try {

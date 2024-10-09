@@ -2,7 +2,6 @@ package com.lww.sandwich.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.sandwich.entity.User;
-import com.lww.common.web.response.ResponseResult;
 
 /**
  *   用户Service

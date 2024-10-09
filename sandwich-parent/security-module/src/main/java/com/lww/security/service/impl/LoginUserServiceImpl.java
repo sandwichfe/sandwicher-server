@@ -2,6 +2,7 @@ package com.lww.security.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lww.common.web.response.ResponseCode;
 import com.lww.security.entity.LoginUser;
 import com.lww.security.mapper.LoginUserMapper;
 import com.lww.common.web.response.ResponseResult;
@@ -38,8 +39,7 @@ public class LoginUserServiceImpl extends ServiceImpl<LoginUserMapper, LoginUser
         // 查询此用户名
         QueryWrapper<LoginUser> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
-        LoginUser user = loginUserMapper.selectOne(wrapper);
-        return user;
+        return loginUserMapper.selectOne(wrapper);
     }
 
     /**
@@ -50,7 +50,7 @@ public class LoginUserServiceImpl extends ServiceImpl<LoginUserMapper, LoginUser
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResponseResult registerUser(LoginUser user) {
+    public ResponseResult<Void> registerUser(LoginUser user) {
         String username = user.getUsername();
         String password = user.getPassword();
         if (!StringUtils.hasText(username)){
@@ -70,6 +70,6 @@ public class LoginUserServiceImpl extends ServiceImpl<LoginUserMapper, LoginUser
         addUser.setUsername(username);
         addUser.setPassword(new BCryptPasswordEncoder().encode(password));
         loginUserMapper.insert(addUser);
-        return ResultUtil.success("注册成功！");
+        return ResultUtil.response(ResponseCode.SUCCESS,"注册成功！");
     }
 }

@@ -24,5 +24,5 @@ public interface LoginUserService extends IService<LoginUser> {
      * @author lww
      * @since 2023/8/16 13:59
      */
-    ResponseResult registerUser(LoginUser user);
+    ResponseResult<Void> registerUser(LoginUser user);
 }
