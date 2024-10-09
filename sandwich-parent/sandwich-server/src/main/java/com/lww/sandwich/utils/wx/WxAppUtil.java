@@ -3,7 +3,7 @@ package com.lww.sandwich.utils.wx;
 import com.alibaba.fastjson.JSONObject;
 import com.lww.sandwich.constant.AppConstants;
 import com.lww.sandwich.utils.AesUtil;
-import com.lww.sandwich.utils.RedisUtil;
+import com.lww.redis.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
