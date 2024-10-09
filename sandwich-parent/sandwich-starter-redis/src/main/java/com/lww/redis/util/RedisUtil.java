@@ -15,10 +15,12 @@ import java.util.concurrent.TimeUnit;
  * @since 2023/7/17 10:06
  */
 @Slf4j
-@Component
 public class RedisUtil {
 
-    @Resource
+    public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
     private RedisTemplate<String,Object> redisTemplate;
 
         /**
