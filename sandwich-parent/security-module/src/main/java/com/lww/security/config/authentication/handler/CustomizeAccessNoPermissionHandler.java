@@ -18,7 +18,7 @@ import java.io.IOException;
  * @since 2022/7/21 10:46
  */
 @Component
-public class CustomizeAccessNoPerissDeniedHandler implements AccessDeniedHandler {
+public class CustomizeAccessNoPermissionHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         ResponseOutUtil.out(response, ResultUtil.response(ResponseCode.UNAUTHORIZED, "暂无权限！"));

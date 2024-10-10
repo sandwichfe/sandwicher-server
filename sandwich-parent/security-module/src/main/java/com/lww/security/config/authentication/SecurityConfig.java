@@ -2,7 +2,7 @@ package com.lww.security.config.authentication;
 
 import com.lww.security.config.authentication.handler.AuthenticationFailHandler;
 import com.lww.security.config.authentication.handler.AuthenticationSuccessHandler;
-import com.lww.security.config.authentication.handler.CustomizeAccessNoPerissDeniedHandler;
+import com.lww.security.config.authentication.handler.CustomizeAccessNoPermissionHandler;
 import com.lww.security.config.authentication.handler.CustomizeAuthNoLoginEntryPoint;
 import com.lww.security.service.LoginUserService;
 import jakarta.annotation.Resource;
@@ -13,6 +13,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -51,7 +52,7 @@ public class SecurityConfig {
      * 无权限时处理
      */
     @Resource
-    private CustomizeAccessNoPerissDeniedHandler accessNoPerissDeniedHandler;
+    private CustomizeAccessNoPermissionHandler accessNoPermissionDeniedHandler;
 
     @Resource
     private SecurityPermit securityPermit;
@@ -65,7 +66,7 @@ public class SecurityConfig {
                 //  禁用basic明文验证
                 .httpBasic(Customizer.withDefaults())
                 // 根据需求选择是否禁用 CSRF
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 // 不使用 session
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 //  自定义登录处理
@@ -87,7 +88,7 @@ public class SecurityConfig {
                                         // 未登录时处理
                                         .authenticationEntryPoint(customizeAuthNoLoginEntryPoint)
                                         // 无权限时处理
-                                        .accessDeniedHandler(accessNoPerissDeniedHandler)
+                                        .accessDeniedHandler(accessNoPermissionDeniedHandler)
                 )
                 //  下面开始设置权限
                 .authorizeHttpRequests(authorizeHttpRequest ->
@@ -109,9 +110,9 @@ public class SecurityConfig {
      *
      * loadUserByUsername  通过用户输入username 程序员给定一个user
      * 来与用户输入的比对是否  账号密码正确
-     * @return      
+     * @return  UserDetailsService
      * @author lww
-     * @since 
+     * @since 2024-10-10
      */
     @Bean
     public UserDetailsService userDetailsService() {
@@ -136,7 +137,7 @@ public class SecurityConfig {
     /** 
      *
      * 配置加密方式 如果不配置security会认为没有加密方式
-     * @return      
+     * @return PasswordEncoder
      * @author lww
      */
     @Bean
@@ -148,7 +149,6 @@ public class SecurityConfig {
     /**
      * 配置跨源访问(CORS)
      *
-     * @return
      */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
