@@ -92,7 +92,6 @@ public class SecurityConfig {
                 //  下面开始设置权限
                 .authorizeHttpRequests(authorizeHttpRequest ->
                         authorizeHttpRequest
-                                .requestMatchers("/login", "/login.html").permitAll()
                                 .requestMatchers(AUTH_WHITELIST).permitAll()
                                 .requestMatchers(AUTH_TEST_LIST).permitAll()
                                 .requestMatchers(securityPermit.getUrls().toArray(new String[0])).permitAll()
