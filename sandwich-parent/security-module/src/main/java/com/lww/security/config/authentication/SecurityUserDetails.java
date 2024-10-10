@@ -1,4 +1,4 @@
-package com.lww.security.config;
+package com.lww.security.config.authentication;
 
 import com.lww.security.entity.LoginUser;
 import org.springframework.security.core.GrantedAuthority;

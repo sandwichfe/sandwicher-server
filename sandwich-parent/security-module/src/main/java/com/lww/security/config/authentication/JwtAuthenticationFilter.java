@@ -1,4 +1,4 @@
-package com.lww.security.config;
+package com.lww.security.config.authentication;
 
 import com.github.xiaoymin.knife4j.core.util.StrUtil;
 import com.lww.security.entity.LoginUser;
@@ -11,13 +11,10 @@ import io.jsonwebtoken.Jwts;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.StringUtils;
 
 import jakarta.servlet.FilterChain;

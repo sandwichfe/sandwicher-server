@@ -1,4 +1,4 @@
-package com.lww.security.config;
+package com.lww.security.config.authentication;
 
 import com.lww.security.config.authentication.handler.AuthenticationFailHandler;
 import com.lww.security.config.authentication.handler.AuthenticationSuccessHandler;
@@ -30,7 +30,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  */
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration {
+public class SecurityConfig {
 
     @Resource
     private LoginUserService userService;

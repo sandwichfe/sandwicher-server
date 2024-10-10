@@ -1,5 +1,6 @@
 package com.lww.security.config;
 
+import com.lww.security.config.authentication.SecurityPermit;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

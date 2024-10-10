@@ -3,7 +3,7 @@ package com.lww.security.config.authentication.handler;
 import com.lww.common.utils.ResponseOutUtil;
 import com.lww.common.web.response.ResponseCode;
 import com.lww.common.web.response.ResultUtil;
-import com.lww.security.config.SecurityConstant;
+import com.lww.security.config.authentication.SecurityConstant;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.ServletException;

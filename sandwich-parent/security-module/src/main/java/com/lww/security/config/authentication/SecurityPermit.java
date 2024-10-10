@@ -1,4 +1,4 @@
-package com.lww.security.config;
+package com.lww.security.config.authentication;
 
 import lombok.Getter;
 import lombok.Setter;
