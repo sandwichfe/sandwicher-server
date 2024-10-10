@@ -27,7 +27,17 @@ spring:
 
 # 忽略权限控制
 security:
-  permit-urls: /base/getRequestIp,
-               /base/test,
-               /test/**,
-               /user/registerUser
+  permit:
+    urls:
+    - /base/getRequestIp
+    - /base/test
+    - /test/**
+    - /user/registerUser
+
+
+logging:
+  level:
+    org:
+     springframework:
+      security: DEBUG
+

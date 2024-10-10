@@ -24,6 +24,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,18 +38,7 @@ import java.util.List;
 @Slf4j
 @Getter
 @Setter
-public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
-
-    private Integer tokenExpireTime;
-
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, Integer tokenExpireTime) {
-        super(authenticationManager);
-        this.tokenExpireTime = tokenExpireTime;
-    }
-
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint authenticationEntryPoint) {
-        super(authenticationManager, authenticationEntryPoint);
-    }
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -66,7 +57,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             UsernamePasswordAuthenticationToken authentication = getAuthentication(header, response);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
-            e.toString();
+            log.error("",e);
         }
         // 放行
         chain.doFilter(request, response);

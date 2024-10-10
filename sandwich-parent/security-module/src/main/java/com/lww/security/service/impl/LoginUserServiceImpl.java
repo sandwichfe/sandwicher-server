@@ -33,9 +33,9 @@ public class LoginUserServiceImpl extends ServiceImpl<LoginUserMapper, LoginUser
         }
         // 模拟存在数据库里面的密码是加密过后的
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        //if ("aaa".equals(username)) {
-        //    return new User("aaa", passwordEncoder.encode("aaa"));
-        //}
+        if ("aaa".equals(username)) {
+           return new LoginUser("aaa", passwordEncoder.encode("aaa"));
+        }
         // 查询此用户名
         QueryWrapper<LoginUser> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
