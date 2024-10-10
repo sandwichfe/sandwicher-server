@@ -50,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         try {
             //UsernamePasswordAuthenticationToken 继承 AbstractAuthenticationToken 实现 Authentication
-            //所以当在页面中输入用户名和密码之后首先会进入到 UsernamePasswordAuthenticationToken验证(Authentication)，
+            //验证用户携带的token是否合法，并解析出用户信息，交给SpringSecurity，以便于后续的授权功能可以正常使用。
             UsernamePasswordAuthenticationToken authentication = getAuthentication(header, response);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
