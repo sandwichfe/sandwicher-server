@@ -92,4 +92,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
+    //    service  a  littleNote   check   hasAuth(security)    yes/no
+    //                                                                         auth(login)
+    //    service  b  server     check     hasAuth(security)    yes/no
+    //    user info?
 }
