@@ -1,6 +1,3 @@
-server:
-  port: 1666
-
 
 #启动模式
 spring:

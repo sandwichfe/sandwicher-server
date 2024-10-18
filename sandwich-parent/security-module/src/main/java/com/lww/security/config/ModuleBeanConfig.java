@@ -1,8 +1,5 @@
 package com.lww.security.config;
 
-import com.lww.security.config.authentication.SecurityPermit;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,12 +9,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan("com.lww.security")
-@MapperScan("com.lww.security.mapper")
 public class ModuleBeanConfig {
 
-    @Bean
-    public SecurityPermit securityPermit() {
-        return new SecurityPermit();
-    }
 
 }

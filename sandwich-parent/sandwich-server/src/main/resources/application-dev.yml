@@ -1,6 +1,9 @@
 #开发环境
 server:
   port: 1241
+  servlet:
+    context-path: /sandwich
+
 
 spring:
   datasource:
@@ -33,6 +36,15 @@ security:
     - /base/test
     - /test/**
     - /user/registerUser
+  oauth2:
+    client:
+      client-id: UserManagement
+      client-secret: user123
+      access-token-uri: http://localhost:8080/oauth/token
+      user-authorization-uri: http://localhost:8080/oauth/authorize
+    resource:
+      jwt:
+        key-uri: http://localhost:8080/oauth/token_key
 
 
 logging:

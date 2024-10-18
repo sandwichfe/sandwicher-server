@@ -1,4 +1,9 @@
 #开发环境
+server:
+  port: 1666
+  servlet:
+    context-path: /littlenote
+
 spring:
   data:
     redis:
@@ -22,3 +27,19 @@ spring:
         maximum-pool-size: 10
 
 
+security:
+  permit:
+    urls:
+      - /base/getRequestIp
+      - /base/test
+      - /test/**
+      - /user/registerUser
+  oauth2:
+    client:
+      client-id: UserManagement
+      client-secret: user123
+      access-token-uri: http://localhost:8080/oauth/token
+      user-authorization-uri: http://localhost:8080/oauth/authorize
+    resource:
+      jwt:
+        key-uri: http://localhost:8080/oauth/token_key
