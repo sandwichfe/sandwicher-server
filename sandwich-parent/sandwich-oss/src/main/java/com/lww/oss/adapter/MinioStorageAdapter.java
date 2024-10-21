@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * minioIO存储适配器
  *
- * @author: ChickenWing
+ * @author: lww
  * @date: 2023/10/14
  */
 public class MinioStorageAdapter implements StorageAdapter {
@@ -35,10 +35,10 @@ public class MinioStorageAdapter implements StorageAdapter {
 
     @Override
     @SneakyThrows
-    public void uploadFile(MultipartFile uploadFile, String bucket, String objectName) {
+    public void uploadFile(MultipartFile uploadFile, String bucket, String dir) {
         minioUtil.createBucket(bucket);
-        if (objectName != null) {
-            minioUtil.uploadFile(uploadFile.getInputStream(), bucket, objectName + "/" + uploadFile.getOriginalFilename());
+        if (dir != null) {
+            minioUtil.uploadFile(uploadFile.getInputStream(), bucket, dir + "/" + uploadFile.getOriginalFilename());
         } else {
             minioUtil.uploadFile(uploadFile.getInputStream(), bucket, uploadFile.getOriginalFilename());
         }
@@ -79,5 +79,6 @@ public class MinioStorageAdapter implements StorageAdapter {
     public String getUrl(String bucket, String objectName) {
         return url + "/" + bucket + "/" + objectName;
     }
+
 
 }

@@ -18,12 +18,20 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.lww</groupId>
+            <artifactId>sandwich-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!--minio-->
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
             <version>8.2.0</version>
         </dependency>
+
+
 
 
     </dependencies>

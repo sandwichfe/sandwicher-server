@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 文件存储service
  *
- * @author: ChickenWing
+ * @author: lww
  * @date: 2023/10/14
  */
 @Service
@@ -42,10 +42,9 @@ public class FileOssService {
     /**
      * 上传文件
      */
-    public String uploadFile(MultipartFile uploadFile, String bucket, String objectName){
-        storageAdapter.uploadFile(uploadFile,bucket,objectName);
-        objectName = objectName + "/" + uploadFile.getOriginalFilename();
-        return storageAdapter.getUrl(bucket, objectName);
+    public String uploadFile(MultipartFile uploadFile, String bucket, String dir){
+        storageAdapter.uploadFile(uploadFile,bucket,dir);
+        return storageAdapter.getUrl(bucket,  dir + "/" + uploadFile.getOriginalFilename());
     }
 }
 
