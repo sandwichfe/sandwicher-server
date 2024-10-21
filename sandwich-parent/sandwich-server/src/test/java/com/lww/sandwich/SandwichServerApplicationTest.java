@@ -55,7 +55,7 @@ public class SandwichServerApplicationTest {
 
     @Test
     public void testJayspy() {
-        String username = stringEncryptor.encrypt("32cBmhpjL9WqSOWN");
+        String username = stringEncryptor.encrypt("test");
         log.info("username 密文: " + username);
     }
 
