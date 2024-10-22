@@ -1,4 +1,4 @@
-package com.lww.authserver.config;
+package com.lww.auth.server.config;
 
 /**
  * @author lww

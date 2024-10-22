@@ -1,4 +1,4 @@
-package com.lww.authresource;
+package com.lww.auth.resource;
 
 /**
  * @author lww

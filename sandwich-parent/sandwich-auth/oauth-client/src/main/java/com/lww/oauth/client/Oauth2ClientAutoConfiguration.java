@@ -1,4 +1,4 @@
-package com.lww.oauthclient;
+package com.lww.oauth.client;
 
 /**
  * @author lww

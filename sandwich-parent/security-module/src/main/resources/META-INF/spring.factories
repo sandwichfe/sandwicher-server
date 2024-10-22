@@ -1,3 +1,0 @@
-#auto import
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.lww.security.config.ModuleBeanConfig

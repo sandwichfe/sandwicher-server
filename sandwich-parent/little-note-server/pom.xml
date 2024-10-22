@@ -26,7 +26,7 @@
 
         <dependency>
             <groupId>com.lww</groupId>
-            <artifactId>security-module</artifactId>
+            <artifactId>auth-resource</artifactId>
             <version>1.0.0</version>
         </dependency>
 

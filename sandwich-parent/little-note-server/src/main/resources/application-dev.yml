@@ -34,12 +34,9 @@ security:
       - /base/test
       - /test/**
       - /user/registerUser
-  oauth2:
-    client:
-      client-id: UserManagement
-      client-secret: user123
-      access-token-uri: http://localhost:8080/oauth/token
-      user-authorization-uri: http://localhost:8080/oauth/authorize
-    resource:
-      jwt:
-        key-uri: http://localhost:8080/oauth/token_key
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://127.0.0.1:9080/oauth2/jwks
