@@ -27,12 +27,6 @@
 
         <dependency>
             <groupId>com.lww</groupId>
-            <artifactId>security-module</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.lww</groupId>
             <artifactId>sandwich-common</artifactId>
             <version>1.0.0</version>
         </dependency>
