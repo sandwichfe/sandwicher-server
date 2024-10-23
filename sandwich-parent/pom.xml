@@ -22,8 +22,8 @@
         <module>little-note-server</module>
         <module>sandwich-server</module>
 <!--        <module>sandwich-auth/auth-server</module>-->
-        <module>sandwich-auth/oauth-client</module>
-        <module>sandwich-auth/auth-resource</module>
+<!--        <module>sandwich-auth/oauth-client</module>-->
+<!--        <module>sandwich-auth/auth-resource</module>-->
     </modules>
 
     <properties>
