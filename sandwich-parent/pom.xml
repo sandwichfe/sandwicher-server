@@ -21,7 +21,10 @@
         <module>sandwich-starter-redis</module>
         <module>little-note-server</module>
         <module>sandwich-server</module>
-<!--        <module>sandwich-auth/auth-server</module>-->
+        <module>sandwich-auth/spring-auth-server</module>
+        <module>sandwich-auth/spring-auth-client</module>
+        <module>sandwich-auth/spring-auth-resources</module>
+        <!--        <module>sandwich-auth/auth-server</module>-->
 <!--        <module>sandwich-auth/oauth-client</module>-->
 <!--        <module>sandwich-auth/auth-resource</module>-->
     </modules>
