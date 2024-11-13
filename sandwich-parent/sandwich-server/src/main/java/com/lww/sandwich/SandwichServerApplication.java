@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @author lww
- * @Date 2022-3-7
+ * @since 2022-3-7
  */
 @SpringBootApplication
 @MapperScan("com.lww.sandwich.mapper")

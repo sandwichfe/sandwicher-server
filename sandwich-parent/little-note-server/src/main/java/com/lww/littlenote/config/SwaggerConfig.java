@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author lww
  *   swagger配置
- * @date 2022/3/7 15:29
+ * @since 2022/3/7 15:29
  */
 @Configuration
 public class SwaggerConfig {

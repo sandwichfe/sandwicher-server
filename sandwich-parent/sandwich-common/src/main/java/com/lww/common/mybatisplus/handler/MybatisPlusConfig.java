@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  *     mp分页插件
  * @author lww
- * @date 2022/4/8 15:07
+ * @since 2022/4/8 15:07
  */
 @Configuration
 public class MybatisPlusConfig {
