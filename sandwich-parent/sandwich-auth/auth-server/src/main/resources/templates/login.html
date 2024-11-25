@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="x-UA-Compatible" content="ie=edge">
+    <title>授权服务器登录</title>
+
+    <!-- 简单的CSS样式 -->
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f8fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* 登录框容器 */
+        .login-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+
+        /* 标题样式 */
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        /* 输入框标签 */
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* 输入框样式 */
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* 输入框聚焦时效果 */
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
+            outline: none;
+        }
+
+        /* 按钮样式 */
+        input[type="submit"],
+        input[type="reset"] {
+            padding: 12px 30px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 48%;
+        }
+
+        /* 修改后的确认按钮样式（与白色搭配的浅灰色） */
+        input[type="submit"] {
+            background-color: #86878d;
+            width: 100%;
+            color: #333;
+            margin: auto;
+        }
+
+
+        /* 按钮悬停效果 */
+        input[type="submit"]:hover,
+        input[type="reset"]:hover {
+            opacity: 0.9;
+        }
+
+        /* 按钮点击效果 */
+        input[type="submit"]:active,
+        input[type="reset"]:active {
+            transform: translateY(2px);
+        }
+
+        /* 按钮容器 */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        /* 使表单居中对齐 */
+        .login-container form {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2>Spring授权服务器登录</h2>
+
+    <form th:action="@{/login}" method="post">
+        <div>
+            <label for="username">用户名：</label>
+            <input type="text" id="username" name="username" required />
+        </div>
+
+        <div>
+            <label for="password">密码：</label>
+            <input type="password" id="password" name="password" required />
+        </div>
+
+        <div class="form-actions">
+            <input type="submit" value="登录">
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
