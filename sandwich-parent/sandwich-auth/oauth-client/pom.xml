@@ -8,10 +8,10 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>auth-server</artifactId>
+    <artifactId>oauth-client</artifactId>
     <packaging>jar</packaging>
 
-    <name>auth-server</name>
+    <name>oauth-client</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -23,13 +23,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!--security-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <!--oauth2-client-->
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-authorization-server</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
     </dependencies>
 

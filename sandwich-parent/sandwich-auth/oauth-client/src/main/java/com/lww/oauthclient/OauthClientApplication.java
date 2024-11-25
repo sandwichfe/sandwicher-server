@@ -1,4 +1,4 @@
-package com.lww.auth.server;
+package com.lww.oauthclient;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,10 +9,10 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  *
  */
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
-public class OauthServerApplication {
+public class OauthClientApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OauthServerApplication.class, args);
+        SpringApplication.run(OauthClientApplication.class, args);
     }
 
     /*

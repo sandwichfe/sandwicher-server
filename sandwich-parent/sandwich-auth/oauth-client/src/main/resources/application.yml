@@ -1,0 +1,48 @@
+server:
+  port: 8080
+#  servlet:
+#    session:
+#      cookie:
+#        # 需要更换存放sessionId的cookie名字，否则认证服务和客户端的sessionId会相互覆盖
+#        name: JSESSIONID-2
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          # 客户端应用名
+          myClient:
+            client-id: client_lww
+            client-secret: 123456
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/myClient
+            scope: openid, profile
+            # 授权服务提供平台名
+            provider: lww-sas
+#          client-id-2:
+#            provider: demo-client-id2
+#            client-id: demo-client-id
+#            client-secret: demo-client-secret
+#            authorization-grant-type: authorization_code
+#            redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
+#            #            client-authentication-method: POST
+#            scope: user_info, pull_requests
+#            client-name: demo-client-id2
+        provider:
+          lww-sas:
+            #授权地址   client.szile.com为配置的授权服务  避免和客户端同域名Session冲突
+            authorization-uri: http://client.szile.com:9000/oauth2/authorize
+            # 访问令牌地址
+            token-uri: http://client.szile.com:9000/oauth2/token
+            # 用于验证jwt签名  的 oauth2授权服务器的公钥集合
+            jwk-set-uri: http://client.szile.com:9000/oauth2/jwks
+#            user-info-uri: http://127.0.0.1:9082/user/info
+#            user-name-attribute: name
+#          demo-client-id2:
+#            authorization-uri: http://127.0.0.1:9080/oauth2/authorize
+#            token-uri: http://127.0.0.1:9080/oauth2/token
+#            user-info-uri: http://127.0.0.1:9082/user/info
+#            user-name-attribute: name
+#            jwk-set-uri: http://127.0.0.1:9080/oauth2/jwks
+
