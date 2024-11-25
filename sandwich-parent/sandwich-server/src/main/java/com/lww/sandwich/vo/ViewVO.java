@@ -3,9 +3,7 @@ package com.lww.sandwich.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lww.common.dict.DictConvert;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,6 +15,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Schema(description =  "View对象VO")
 public class ViewVO implements Serializable {
 
