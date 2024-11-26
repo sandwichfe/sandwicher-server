@@ -24,6 +24,10 @@ public class ResultUtil {
         return new ResponseResult<T>().setCode(ResponseCode.FAILURE).setMsg(message);
     }
 
+    public static <T> ResponseResult<T> error(Integer code, String message) {
+        return new ResponseResult<T>().setCode(code).setMsg(message);
+    }
+
     public static <T> ResponseResult<T> error(ResponseCode code, String message) {
         return new ResponseResult<T>().setCode(code).setMsg(message);
     }
