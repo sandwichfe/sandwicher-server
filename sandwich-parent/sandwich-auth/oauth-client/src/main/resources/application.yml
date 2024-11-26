@@ -32,11 +32,11 @@ spring:
         provider:
           lww-sas:
             #授权地址   client.szile.com为配置的授权服务  避免和客户端同域名Session冲突
-            authorization-uri: http://client.szile.com:9000/oauth2/authorize
+            authorization-uri: http://oauth.local.server:9000/oauth2/authorize
             # 访问令牌地址
-            token-uri: http://client.szile.com:9000/oauth2/token
+            token-uri: http://oauth.local.server:9000/oauth2/token
             # 用于验证jwt签名  的 oauth2授权服务器的公钥集合
-            jwk-set-uri: http://client.szile.com:9000/oauth2/jwks
+            jwk-set-uri: http://oauth.local.server:9000/oauth2/jwks
 #            user-info-uri: http://127.0.0.1:9082/user/info
 #            user-name-attribute: name
 #          demo-client-id2:

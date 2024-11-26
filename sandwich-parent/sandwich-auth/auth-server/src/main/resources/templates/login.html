@@ -35,7 +35,7 @@
         h2 {
             text-align: center;
             color: #333;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             font-size: 24px;
             font-weight: 600;
         }
@@ -53,7 +53,7 @@
         input[type="password"] {
             width: 100%;
             padding: 12px;
-            margin: 10px 0 20px 0;
+            margin: 10px 0 10px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
@@ -85,23 +85,27 @@
 
         /* 修改后的确认按钮样式（与白色搭配的浅灰色） */
         input[type="submit"] {
-            background-color: #86878d;
             width: 100%;
-            color: #333;
             margin: auto;
+            padding: 12px 40px;
+            border: none;
+            border-radius: 4px; /* 方形按钮 */
+            background-color: #b0caff; /* 淡蓝色背景 */
+            color: white; /* 白色文字 */
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
-
-        /* 按钮悬停效果 */
-        input[type="submit"]:hover,
-        input[type="reset"]:hover {
-            opacity: 0.9;
+        input[type="submit"]:hover {
+            background-color: #5a87e4; /* 悬停时更深的蓝色 */
+            transform: translateY(-2px);
         }
 
-        /* 按钮点击效果 */
-        input[type="submit"]:active,
-        input[type="reset"]:active {
-            transform: translateY(2px);
+        input[type="submit"]:active {
+            background-color: #4a79d3; /* 按下时的蓝色 */
+            transform: translateY(0);
         }
 
         /* 按钮容器 */
@@ -125,13 +129,11 @@
 
     <form th:action="@{/login}" method="post">
         <div>
-            <label for="username">用户名：</label>
-            <input type="text" id="username" name="username" required />
+            <input type="text" id="username" name="username" required placeholder="用户名" />
         </div>
 
         <div>
-            <label for="password">密码：</label>
-            <input type="password" id="password" name="password" required />
+            <input type="password" id="password" name="password" required placeholder="密码" />
         </div>
 
         <div class="form-actions">
