@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 /**
  * Hello world!
  *
+ * @author lww
  */
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 public class OauthServerApplication {
