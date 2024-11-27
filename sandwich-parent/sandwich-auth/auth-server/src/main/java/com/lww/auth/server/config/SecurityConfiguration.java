@@ -138,7 +138,7 @@ class SecurityConfiguration {
                 .scope(OidcScopes.OPENID)
                 // 用户的个人信息
                 .scope(OidcScopes.PROFILE)
-                // http://localhost:9001/oauth2/authorize?client_id=client_lww&redirect_uri=http://www.baidu.com&scope=read&response_type=code
+                // http://localhost:9000/oauth2/authorize?client_id=client_lww&redirect_uri=http://www.baidu.com&scope=read&response_type=code
                 // 至少要有个read  在拿授权码的时候 这玩意也要传read 不然授权码有问题 这个目前还没搞懂
                 .scope("read")
                 // 是否需要用户授权确认

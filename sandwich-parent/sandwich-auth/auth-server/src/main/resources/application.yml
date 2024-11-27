@@ -1,8 +1,2 @@
 server:
   port: 9000
-
-spring:
-  # springSecurity的用户
-  security:
-    oauth2:
-      authorizationserver:
