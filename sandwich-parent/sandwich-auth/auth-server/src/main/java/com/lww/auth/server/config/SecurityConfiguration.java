@@ -8,6 +8,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,7 +29,7 @@ import org.springframework.security.oauth2.server.authorization.settings.ClientS
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -58,7 +59,15 @@ class SecurityConfiguration {
                 // 开启oidc
                 .oidc(Customizer.withDefaults());
         // 未认证的请求异常处理（/Login）    指向到login地址
-        http.exceptionHandling(exception -> exception.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")));
+        http.exceptionHandling((exceptions) -> exceptions
+                        .defaultAuthenticationEntryPointFor(
+                                new LoginUrlAuthenticationEntryPoint("/login"),
+                                new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                        )
+                )
+                // 接受用户信息和/或客户端注册的访问令牌
+                .oauth2ResourceServer((resourceServer) -> resourceServer
+                        .jwt(Customizer.withDefaults()));
         return http.build();
     }
 
@@ -71,21 +80,17 @@ class SecurityConfiguration {
     @Bean
     @Order(2)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize.requestMatchers(
-                                // 不拦截
-                                new AntPathRequestMatcher("/auth/**"),
-                                new AntPathRequestMatcher("/oauth2/**"))
-                        .permitAll()
+        http.authorizeHttpRequests(authorize -> authorize
+                // 不拦截
+                .requestMatchers(new String[]{"/assets/**", "/webjars/**", "/login"}).permitAll()
                 // 其他请求需要认证
                 .anyRequest().authenticated());
         http.formLogin(form -> form
-                // 自定义登录页面
-                .loginPage("/login")
+                        // 自定义登录页面
+                        .loginPage("/login")
                 // 处理登录请求接口
-                .loginProcessingUrl("/login").permitAll());
-        // 接受用户信息和/或客户端注册的访问令牌
-        http.oauth2ResourceServer(resourceServer -> resourceServer
-                .jwt(Customizer.withDefaults()));
+                // .loginProcessingUrl("/login").permitAll()
+        );
         return http.build();
     }
 
@@ -124,7 +129,8 @@ class SecurityConfiguration {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 // 客户端回调地址
-                .redirectUri("http://localhost:8080/login/oauth2/code/myClient")
+                // .redirectUri("http://localhost:8080/login/oauth2/code/myClient")
+                .redirectUri("http://www.baidu.com")
                 // logout后回调地址
                 .postLogoutRedirectUri("http://127.0.0.1:8080/")
                 // 授权范围
@@ -132,6 +138,9 @@ class SecurityConfiguration {
                 .scope(OidcScopes.OPENID)
                 // 用户的个人信息
                 .scope(OidcScopes.PROFILE)
+                // http://localhost:9001/oauth2/authorize?client_id=client_lww&redirect_uri=http://www.baidu.com&scope=read&response_type=code
+                // 至少要有个read  在拿授权码的时候 这玩意也要传read 不然授权码有问题 这个目前还没搞懂
+                .scope("read")
                 // 是否需要用户授权确认
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
