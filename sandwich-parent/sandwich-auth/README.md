@@ -1,4 +1,27 @@
 # sandwich
+
+
+1. 获取授权码code  
+http://oauth.local.server:9000/oauth2/authorize?client_id=client_test&redirect_uri=http://www.baidu.com&scope=read&response_type=code
+2. 请求token  
+post http://oauth.local.server:9000/oauth2/token  
+form-data:  
+  
+   param     | Value
+   -------- | -----
+   grant_type  | authorization_code
+   code  | 授权码code
+   client_id  | client_test
+   client_secret  | 123456
+   redirect_uri  | http://www.baidu.com
+
+
+
+
+
+
+
+
 个人的一些理解
 
 

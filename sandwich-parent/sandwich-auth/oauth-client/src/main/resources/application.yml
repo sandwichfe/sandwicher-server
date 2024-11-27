@@ -13,10 +13,10 @@ spring:
         registration:
           # 客户端应用名
           myClient:
-            client-id: client_lww
+            client-id: client_test
             client-secret: 123456
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8080/login/oauth2/code/myClient
+            redirect-uri: http://www.baidu.com
             scope: openid, profile, read, all
             # 授权服务提供平台名
             provider: lww-sas
