@@ -129,17 +129,15 @@ class SecurityConfiguration {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 // 客户端回调地址
-                // .redirectUri("http://localhost:8080/login/oauth2/code/myClient")
                 .redirectUri("http://www.baidu.com")
                 // logout后回调地址
                 .postLogoutRedirectUri("http://127.0.0.1:8080/")
                 // 授权范围
-                // 用户的唯一标识符
-                .scope(OidcScopes.OPENID)
                 // 用户的个人信息
                 .scope(OidcScopes.PROFILE)
+                .scope(OidcScopes.OPENID)
                 // http://localhost:9000/oauth2/authorize?client_id=client_lww&redirect_uri=http://www.baidu.com&scope=read&response_type=code
-                // 至少要有个read  在拿授权码的时候 这玩意也要传read 不然授权码有问题 这个目前还没搞懂
+                // 至少要有个read  在拿授权码的时候 这玩意也要传read 且只勾选read 不然授权码有问题 这个目前还没搞懂
                 .scope("read")
                 // 是否需要用户授权确认
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
