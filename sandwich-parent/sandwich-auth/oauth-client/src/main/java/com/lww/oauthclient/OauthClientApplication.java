@@ -15,13 +15,5 @@ public class OauthClientApplication {
     public static void main(String[] args) {
         SpringApplication.run(OauthClientApplication.class, args);
     }
-
-    /*
-    * 1.获取 token
-    * post http://localhost:9080/oauth/token?grant_type=password&redirect_uri=http://www.baidu.com&client_id=c1&client_secret=secret&username=zhangsan&password=123
-    * 2. 请求头 携带 auth    Beaber token
-    *
-    *
-    * */
 }
 

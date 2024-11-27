@@ -1,2 +1,15 @@
 server:
   port: 9000
+
+# 学习框架 就应该把 log打开 不知道出错了 完全不知道啥原因
+logging:
+  level:
+    org:
+      springframework:
+        security: trace
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/authorization_server_db?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456

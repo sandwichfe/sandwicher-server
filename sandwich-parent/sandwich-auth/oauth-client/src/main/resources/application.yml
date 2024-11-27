@@ -17,7 +17,7 @@ spring:
             client-secret: 123456
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8080/login/oauth2/code/myClient
-            scope: openid, profile
+            scope: openid, profile, read, all
             # 授权服务提供平台名
             provider: lww-sas
 #          client-id-2:
