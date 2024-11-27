@@ -96,7 +96,7 @@ class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
                 // 不拦截
-                .requestMatchers(new String[]{"/assets/**", "/webjars/**", "/login","/oauth2/token/**"}).permitAll()
+                .requestMatchers(new String[]{"/assets/**", "/webjars/**", "/login","/logout","/oauth2/token/**"}).permitAll()
                 // 其他请求需要认证
                 .anyRequest().authenticated());
         http.formLogin(form -> form

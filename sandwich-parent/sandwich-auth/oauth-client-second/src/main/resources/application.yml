@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 #  servlet:
 #    session:
 #      cookie:
@@ -19,7 +19,7 @@ spring:
             client-id: client_lww
             client-secret: 123456
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8080/login/oauth2/code/myClient
+            redirect-uri: http://localhost:8081/login/oauth2/code/myClient
             scope: openid, profile, read, all
             # 授权服务提供平台名
             provider: lww-sas
