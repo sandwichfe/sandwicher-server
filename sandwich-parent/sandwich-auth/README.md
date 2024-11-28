@@ -15,6 +15,11 @@ form-data:
    client_secret  | 123456
    redirect_uri  | http://www.baidu.com
 
+3.根据jwt 调 resource-server中的资源接口
+**请求头**带有   
+**Authorization**  
+**Bearer** {2步骤请求的token}
+
 
 
 登出接口：  
