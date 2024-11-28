@@ -1,6 +1,5 @@
 package com.lww.auth.server.config;
 
-import com.lww.auth.server.impl.AuthUserDetails;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -126,7 +125,7 @@ class SecurityConfiguration {
 
 
     /**
-     * 暂时还没搞懂干啥的
+     * 好像 是 自定义 jwt内容的
      *
      * @author lww
      * @since 2024/11/27
@@ -142,8 +141,8 @@ class SecurityConfiguration {
                             .map(GrantedAuthority::getAuthority)
                             .collect(Collectors.toSet());
                     context.getClaims().claims(claim -> {
-                        if (Objects.nonNull(userDetail) && userDetail instanceof AuthUserDetails authUserDetails) {
-                            claim.put("userId", authUserDetails.getId());
+                        if (Objects.nonNull(userDetail) && userDetail instanceof UserDetails userDetails) {
+                            claim.put("userName", userDetails.getUsername());
                         }
                         claim.put("authorities", authorities);
                     });

@@ -1,0 +1,16 @@
+server:
+  port: 8082
+
+logging:
+  level:
+    org:
+      springframework:
+        security: trace
+
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://oauth.local.server:9000/oauth2/jwks
