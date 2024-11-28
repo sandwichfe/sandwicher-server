@@ -1,5 +1,6 @@
 package com.lww.auth.server.config;
 
+import com.lww.auth.server.utils.SecurityUtils;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -12,6 +13,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
@@ -47,8 +49,20 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
+/**
+ * EnableWebSecurity 注解有两个作用:
+ *  * 1. 加载了WebSecurityConfiguration配置类, 配置安全认证策略。
+ *  * 2. 加载了AuthenticationConfiguration, 配置了认证信息。
+ * EnableMethodSecurity 注解用于启用Security 方法权限注解。
+ *
+ * @description: Security配置
+ * @author: lww
+ */
+
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(jsr250Enabled = true, securedEnabled = true)
 class SecurityConfiguration {
 
     @Resource
@@ -106,7 +120,12 @@ class SecurityConfiguration {
         );
         // 添加BearerTokenAuthenticationFilter，将认证服务当做一个资源服务，解析请求头中的token
         http.oauth2ResourceServer((resourceServer) -> resourceServer
-                .jwt(Customizer.withDefaults()));
+                .jwt(Customizer.withDefaults())
+                // 异常处理
+                .accessDeniedHandler(SecurityUtils::exceptionHandler)
+                // 认证失败处理
+                .authenticationEntryPoint(SecurityUtils::exceptionHandler)
+        );
         return http.build();
     }
 
