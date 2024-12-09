@@ -29,6 +29,7 @@ minio:
 oss:
   service:
     type: minio
+#忽略token认证
 security:
   permit:
     urls:
