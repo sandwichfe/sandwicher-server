@@ -23,6 +23,7 @@
         <module>sandwich-server</module>
         <module>sandwich-auth</module>
         <module>sandwich-oss</module>
+        <module>sandwich-auth/sandwich-auth-resources-server</module>
     </modules>
 
     <properties>

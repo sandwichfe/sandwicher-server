@@ -1,4 +1,4 @@
-package com.lww.spring_auth_resources.controller;
+package com.lww.auth.resources.server.controller;
 
 /**
  * todo

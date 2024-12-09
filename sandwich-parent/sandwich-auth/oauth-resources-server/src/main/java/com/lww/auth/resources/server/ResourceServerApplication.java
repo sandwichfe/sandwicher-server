@@ -1,4 +1,4 @@
-package com.lww.spring_auth_resources;
+package com.lww.auth.resources.server;
 
 /**
  * Hello world!

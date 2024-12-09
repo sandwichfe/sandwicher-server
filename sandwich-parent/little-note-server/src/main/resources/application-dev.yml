@@ -21,6 +21,15 @@ spring:
         connection-timeout: 30000
         maximum-pool-size: 10
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Jwt中claims的iss属性，也就是jwt的签发地址，即认证服务器的根路径
+          # 资源服务器会进一步的配置，通过该地址获取公钥以解析jwt
+          issuer-uri: http://oauth.local.server:9000
+
+
 
 minio:
   url: http://49.235.149.110:9000
@@ -38,8 +47,3 @@ security:
       - /test/**
       - /user/registerUser
 
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://127.0.0.1:9080/oauth2/jwks
