@@ -30,8 +30,8 @@ public class UserController {
     @PostMapping(value = "/login")
     @Operation(summary = "用户登录", description = "用户登录")
     public ResponseResult collectTag(String username, String password) {
-        // OAuth token endpoint
-        String tokenUrl = "http://127.0.0.1:9000/oauth2/token";
+        // OAuth token endpoint  请求的域名 要和ResourceServer配置的issuer-uri 一致 不然jwt会认证失败
+        String tokenUrl = "http://localhost:9000/oauth2/token";
         // 通过 Hu tool HttpRequest 构建请求体和请求头
         HttpResponse response = HttpRequest.post(tokenUrl)
                 .form("grant_type", "password")
