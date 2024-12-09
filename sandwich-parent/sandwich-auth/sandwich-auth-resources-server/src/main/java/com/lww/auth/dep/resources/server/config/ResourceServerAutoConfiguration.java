@@ -14,6 +14,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Configuration
 public class ResourceServerAutoConfiguration {
@@ -23,7 +26,18 @@ public class ResourceServerAutoConfiguration {
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
+        http
+                // 关闭csrf 要写在requestMatchers之前
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowCredentials(true);
+                    config.setAllowedOriginPatterns(List.of("*")); // 允许所有来源
+                    config.addAllowedHeader("*"); // 允许所有头部
+                    config.addAllowedMethod("*"); // 允许所有方法
+                    return config;
+                }))
+                .authorizeHttpRequests(authorize -> authorize
                         // 下边一行是放行接口的配置，被放行的接口上不能有权限注解，e.g. @PreAuthorize，否则无效
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers(AUTH_TEST_LIST).permitAll()
