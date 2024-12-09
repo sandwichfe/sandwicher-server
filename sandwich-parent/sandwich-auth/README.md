@@ -1,6 +1,6 @@
 # sandwich
 
-
+## 授权码模式
 1. 获取授权码code  
 http://oauth.local.server:9000/oauth2/authorize?client_id=client_test&redirect_uri=http://www.baidu.com&scope=read&response_type=code
 2. 请求token  
@@ -22,9 +22,29 @@ form-data:
 
 
 
+
+## 密码模式
+oauth2.1 已经不支持密码模式 需要自定义扩展
+
+post http://oauth.local.server:9000/oauth2/token
+
+form-data:    
+
+   param     | Value
+   -------- | -----
+   grant_type  | password
+   client_id  | client_password
+   client_secret  | 123456
+   username  | lww
+   password  | 123456
+
+
 登出接口：  
 http://localhost:8080/logout
 http://localhost:8081/logout
+
+
+
 
 
 
