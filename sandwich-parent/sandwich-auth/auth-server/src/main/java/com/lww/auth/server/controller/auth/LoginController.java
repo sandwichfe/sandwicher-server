@@ -1,4 +1,4 @@
-package com.lww.auth.server.controller;
+package com.lww.auth.server.controller.auth;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * @author lww
+ */
 @Slf4j
 @Controller
 public class LoginController {

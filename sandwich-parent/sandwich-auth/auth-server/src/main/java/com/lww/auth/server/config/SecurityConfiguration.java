@@ -160,9 +160,14 @@ class SecurityConfiguration {
     @Bean
     @Order(2)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
+        http
+                // 关闭csrf 要写在requestMatchers之前
+                .csrf().disable()
+                .authorizeHttpRequests(authorize -> authorize
                 // 不拦截
                 .requestMatchers(new String[]{"/assets/**", "/webjars/**", "/login","/logout","/oauth2/token/**"}).permitAll()
+                // 用户登录相关
+                .requestMatchers(new String[]{"/user/login"}).permitAll()
                 // 其他请求需要认证
                 .anyRequest().authenticated());
         http.formLogin(form -> form
