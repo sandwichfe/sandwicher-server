@@ -1,9 +1,4 @@
 #开发环境
-server:
-  port: 1666
-  servlet:
-    context-path: /littlenote
-
 spring:
   data:
     redis:
@@ -27,6 +22,13 @@ spring:
         maximum-pool-size: 10
 
 
+minio:
+  url: http://49.235.149.110:9000
+  accessKey: ENC(++DhoCRIUGTN/piVAvuyhuHSJFGvAQK8vQ7X+SfXVYduDnUjwT+DxqL1NCMnTNUGaV22xRB83jIGtH0mrsCoVQ==)
+  secretKey: ENC(7pfueoPk8MFvfe1xCU8vQQDgBhnL2OgQa10FarQVA4BzrEfnhbDDG28EA2yzvRYyV3RI/Mq2jXH14OApv/jySBfYTarVQ4qDlYwgn3gtuTc=)
+oss:
+  service:
+    type: minio
 security:
   permit:
     urls:

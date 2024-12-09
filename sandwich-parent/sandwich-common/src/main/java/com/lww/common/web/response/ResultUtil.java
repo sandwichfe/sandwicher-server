@@ -3,7 +3,7 @@ package com.lww.common.web.response;
 /**
  * @author lww
  *   返回结果工具类
- * @date 2022/3/11 16:33
+ * @since 2022/3/11 16:33
  */
 public class ResultUtil {
 

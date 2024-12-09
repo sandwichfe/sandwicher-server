@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 /**
  *   mybatis plus 自动填充 
  * @author lww
- * @date 2022/4/7 16:47
+ * @since 2022/4/7 16:47
  */
 @Slf4j
 @Component

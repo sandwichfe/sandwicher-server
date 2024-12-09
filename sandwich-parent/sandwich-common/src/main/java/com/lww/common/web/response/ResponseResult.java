@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * @author lww
  *   返回结果实体
- * @date 2022/3/11 16:28
+ * @since 2022/3/11 16:28
  */
 @Schema(description = "返回结果实体")
 public class ResponseResult<T> {

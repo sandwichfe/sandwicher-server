@@ -9,7 +9,7 @@ import java.util.Collections;
 /**
  * @author lww
  *   代码生成器
- * @date 2022/3/10 13:30
+ * @since 2022/3/10 13:30
  */
 public class MpGeneCode {
     private static String url = "jdbc:mysql://120.26.91.154:3306/sandwich";
