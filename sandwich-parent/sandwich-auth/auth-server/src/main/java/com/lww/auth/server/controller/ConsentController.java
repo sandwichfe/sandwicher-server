@@ -1,4 +1,4 @@
-package com.lww.auth.server.controller.auth;
+package com.lww.auth.server.controller;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;

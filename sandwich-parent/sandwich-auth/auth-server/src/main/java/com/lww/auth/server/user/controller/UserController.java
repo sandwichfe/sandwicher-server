@@ -1,14 +1,14 @@
-package com.lww.auth.server.controller.user;
+package com.lww.auth.server.user.controller;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.lww.auth.server.user.vo.Oauth2Param;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,21 +29,31 @@ public class UserController {
 
     @PostMapping(value = "/login")
     @Operation(summary = "用户登录", description = "用户登录")
-    public ResponseResult collectTag(String username, String password) {
+    public ResponseResult<String> collectTag(String username, String password) {
+        Oauth2Param oauth2Param = new Oauth2Param()
+                .setGrantType("password")
+                .setClientId(username)
+                .setClientSecret(password)
+                .setUsername(username)
+                .setPassword(password);
+        String token = getOauth2TokenByPassWord(oauth2Param);
+        return ResultUtil.success(token);
+    }
+
+    private static String getOauth2TokenByPassWord(Oauth2Param oauth2Param) {
         // OAuth token endpoint  请求的域名 要和ResourceServer配置的issuer-uri 一致 不然jwt会认证失败
         String tokenUrl = "http://127.0.0.1:9000/oauth2/token";
         // 通过 Hu tool HttpRequest 构建请求体和请求头
         HttpResponse response = HttpRequest.post(tokenUrl)
-                .form("grant_type", "password")
-                .form("client_id", "client_password")
-                .form("client_secret", "123456")
-                .form("username", username)
-                .form("password", password)
+                .form("grant_type", oauth2Param.getGrantType())
+                .form("client_id", oauth2Param.getClientId())
+                .form("client_secret", oauth2Param.getClientSecret())
+                .form("username", oauth2Param.getUsername())
+                .form("password", oauth2Param.getPassword())
                 .execute();
         // 获取返回的响应体
         String responseBody = response.body();
-        String token = extractAccessToken(responseBody);
-        return ResultUtil.success(token);
+        return extractAccessToken(responseBody);
     }
 
     /**
@@ -60,9 +70,9 @@ public class UserController {
             // 解析根级 JSON
             JSONObject rootNode = JSON.parseObject(responseBody);
             // 提取 access_token
-            return "Bearer "+rootNode.getString("access_token");
+            return "Bearer " + rootNode.getString("access_token");
         } catch (Exception e) {
-            log.error("login error",e);
+            log.error("login error", e);
             return null;
         }
     }
