@@ -1,4 +1,5 @@
-package com.lww.sandwich.gene;
+package com.lww.generator;
+
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
@@ -7,16 +8,17 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import java.util.Collections;
 
 /**
+ * 代码生成器
+ *
  * @author lww
- *   代码生成器
  * @since 2022/3/10 13:30
  */
 public class MpGeneCode {
-    private static String url = "jdbc:mysql://120.26.91.154:3306/sandwich";
-    private static String username = "lww";
+    private static String url = "jdbc:mysql://localhost/sandwich";
+    private static String username = "123456";
     private static String password = "123456";
 
-    private static String tableNames = "t_view";
+    private static final String tableNames = "t_view";
 
     public static void main(String[] args) {
         String baseOutPutDir = "F://sandwicher//sandwich-server//src//main//java//";

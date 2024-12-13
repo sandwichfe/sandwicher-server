@@ -24,6 +24,7 @@
         <module>sandwich-auth</module>
         <module>sandwich-oss</module>
         <module>sandwich-auth/sandwich-auth-resources-server</module>
+        <module>sandwich-generator</module>
     </modules>
 
     <properties>
@@ -105,12 +106,6 @@
         </dependency>
 
 
-        <!--MP 代码生成器-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-            <version>3.5.2</version>
-        </dependency>
 
         <!-- 执行SQL分析打印-->
         <dependency>
