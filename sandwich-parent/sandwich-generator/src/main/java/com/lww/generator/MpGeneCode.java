@@ -1,6 +1,7 @@
 package com.lww.generator;
 
 
+
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
@@ -14,29 +15,30 @@ import java.util.Collections;
  * @since 2022/3/10 13:30
  */
 public class MpGeneCode {
-    private static String url = "jdbc:mysql://localhost/sandwich";
-    private static String username = "123456";
+    private static String url = "jdbc:mysql://localhost/local_test";
+    private static String username = "root";
     private static String password = "123456";
-
-    private static final String tableNames = "t_view";
-
+    private static String baseOutPutDir = "D://sandwich//sandwicher-server//sandwich-parent//sandwich-generator//src//main//java//";
+    private static String baseOutPutMapperDir = "D://sandwich//sandwicher-server//sandwich-parent//sandwich-generator//src//main//resources//mapper//";
+    private static final String tableNames = "your table name";
     public static void main(String[] args) {
-        String baseOutPutDir = "F://sandwicher//sandwich-server//src//main//java//";
+
         FastAutoGenerator.create(url, username, password)
                 // 全局配置
                 .globalConfig(builder ->
                     builder.author("lww") // 设置作者
-                            .enableSwagger() // 开启 swagger 模式
+                            // .enableSwagger() // 开启 swagger 模式
+                            .enableSpringdoc() // 文档为springdoc
                             .commentDate("yyyy-MM-dd HH:mm:ss")
-                            //                             .fileOverride() // 覆盖已生成文件
+                                                        // .fileOverride() // 覆盖已生成文件
                             .disableOpenDir() // 生成完不弹出对应目录
                             .outputDir(baseOutPutDir) // 指定输出目录
                 )
                 // 包配置相关
                 .packageConfig(builder ->
                     builder.parent("com.lww") // 设置父包名
-                            .moduleName("sandwich")// 设置父包模块名
-                            .pathInfo(Collections.singletonMap(OutputFile.xml, "F://sandwicher//sandwich-server//src//main//resources//mapper//")) // 设置mapperXml生成路径
+                            .moduleName("generator")// 设置父包模块名
+                            .pathInfo(Collections.singletonMap(OutputFile.xml, baseOutPutMapperDir)) // 设置mapperXml生成路径
                 )
                 // 策略配置
                 .strategyConfig(builder ->
@@ -55,12 +57,12 @@ public class MpGeneCode {
                 .templateConfig(builder -> {
                     builder
                             //.disable(TemplateType.ENTITY)   //  暂时没发现有啥用
-                            .controller("/templates/controller.java")    //  模板位置
-                            .service("/templates/service.java")          //
-                            .serviceImpl("/templates/serviceImpl.java")  //
-                            .entity("/templates/entity.java")            //
-                            .mapper("/templates/mapper.java")            //
-                            .xml("/templates/mapper.xml")                //
+                            .controller("/templates/controller.java")
+                            .service("/templates/service.java")
+                            .serviceImpl("/templates/serviceImpl.java")
+                            .entity("/templates/entity.java")
+                            .mapper("/templates/mapper.java")
+                            .xml("/templates/mapper.xml")
                             .build();
                 })
                 // 使用Freemarker引擎模板，默认的是Velocity引擎模板
@@ -71,6 +73,7 @@ public class MpGeneCode {
                         //System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
                     }).build()
                 ).execute();
+        System.out.println("gene successful");
     }
 
 }
