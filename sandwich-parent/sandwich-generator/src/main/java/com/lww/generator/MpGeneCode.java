@@ -1,11 +1,13 @@
 package com.lww.generator;
 
 
-
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Collections;
 
 /**
@@ -18,9 +20,22 @@ public class MpGeneCode {
     private static String url = "jdbc:mysql://localhost/local_test";
     private static String username = "root";
     private static String password = "123456";
-    private static String baseOutPutDir = "D://sandwich//sandwicher-server//sandwich-parent//sandwich-generator//src//main//java//";
-    private static String baseOutPutMapperDir = "D://sandwich//sandwicher-server//sandwich-parent//sandwich-generator//src//main//resources//mapper//";
+    private static String baseOutPutDir;
+    private static String baseOutPutMapperDir ;
     private static final String tableNames = "your table name";
+    static {
+        try {
+            // 获取当前类的路径
+            URL location = MpGeneCode.class.getProtectionDomain().getCodeSource().getLocation();
+            // 转换为绝对路径
+            String parentPath = Paths.get(location.toURI()).toAbsolutePath().toString().replace("\\", "//").replace("//target//classes", "");
+            baseOutPutDir = parentPath+"//src//main//java//";
+            baseOutPutMapperDir = parentPath+"//src//main//resources//mapper//";
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void main(String[] args) {
 
         FastAutoGenerator.create(url, username, password)
