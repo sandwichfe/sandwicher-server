@@ -1,9 +1,7 @@
 package com.lww.redis.util;
 
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
@@ -105,9 +103,7 @@ public class RedisUtil {
          */
         public  boolean set(String key, Object value) {
             try {
-                if (Boolean.FALSE.equals(hasKey(key))){
-                    redisTemplate.opsForValue().set(key, value);
-                }
+                redisTemplate.opsForValue().set(key, value);
                 return true;
             } catch (Exception e) {
                 log.error("set redis key error：", e);
