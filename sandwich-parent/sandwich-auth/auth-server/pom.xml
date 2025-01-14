@@ -38,6 +38,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+
+        <!--redis-->
+        <dependency>
+            <groupId>com.lww</groupId>
+            <artifactId>sandwich-starter-redis</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

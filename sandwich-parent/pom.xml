@@ -24,6 +24,7 @@
         <module>sandwich-auth</module>
         <module>sandwich-oss</module>
         <module>sandwich-auth/sandwich-auth-resources-server</module>
+        <module>sandwich-generator</module>
     </modules>
 
     <properties>
@@ -47,14 +48,23 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-        </dependencies>
 
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-bom</artifactId>
+                <version>3.5.9</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
 
     </dependencyManagement>
 
 
     <dependencies>
 
+        <!--log4j2-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
@@ -66,7 +76,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -85,11 +94,16 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--mybatis-plus-->
+        <!-- mybatis-plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-            <version>3.5.5</version>
+        </dependency>
+
+        <!-- mybatis-plus jdk 11+ 引入可选模块 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
         </dependency>
 
         <!-- mysql-connector-java -->
@@ -103,22 +117,6 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
         </dependency>
-
-
-        <!--MP 代码生成器-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-            <version>3.5.2</version>
-        </dependency>
-
-        <!-- 执行SQL分析打印-->
-        <dependency>
-            <groupId>p6spy</groupId>
-            <artifactId>p6spy</artifactId>
-            <version>3.9.1</version>
-        </dependency>
-
 
         <!-- fastjson -->
         <dependency>

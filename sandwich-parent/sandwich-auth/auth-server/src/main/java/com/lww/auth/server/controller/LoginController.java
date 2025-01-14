@@ -1,4 +1,4 @@
-package com.lww.auth.server.controller.auth;
+package com.lww.auth.server.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
