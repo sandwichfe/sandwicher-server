@@ -1,4 +1,5 @@
-
+server:
+  port: 8000
 #启动模式
 spring:
   profiles:
