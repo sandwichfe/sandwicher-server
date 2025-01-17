@@ -44,16 +44,14 @@ public class UserLoginController {
                 .setPassword(password);
         String token = getOauth2TokenByPassWord(oauth2Param);
 
-        if (StringUtils.isEmpty(token)) {
-            throw new AppException("登录失败");
-        }
-
         return ResultUtil.success(token);
     }
 
     private String getOauth2TokenByPassWord(Oauth2Param oauth2Param) {
         // OAuth token endpoint  请求的域名 要和ResourceServer配置的issuer-uri 一致 不然jwt会认证失败
         // 通过 Hu tool HttpRequest 构建请求体和请求头
+        log.info("tokenUrl:{}", tokenUrl);
+        log.info("oauth2Param:{}", oauth2Param);
         HttpResponse response = HttpRequest.post(tokenUrl)
                 .form("grant_type", oauth2Param.getGrantType())
                 .form("client_id", oauth2Param.getClientId())
@@ -63,7 +61,11 @@ public class UserLoginController {
                 .execute();
         // 获取返回的响应体
         String responseBody = response.body();
-        return extractAccessToken(responseBody);
+        String token = extractAccessToken(responseBody);
+        if (!StringUtils.hasText(token)) {
+            throw new AppException("登录失败");
+        }
+        return "Bearer "+token;
     }
 
     /**
@@ -80,7 +82,7 @@ public class UserLoginController {
             // 解析根级 JSON
             JSONObject rootNode = JSON.parseObject(responseBody);
             // 提取 access_token
-            return "Bearer " + rootNode.getString("access_token");
+            return rootNode.getString("access_token");
         } catch (Exception e) {
             log.error("login error", e);
             return null;

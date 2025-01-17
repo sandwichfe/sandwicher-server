@@ -20,3 +20,5 @@ ENTRYPOINT ["java", "-Djasypt.encryptor.password=sandwich_yiru", "-jar", "/app/a
 #docker build -t myapp:1.0.0 .
 #创建容器运行   --restart=always 随docker启动而启动
 #docker run --restart=always -d -it --name=myapp -p 8082:8081 -v /home/admin/app:/usr/data myapp:1.0.0
+
+

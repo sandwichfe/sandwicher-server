@@ -25,6 +25,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
+          # 如果 带着token认证 总是显示不合法 可能是这里配置ip的问题
           # Jwt中claims的iss属性，也就是jwt的签发地址，即认证服务器的根路径   验证token的真实性
           # 资源服务器会进一步的配置，通过该地址获取公钥以解析jwt
           issuer-uri: http://127.0.0.1:9088
