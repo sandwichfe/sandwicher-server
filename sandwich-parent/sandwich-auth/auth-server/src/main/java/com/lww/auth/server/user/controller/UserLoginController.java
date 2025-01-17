@@ -5,11 +5,13 @@ import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.lww.auth.server.user.vo.Oauth2Param;
+import com.lww.common.web.exception.AppException;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,11 +38,16 @@ public class UserLoginController {
     public ResponseResult<String> collectTag(String username, String password) {
         Oauth2Param oauth2Param = new Oauth2Param()
                 .setGrantType("password")
-                .setClientId(username)
-                .setClientSecret(password)
+                .setClientId("client_password")
+                .setClientSecret("123456")
                 .setUsername(username)
                 .setPassword(password);
         String token = getOauth2TokenByPassWord(oauth2Param);
+
+        if (StringUtils.isEmpty(token)) {
+            throw new AppException("登录失败");
+        }
+
         return ResultUtil.success(token);
     }
 
