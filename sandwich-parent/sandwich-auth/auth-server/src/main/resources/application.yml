@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: 9088
 
 # 学习框架 就应该把 log打开 不知道出错了 完全不知道啥原因
 logging:
@@ -7,6 +7,9 @@ logging:
     org:
       springframework:
         security: trace
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
 
 spring:
   datasource:

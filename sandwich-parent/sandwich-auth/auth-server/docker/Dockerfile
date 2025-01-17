@@ -3,10 +3,12 @@ FROM openjdk:17-jdk-alpine
 LABEL maintainer="维护者 <1344382941@qq.com>"
 LABEL description="描述"
 WORKDIR /app
-COPY yourApp.jar /app/app.jar
+COPY auth-server-1.0.0.jar /app/app.jar
 COPY application.yml /app/application.yml
-# 开放端口8000
-EXPOSE 8000
+# 安装 bash
+RUN apk add --no-cache bash
+# 开放端口9000
+EXPOSE 9088
 # 执行命令
 ENTRYPOINT ["java","-jar","/app/app.jar"]
 
