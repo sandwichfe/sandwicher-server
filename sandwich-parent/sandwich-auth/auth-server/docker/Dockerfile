@@ -6,7 +6,10 @@ WORKDIR /app
 COPY auth-server-1.0.0.jar /app/app.jar
 COPY application.yml /app/application.yml
 # 安装 bash
-RUN apk add --no-cache bash
+RUN echo "http://mirrors.aliyun.com/alpine/v3.14/main" > /etc/apk/repositories && \
+    echo "http://mirrors.aliyun.com/alpine/v3.14/community" >> /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache bash
 # 开放端口9000
 EXPOSE 9088
 # 执行命令

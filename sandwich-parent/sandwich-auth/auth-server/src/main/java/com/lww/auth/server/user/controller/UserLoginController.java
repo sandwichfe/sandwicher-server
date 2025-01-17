@@ -9,6 +9,7 @@ import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserLoginController {
 
+    @Value("${oauth2.token-url:http://127.0.0.1:9000/oauth2/token}")
+    private String tokenUrl;
+
     @PostMapping(value = "/login")
     @Operation(summary = "用户登录", description = "用户登录")
     public ResponseResult<String> collectTag(String username, String password) {
@@ -40,9 +44,8 @@ public class UserLoginController {
         return ResultUtil.success(token);
     }
 
-    private static String getOauth2TokenByPassWord(Oauth2Param oauth2Param) {
+    private String getOauth2TokenByPassWord(Oauth2Param oauth2Param) {
         // OAuth token endpoint  请求的域名 要和ResourceServer配置的issuer-uri 一致 不然jwt会认证失败
-        String tokenUrl = "http://127.0.0.1:9000/oauth2/token";
         // 通过 Hu tool HttpRequest 构建请求体和请求头
         HttpResponse response = HttpRequest.post(tokenUrl)
                 .form("grant_type", oauth2Param.getGrantType())
