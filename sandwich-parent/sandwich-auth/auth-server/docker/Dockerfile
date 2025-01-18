@@ -5,11 +5,14 @@ LABEL description="描述"
 WORKDIR /app
 COPY auth-server-1.0.0.jar /app/app.jar
 COPY application.yml /app/application.yml
-# 安装 bash
+# 安装 bash 以及镜像设置为北京时间
 RUN echo "http://mirrors.aliyun.com/alpine/v3.14/main" > /etc/apk/repositories && \
     echo "http://mirrors.aliyun.com/alpine/v3.14/community" >> /etc/apk/repositories && \
     apk update && \
-    apk add --no-cache bash
+    apk add --no-cache bash tzdata && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" > /etc/timezone && \
+    apk del tzdata
 # 开放端口9000
 EXPOSE 9088
 # 执行命令
