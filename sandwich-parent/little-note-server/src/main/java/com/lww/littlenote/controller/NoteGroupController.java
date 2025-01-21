@@ -56,8 +56,8 @@ public class NoteGroupController {
     }
 
     @GetMapping("/deleteNoteGroup")
-    public ResponseResult<Void> deleteNote(Note note) {
-        noteGroupService.removeById(note);
+    public ResponseResult<Void> deleteNote(Long id) {
+        noteGroupService.removeById(id);
         return ResultUtil.success();
     }
 
