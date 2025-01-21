@@ -46,8 +46,9 @@ public class NoteController {
     }
 
     @PostMapping("/editNote")
-    public ResponseResult<Void> listNote(@RequestBody Note note) {
-        noteService.saveOrUpdate(note);
+    public ResponseResult<Void> editNote(@RequestBody Note note) {
+        note.setUpdateTime(LocalDateTime.now());
+        noteService.updateById(note);
         return ResultUtil.success();
     }
 
