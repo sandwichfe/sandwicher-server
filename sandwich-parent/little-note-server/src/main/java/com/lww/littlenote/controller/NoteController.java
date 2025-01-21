@@ -8,13 +8,13 @@ import com.lww.littlenote.entity.Note;
 import com.lww.littlenote.service.NoteService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * @author lww
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/note")
@@ -30,14 +30,14 @@ public class NoteController {
         return ResultUtil.success(pages);
     }
 
-    @PostMapping("/getNote")
+    @GetMapping("/getNote")
     public Note getNote(Long id) {
         return noteService.getById(id);
     }
 
 
     @PostMapping("/addNote")
-    public ResponseResult<Long> addNote(Note note) {
+    public ResponseResult<Long> addNote(@RequestBody Note note) {
         note.setUpdateTime(LocalDateTime.now());
         noteService.save(note);
         Long id = note.getId();
@@ -46,13 +46,13 @@ public class NoteController {
     }
 
     @PostMapping("/editNote")
-    public ResponseResult<Void> listNote(Note note) {
+    public ResponseResult<Void> listNote(@RequestBody Note note) {
         noteService.saveOrUpdate(note);
         return ResultUtil.success();
     }
 
 
-    @PostMapping("/deleteNote")
+    @GetMapping("/deleteNote")
     public ResponseResult<Void> deleteNote(Note note) {
         noteService.removeById(note);
         return ResultUtil.success();
