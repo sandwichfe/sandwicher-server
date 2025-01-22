@@ -32,7 +32,7 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
     public Page<Note> listNote(NoteDto noteDto) {
         LambdaQueryWrapper<Note> wrapper = new LambdaQueryWrapper<>();
         wrapper
-                .select(Note::getId, Note::getTitle, Note::getCreateTime, Note::getUpdateTime)
+                .select(Note::getId, Note::getTitle, Note::getCreateTime, Note::getUpdateTime,Note::getGroupId,Note::getUserId)
                 .eq(noteDto.getGroupId() != null, Note::getGroupId, noteDto.getGroupId())
                 .orderByDesc(Note::getUpdateTime);
         return noteMapper.selectPage(new Page<>(noteDto.getPageNum(), noteDto.getPageSize()), wrapper);
