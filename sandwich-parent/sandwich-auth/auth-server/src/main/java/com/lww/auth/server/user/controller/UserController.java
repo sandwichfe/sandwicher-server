@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import java.util.List;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lww.common.web.vo.PageVo;
 
 /**
  * <p>
@@ -31,7 +33,7 @@ public class UserController {
      * 新增用户
      */
     @Operation(summary = "新增用户")
-    @PostMapping
+    @PostMapping("/create")
     public ResponseResult<User> createUser(@RequestBody User user) {
         userService.save(user);
         return ResultUtil.success(user);
@@ -41,19 +43,20 @@ public class UserController {
      * 根据ID获取用户
      */
     @Operation(summary = "根据ID获取用户")
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseResult<User> getUserById(@PathVariable Long id) {
         User user = userService.getById(id);
         return ResultUtil.success(user);
     }
 
     /**
-     * 获取所有用户
+     * 获取所有用户（分页）
      */
-    @Operation(summary = "获取所有用户")
-    @GetMapping
-    public ResponseResult<List<User>> getAllUsers() {
-        List<User> users = userService.list();
+    @Operation(summary = "获取所有用户（分页）")
+    @PostMapping("/list")
+    public ResponseResult<Page<User>> getAllUsers(@RequestBody PageVo pageVo) {
+        Page<User> page = new Page<>(pageVo.getPageNum(), pageVo.getPageSize());
+        Page<User> users = userService.page(page);
         return ResultUtil.success(users);
     }
 
@@ -61,7 +64,7 @@ public class UserController {
      * 更新用户
      */
     @Operation(summary = "更新用户")
-    @PutMapping
+    @PostMapping("/update")
     public ResponseResult<User> updateUser(@RequestBody User user) {
         userService.updateById(user);
         return ResultUtil.success(user);
@@ -71,7 +74,7 @@ public class UserController {
      * 删除用户
      */
     @Operation(summary = "删除用户")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseResult<Void> deleteUser(@PathVariable Long id) {
         userService.removeById(id);
         return ResultUtil.success();

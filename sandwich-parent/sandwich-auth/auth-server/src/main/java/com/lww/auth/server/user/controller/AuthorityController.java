@@ -10,15 +10,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import java.util.List;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lww.common.web.vo.PageVo;
 
-/**
- * <p>
- * 系统菜单表 前端控制器
- * </p>
- *
- * @author lww
- * @since 2024-12-16 11:53:37
- */
 @Tag(name = "菜单管理")
 @RestController
 @RequestMapping("/sys/authority")
@@ -27,51 +21,37 @@ public class AuthorityController {
     @Resource
     private AuthorityService authorityService;
 
-    /**
-     * 新增菜单
-     */
     @Operation(summary = "新增菜单")
-    @PostMapping
+    @PostMapping("/create")
     public ResponseResult<Authority> createAuthority(@RequestBody Authority authority) {
         authorityService.save(authority);
         return ResultUtil.success(authority);
     }
 
-    /**
-     * 根据ID获取菜单
-     */
     @Operation(summary = "根据ID获取菜单")
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseResult<Authority> getAuthorityById(@PathVariable Long id) {
         Authority authority = authorityService.getById(id);
         return ResultUtil.success(authority);
     }
 
-    /**
-     * 获取所有菜单
-     */
     @Operation(summary = "获取所有菜单")
-    @GetMapping
-    public ResponseResult<List<Authority>> getAllAuthorities() {
-        List<Authority> authorities = authorityService.list();
+    @PostMapping("/list")
+    public ResponseResult<Page<Authority>> getAllAuthorities(@RequestBody PageVo pageVo) {
+        Page<Authority> page = new Page<>(pageVo.getPageNum(), pageVo.getPageSize());
+        Page<Authority> authorities = authorityService.page(page);
         return ResultUtil.success(authorities);
     }
 
-    /**
-     * 更新菜单
-     */
     @Operation(summary = "更新菜单")
-    @PutMapping
+    @PostMapping("/update")
     public ResponseResult<Authority> updateAuthority(@RequestBody Authority authority) {
         authorityService.updateById(authority);
         return ResultUtil.success(authority);
     }
 
-    /**
-     * 删除菜单
-     */
     @Operation(summary = "删除菜单")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseResult<Void> deleteAuthority(@PathVariable Long id) {
         authorityService.removeById(id);
         return ResultUtil.success();

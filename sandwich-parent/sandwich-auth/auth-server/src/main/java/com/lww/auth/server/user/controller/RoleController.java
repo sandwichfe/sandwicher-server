@@ -10,15 +10,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import java.util.List;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lww.common.web.vo.PageVo;
 
-/**
- * <p>
- * 系统角色表 前端控制器
- * </p>
- *
- * @author lww
- * @since 2024-12-16 11:53:37
- */
 @Tag(name = "角色管理")
 @RestController
 @RequestMapping("/sys/role")
@@ -27,51 +21,37 @@ public class RoleController {
     @Resource
     private RoleService roleService;
 
-    /**
-     * 新增角色
-     */
     @Operation(summary = "新增角色")
-    @PostMapping
+    @PostMapping("/create")
     public ResponseResult<Role> createRole(@RequestBody Role role) {
         roleService.save(role);
         return ResultUtil.success(role);
     }
 
-    /**
-     * 根据ID获取角色
-     */
     @Operation(summary = "根据ID获取角色")
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseResult<Role> getRoleById(@PathVariable Long id) {
         Role role = roleService.getById(id);
         return ResultUtil.success(role);
     }
 
-    /**
-     * 获取所有角色
-     */
     @Operation(summary = "获取所有角色")
-    @GetMapping
-    public ResponseResult<List<Role>> getAllRoles() {
-        List<Role> roles = roleService.list();
+    @PostMapping("/list")
+    public ResponseResult<Page<Role>> getAllRoles(@RequestBody PageVo pageVo) {
+        Page<Role> page = new Page<>(pageVo.getPageNum(), pageVo.getPageSize());
+        Page<Role> roles = roleService.page(page);
         return ResultUtil.success(roles);
     }
 
-    /**
-     * 更新角色
-     */
     @Operation(summary = "更新角色")
-    @PutMapping
+    @PostMapping("/update")
     public ResponseResult<Role> updateRole(@RequestBody Role role) {
         roleService.updateById(role);
         return ResultUtil.success(role);
     }
 
-    /**
-     * 删除角色
-     */
     @Operation(summary = "删除角色")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseResult<Void> deleteRole(@PathVariable Long id) {
         roleService.removeById(id);
         return ResultUtil.success();
