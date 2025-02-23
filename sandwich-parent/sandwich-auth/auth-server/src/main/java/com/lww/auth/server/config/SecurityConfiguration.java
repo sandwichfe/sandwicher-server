@@ -173,12 +173,21 @@ class SecurityConfiguration {
                     return config;
                 }))
                 .authorizeHttpRequests(authorize -> authorize
-                // 不拦截
-                .requestMatchers(new String[]{"/assets/**", "/webjars/**", "/login","/logout","/oauth2/token/**"}).permitAll()
-                // 用户登录相关
-                .requestMatchers(new String[]{"/user/login"}).permitAll()
-                // 其他请求需要认证
-                .anyRequest().authenticated());
+                        // 不拦截
+                        .requestMatchers(new String[]{"/assets/**", "/webjars/**", "/login", "/logout", "/oauth2/token/**"}).permitAll()
+                        // 用户登录相关
+                        .requestMatchers(new String[]{"/user/login"}).permitAll()
+                        // sys
+                        .requestMatchers(new String[]{"/sys/**"}).permitAll()
+                        // swagger
+                        .requestMatchers(new String[]{"/swagger-resources/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/webjars/**",
+                                // swagger-boostrap-ui
+                                "/doc.html",}).permitAll()
+                        // 其他请求需要认证
+                        .anyRequest().authenticated());
         http.formLogin(form -> form
                         // 自定义登录页面
                         .loginPage("/login")
