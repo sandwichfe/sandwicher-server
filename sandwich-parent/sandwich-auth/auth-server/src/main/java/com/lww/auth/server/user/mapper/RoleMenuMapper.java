@@ -1,7 +1,7 @@
 package com.lww.auth.server.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lww.auth.server.user.entity.RoleAuthority;
+import com.lww.auth.server.user.entity.RoleMenu;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.lww.auth.server.user.entity.RoleAuthority;
  * @author lww
  * @since 2024-12-16 11:53:37
  */
-public interface RoleAuthorityMapper extends BaseMapper<RoleAuthority> {
+public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
 
 }

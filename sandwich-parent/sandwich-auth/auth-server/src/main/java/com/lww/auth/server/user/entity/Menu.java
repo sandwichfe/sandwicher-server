@@ -20,9 +20,9 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@TableName("t_authority")
-@Schema(name = "Authority", description = "系统菜单表")
-public class Authority implements Serializable {
+@TableName("t_menu")
+@Schema(name = "menu", description = "系统菜单表")
+public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,13 +37,13 @@ public class Authority implements Serializable {
     private Long menuPid;
 
     @Schema(description = "跳转URL")
-    private String url;
+    private String path;
 
     @Schema(description = "所需权限")
     private String authority;
 
     @Schema(description = "排序")
-    private Byte sort;
+    private Integer sort;
 
     @Schema(description = "0:菜单,1:接口")
     private Byte type;

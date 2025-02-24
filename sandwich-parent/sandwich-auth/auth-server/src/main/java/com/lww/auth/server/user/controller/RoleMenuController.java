@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024-12-16 11:53:37
  */
 @RestController
-@RequestMapping("/generator/roleAuthority")
-public class RoleAuthorityController {
+@RequestMapping("/generator/roleMenu")
+public class RoleMenuController {
 
 }

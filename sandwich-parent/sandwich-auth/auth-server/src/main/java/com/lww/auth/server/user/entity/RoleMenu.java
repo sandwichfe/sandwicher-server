@@ -19,9 +19,9 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-@TableName("t_role_authority")
-@Schema(name = "RoleAuthority", description = "角色菜单多对多关联表")
-public class RoleAuthority implements Serializable {
+@TableName("t_role_menu")
+@Schema(name = "RoleMenu", description = "角色菜单多对多关联表")
+public class RoleMenu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
