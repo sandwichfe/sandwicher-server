@@ -176,7 +176,7 @@ class SecurityConfiguration {
                         // 不拦截
                         .requestMatchers(new String[]{"/assets/**", "/webjars/**", "/login", "/logout", "/oauth2/token/**"}).permitAll()
                         // 用户登录相关
-                        .requestMatchers(new String[]{"/user/login"}).permitAll()
+                        .requestMatchers(new String[]{"/user/login","/user/slider/generate","/user/slider/verify"}).permitAll()
                         // sys
                         .requestMatchers(new String[]{"/sys/**"}).permitAll()
                         // swagger

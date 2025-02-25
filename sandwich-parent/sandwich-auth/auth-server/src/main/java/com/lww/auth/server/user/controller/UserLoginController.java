@@ -4,6 +4,7 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.lww.auth.server.user.vo.Oauth2Param;
 import com.lww.common.web.exception.AppException;
 import com.lww.common.web.response.ResponseResult;
@@ -12,9 +13,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * 注意：本来这个服务只是用来做 授权认证的
@@ -33,6 +39,9 @@ public class UserLoginController {
     @Value("${oauth2.token-url:http://127.0.0.1:9000/oauth2/token}")
     private String tokenUrl;
 
+    // 用于存储滑块验证码的缓存
+    private Map<String, Integer> sliderCache = new HashMap<>();
+
     @PostMapping(value = "/login")
     @Operation(summary = "用户登录", description = "用户登录")
     public ResponseResult<String> collectTag(String username, String password) {
@@ -45,6 +54,43 @@ public class UserLoginController {
         String token = getOauth2TokenByPassWord(oauth2Param);
 
         return ResultUtil.success(token);
+    }
+
+    @GetMapping(value = "/slider/generate")
+    @Operation(summary = "生成滑块验证码", description = "生成滑块验证码")
+    public ResponseResult<Map<String, Object>> generateSlider() {
+        Random random = new Random();
+        // 生成滑块的目标位置
+        int targetX = random.nextInt(200);
+        // 生成唯一的滑块ID
+        String sliderId = IdWorker.getIdStr();
+
+        // 将滑块ID和目标位置存入缓存
+        sliderCache.put(sliderId, targetX);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("sliderId", sliderId);
+        result.put("targetX", targetX);
+
+        return ResultUtil.success(result);
+    }
+
+    @PostMapping(value = "/slider/verify")
+    @Operation(summary = "验证滑块位置", description = "验证滑块位置")
+    public ResponseResult<Boolean> verifySlider(String sliderId, int userX) {
+        Integer targetX = sliderCache.get(sliderId);
+        if (targetX == null) {
+            throw new AppException("滑块验证码已过期或无效");
+        }
+
+        // 允许一定的误差范围
+        boolean isValid = Math.abs(userX - targetX) <= 5;
+
+        // 验证完成后移除缓存
+        sliderCache.remove(sliderId);
+
+        isValid = true;
+        return ResultUtil.success(isValid);
     }
 
     private String getOauth2TokenByPassWord(Oauth2Param oauth2Param) {
@@ -88,6 +134,4 @@ public class UserLoginController {
             return null;
         }
     }
-
-
 }
