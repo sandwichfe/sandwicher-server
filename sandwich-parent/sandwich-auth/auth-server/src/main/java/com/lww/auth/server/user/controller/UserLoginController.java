@@ -2,6 +2,7 @@ package com.lww.auth.server.user.controller;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpStatus;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -124,14 +125,13 @@ public class UserLoginController {
      */
     public static String extractAccessToken(String responseBody) {
         log.info("oauth token responseBody:{}", responseBody);
-        try {
             // 解析根级 JSON
             JSONObject rootNode = JSON.parseObject(responseBody);
+            if (HttpStatus.HTTP_OK!=rootNode.getInteger("code")){
+                throw new AppException(rootNode.getString("msg"));
+            }
             // 提取 access_token
-            return rootNode.getString("access_token");
-        } catch (Exception e) {
-            log.error("login error", e);
-            return null;
-        }
+            JSONObject data = (JSONObject) rootNode.get("data");
+            return data.getString("access_token");
     }
 }

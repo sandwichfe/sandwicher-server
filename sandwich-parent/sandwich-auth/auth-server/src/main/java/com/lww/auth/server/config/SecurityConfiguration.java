@@ -1,5 +1,7 @@
 package com.lww.auth.server.config;
 
+import com.lww.auth.server.oauth2.handler.MyAuthenticationFailureHandler;
+import com.lww.auth.server.oauth2.handler.MyAuthenticationSuccessHandler;
 import com.lww.auth.server.oauth2.password.PasswordAuthenticationConverter;
 import com.lww.auth.server.oauth2.password.PasswordAuthenticationProvider;
 import com.lww.auth.server.utils.SecurityUtils;
@@ -23,9 +25,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -45,7 +45,6 @@ import org.springframework.security.oauth2.server.authorization.token.*;
 import org.springframework.security.oauth2.server.authorization.web.authentication.OAuth2AuthorizationCodeAuthenticationConverter;
 import org.springframework.security.oauth2.server.authorization.web.authentication.OAuth2ClientCredentialsAuthenticationConverter;
 import org.springframework.security.oauth2.server.authorization.web.authentication.OAuth2RefreshTokenAuthenticationConverter;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -135,8 +134,8 @@ class SecurityConfiguration {
                                                 )
                                         )
                         )
-                        // .accessTokenResponseHandler(new MyAuthenticationSuccessHandler()) // 自定义成功响应
-                        // .errorResponseHandler(new MyAuthenticationFailureHandler()) // 自定义失败响应
+                        .accessTokenResponseHandler(new MyAuthenticationSuccessHandler()) // 自定义成功响应
+                        .errorResponseHandler(new MyAuthenticationFailureHandler()) // 自定义失败响应
                 );
 
         // 未认证的请求异常处理（/Login）    指向到login地址
@@ -205,22 +204,6 @@ class SecurityConfiguration {
         return http.build();
     }
 
-    /**
-     * springSecurity 的用户
-     *
-     * @author lww
-     * @since 2024/11/26
-     */
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails userDetails = User.withDefaultPasswordEncoder()
-                .username("lww")
-                .password("123456")
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(userDetails);
-    }
-
 
     /**
      * 好像 是 自定义 jwt内容的
@@ -249,9 +232,13 @@ class SecurityConfiguration {
         };
     }
 
-
+    /**
+     * 密码加密方式  DelegatingPasswordEncoder。这种编码器可以根据密码的前缀（如{bcrypt}）自动选择对应的编码器
+     * 如果设置成 BCryptPasswordEncoder反而有问题  影响到了oauth客户端的？
+     * @return
+     */
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
@@ -322,4 +309,21 @@ class SecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
+    /**
+     * springSecurity 的用户
+     *
+     * @author lww
+     * @since 2024/11/26
+
+     @Bean
+     public UserDetailsService userDetailsService() {
+     UserDetails userDetails = User.withDefaultPasswordEncoder()
+     .username("lww")
+     .password("123456")
+     .roles("USER")
+     .build();
+     return new InMemoryUserDetailsManager(userDetails);
+     } */
+
 }
