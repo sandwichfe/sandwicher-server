@@ -177,7 +177,7 @@ class SecurityConfiguration {
                         // 用户登录相关
                         .requestMatchers(new String[]{"/user/login","/user/slider/generate","/user/slider/verify"}).permitAll()
                         // sys
-                        .requestMatchers(new String[]{"/sys/**"}).permitAll()
+                        // .requestMatchers(new String[]{"/sys/**"}).permitAll()
                         // swagger
                         .requestMatchers(new String[]{"/swagger-resources/**",
                                 "/swagger-ui.html",
