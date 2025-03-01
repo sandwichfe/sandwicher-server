@@ -1,17 +1,16 @@
 package com.lww.auth.server.user.controller;
 
-import com.lww.common.web.response.ResponseResult;
-import com.lww.common.web.response.ResultUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lww.auth.dep.resources.server.config.utils.SecurityUserUtils;
 import com.lww.auth.server.user.entity.User;
 import com.lww.auth.server.user.service.UserService;
-import org.springframework.web.bind.annotation.*;
-
+import com.lww.common.web.response.ResponseResult;
+import com.lww.common.web.response.ResultUtil;
+import com.lww.common.web.vo.PageVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import java.util.List;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lww.common.web.vo.PageVo;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -55,6 +54,7 @@ public class UserController {
     @Operation(summary = "获取所有用户（分页）")
     @PostMapping("/list")
     public ResponseResult<Page<User>> getAllUsers(@RequestBody PageVo pageVo) {
+        Long userId = SecurityUserUtils.getUserId();
         Page<User> page = new Page<>(pageVo.getPageNum(), pageVo.getPageSize());
         Page<User> users = userService.page(page);
         return ResultUtil.success(users);

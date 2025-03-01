@@ -1,9 +1,9 @@
 package com.lww.littlenote.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lww.auth.dep.resources.server.config.utils.SecurityUserUtils;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
-import com.lww.common.web.vo.PageVo;
 import com.lww.littlenote.dto.NoteDto;
 import com.lww.littlenote.entity.Note;
 import com.lww.littlenote.service.NoteService;
@@ -25,6 +25,9 @@ public class NoteController {
 
     @PostMapping("/listNote")
     public ResponseResult<Page<Note>> listNote(@Valid NoteDto noteDto) {
+        // 在 Controller/Service 中直接调用
+        Long userId = SecurityUserUtils.getUserId();
+        String username = SecurityUserUtils.getUsername();
         Page<Note> pages = noteService.listNote(noteDto);
         return ResultUtil.success(pages);
     }

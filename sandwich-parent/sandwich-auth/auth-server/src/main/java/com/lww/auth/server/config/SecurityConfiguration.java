@@ -222,7 +222,8 @@ class SecurityConfiguration {
                             .map(GrantedAuthority::getAuthority)
                             .collect(Collectors.toSet());
                     context.getClaims().claims(claim -> {
-                        if (Objects.nonNull(userDetail) && userDetail instanceof UserDetails userDetails) {
+                        if (Objects.nonNull(userDetail) && userDetail instanceof SecurityUserDetails userDetails) {
+                            claim.put("userId", userDetails.getUserId());
                             claim.put("userName", userDetails.getUsername());
                         }
                         claim.put("authorities", authorities);
