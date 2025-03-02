@@ -16,7 +16,18 @@ spring:
     url: jdbc:mysql://yiruserene.top:3306/sandwich?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
     username: ENC(jelC1fjDfZ5PG7c8uG/0iRjx/HGJgbHI1A4CtgFF09TPiBe+YyflAxb+hVHY/SOm)
     password: ENC(p5067+1TCj3uIYyTXp5unyyitXAI0q1h5IhxNWNcc0SdiMLm9Xik1ZwtcOPYG78l)
-
+  data:
+    redis:
+      host: 49.235.149.110
+      port: 6379
+      password: ENC(uJjGYgAuROdH+xJKEyeznHV8RL2zz1I/58iwtDQ8KlPHMuW4qNRkNHFaw0m2EnRE)
+      jedis:
+        pool:
+          max-idle: 500
+          min-idle: 50
+          max-active: 2000
+          max-wait: 1000
+      timeout: 5000
 
 #请求密码模式的token用的 和spring oauth自己的配置没什么关系
 oauth2:

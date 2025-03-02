@@ -5,12 +5,14 @@ import com.lww.auth.server.oauth2.handler.MyAuthenticationSuccessHandler;
 import com.lww.auth.server.oauth2.password.PasswordAuthenticationConverter;
 import com.lww.auth.server.oauth2.password.PasswordAuthenticationProvider;
 import com.lww.auth.server.utils.SecurityUtils;
+import com.lww.redis.util.RedisUtil;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import jakarta.annotation.Resource;
+import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -25,7 +27,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -83,6 +84,11 @@ class SecurityConfiguration {
     @Lazy
     @Resource
     private  OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer;
+
+    /**
+     * jwk set缓存前缀
+     */
+    public static final String AUTHORIZATION_JWS_PREFIX_KEY = "authorization_jws";
 
     /**
      * OAuth2AuthorizationServer配置
@@ -259,8 +265,42 @@ class SecurityConfiguration {
         return new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository());
     }
 
+
+
+    /**
+     * 配置jwk源，使用非对称加密，公开用于检索匹配指定选择器的JWK的方法
+     *
+     * @return JWKSource
+     */
     @Bean
-    public JWKSource<SecurityContext> jwkSource() {
+    @SneakyThrows
+    public JWKSource<SecurityContext> jwkSource(RedisUtil redisUtil) {
+        // 先从redis获取 加密密钥    使用默认的生成策略 每次重启都会生成新的jws公钥私钥 那么之前的签发的token就会失效(授权服务器同时作为资源服务器才会这样) 用户就要重新登录 体验差 所以把jws用redis缓存起来
+        String jwkSetCache = redisUtil.get(AUTHORIZATION_JWS_PREFIX_KEY);
+        if (ObjectUtils.isEmpty(jwkSetCache)) {
+            KeyPair keyPair = generateRsaKey();
+            RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+            RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+            RSAKey rsaKey = new RSAKey.Builder(publicKey)
+                    .privateKey(privateKey)
+                    .keyID(UUID.randomUUID().toString())
+                    .build();
+            // 生成jws
+            JWKSet jwkSet = new JWKSet(rsaKey);
+            // 转为json字符串
+            String jwkSetString = jwkSet.toString(Boolean.FALSE);
+            // 存入redis
+            redisUtil.set(AUTHORIZATION_JWS_PREFIX_KEY, jwkSetString);
+            return new ImmutableJWKSet<>(jwkSet);
+        }
+        // 解析存储的jws
+        JWKSet jwkSet = JWKSet.parse(jwkSetCache);
+        return new ImmutableJWKSet<>(jwkSet);
+    }
+
+
+
+    public JWKSource<SecurityContext> jwkSourcedefault() throws Exception {
         KeyPair keyPair = generateRsaKey();
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
@@ -272,6 +312,11 @@ class SecurityConfiguration {
         return new ImmutableJWKSet<>(jwkSet);
     }
 
+
+    /**
+     * 生成RSA密钥对 默认的方式
+     * @return
+     */
     private static KeyPair generateRsaKey() {
         KeyPair keyPair;
         try {
