@@ -185,11 +185,9 @@ class SecurityConfiguration {
                         .requestMatchers(new String[]{"/assets/**", "/webjars/**", "/login", "/logout", "/oauth2/token/**"}).permitAll()
                         // 用户登录相关
                         .requestMatchers(new String[]{"/user/login","/user/slider/generate","/user/slider/verify"}).permitAll()
-                        // sys
-                        // .requestMatchers(new String[]{"/sys/**"}).permitAll()
                         // swagger
                         .requestMatchers(new String[]{"/swagger-resources/**",
-                                "/swagger-ui.html",
+                                "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/webjars/**",
                                 // swagger-boostrap-ui
