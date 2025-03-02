@@ -56,11 +56,26 @@ public class UserController {
     @PostMapping("/list")
     public ResponseResult<Page<User>> getAllUsers(@RequestBody PageVo pageVo) {
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = jwt.getClaim("userId"); // 直接读取自定义 claim
-        String userName = jwt.getClaim("userName");
         Page<User> page = new Page<>(pageVo.getPageNum(), pageVo.getPageSize());
         Page<User> users = userService.page(page);
         return ResultUtil.success(users);
+    }
+
+    /**
+     * 获取当前登录用户信息
+     */
+    @Operation(summary = "获取当前登录用户信息")
+    @GetMapping("/current")
+    public ResponseResult<User> getCurrentUser() {
+        Long userId = getCurrentUserId();
+        User user = userService.getById(userId);
+        return ResultUtil.success(user);
+    }
+
+    private static Long getCurrentUserId() {
+        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = jwt.getClaim("userId");
+        return userId;
     }
 
     /**
@@ -69,6 +84,18 @@ public class UserController {
     @Operation(summary = "更新用户")
     @PostMapping("/update")
     public ResponseResult<User> updateUser(@RequestBody User user) {
+        userService.updateById(user);
+        return ResultUtil.success(user);
+    }
+
+    /**
+     * 更新当前登录用户信息
+     */
+    @Operation(summary = "更新当前登录用户信息")
+    @PostMapping("/update/current")
+    public ResponseResult<User> updateCurrentUser(@RequestBody User user) {
+        Long userId = getCurrentUserId();
+        user.setId(userId); // 确保更新的是当前用户
         userService.updateById(user);
         return ResultUtil.success(user);
     }
