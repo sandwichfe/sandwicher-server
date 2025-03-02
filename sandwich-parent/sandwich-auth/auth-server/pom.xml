@@ -34,12 +34,6 @@
             <artifactId>spring-security-cas</artifactId>
         </dependency>
 
-        <!--auth 为user相关的接口 又作为了一个资源服务器-->
-        <dependency>
-            <groupId>com.lww</groupId>
-            <artifactId>sandwich-auth-resources-server</artifactId>
-            <version>1.0.0</version>
-        </dependency>
         <!--thymeleaf-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

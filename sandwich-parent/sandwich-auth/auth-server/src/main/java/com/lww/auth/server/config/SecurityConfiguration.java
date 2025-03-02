@@ -146,14 +146,17 @@ class SecurityConfiguration {
 
         // 未认证的请求异常处理（/Login）    指向到login地址
         http.exceptionHandling(exceptions -> exceptions
-                        .defaultAuthenticationEntryPointFor(
-                                new LoginUrlAuthenticationEntryPoint("/login"),
-                                new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-                        )
+                        .authenticationEntryPoint(new LoginAuthenticationJsonEntryPoint())
                 )
                 // 接受用户信息和/或客户端注册的访问令牌
                 .oauth2ResourceServer(resourceServer -> resourceServer
-                        .jwt(Customizer.withDefaults()));
+                        .jwt(Customizer.withDefaults())
+                        // 异常处理
+                        .accessDeniedHandler(SecurityUtils::exceptionHandler)
+                        // 认证失败处理
+                        .authenticationEntryPoint(SecurityUtils::exceptionHandler)
+                );
+
         return http.build();
     }
 
@@ -194,8 +197,9 @@ class SecurityConfiguration {
                         // 其他请求需要认证
                         .anyRequest().authenticated());
         http.formLogin(form -> form
+                        .disable()
                         // 自定义登录页面
-                        .loginPage("/login")
+                        // .loginPage("/login")
                 // 处理登录请求接口
                 // .loginProcessingUrl("/login").permitAll()
         );
