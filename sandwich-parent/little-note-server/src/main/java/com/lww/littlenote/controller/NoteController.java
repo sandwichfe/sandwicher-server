@@ -27,7 +27,7 @@ public class NoteController {
     public ResponseResult<Page<Note>> listNote(@Valid NoteDto noteDto) {
         // 在 Controller/Service 中直接调用
         Long userId = SecurityUserUtils.getUserId();
-        String username = SecurityUserUtils.getUsername();
+        noteDto.setUserId(userId);
         Page<Note> pages = noteService.listNote(noteDto);
         return ResultUtil.success(pages);
     }

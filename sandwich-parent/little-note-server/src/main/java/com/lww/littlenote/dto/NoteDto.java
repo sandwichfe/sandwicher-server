@@ -18,6 +18,6 @@ public class NoteDto extends PageVo {
 
     private Long groupId;
 
-    private String userId;
+    private Long userId;
 
 }

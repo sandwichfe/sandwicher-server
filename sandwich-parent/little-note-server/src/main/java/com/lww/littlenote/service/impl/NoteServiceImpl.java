@@ -34,6 +34,7 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
         wrapper
                 .select(Note::getId, Note::getTitle, Note::getCreateTime, Note::getUpdateTime,Note::getGroupId,Note::getUserId)
                 .eq(noteDto.getGroupId() != null, Note::getGroupId, noteDto.getGroupId())
+                .eq(noteDto.getUserId() != null, Note::getUserId, noteDto.getUserId())
                 .orderByDesc(Note::getUpdateTime);
         return noteMapper.selectPage(new Page<>(noteDto.getPageNum(), noteDto.getPageSize()), wrapper);
     }
