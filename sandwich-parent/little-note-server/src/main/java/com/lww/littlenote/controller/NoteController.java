@@ -40,6 +40,8 @@ public class NoteController {
 
     @PostMapping("/addNote")
     public ResponseResult<Long> addNote(@RequestBody Note note) {
+        Long userId = SecurityUserUtils.getUserId();
+        note.setUserId(userId);
         note.setUpdateTime(LocalDateTime.now());
         noteService.save(note);
         Long id = note.getId();
@@ -49,6 +51,8 @@ public class NoteController {
 
     @PostMapping("/editNote")
     public ResponseResult<Void> editNote(@RequestBody Note note) {
+        Long userId = SecurityUserUtils.getUserId();
+        note.setUserId(userId);
         note.setUpdateTime(LocalDateTime.now());
         noteService.updateById(note);
         return ResultUtil.success();
