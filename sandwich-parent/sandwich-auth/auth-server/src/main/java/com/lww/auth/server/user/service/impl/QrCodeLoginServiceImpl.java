@@ -151,10 +151,16 @@ public class QrCodeLoginServiceImpl implements QrCodeLoginService {
 
     @Override
     public QrCodeLoginFetchResponse fetch(String qrCodeId) {
+        if (1==1){
+            QrCodeLoginFetchResponse response = resultUtil.get(QR_CODE_PREV + qrCodeId);
+            return response;
+        }
+
         // 校验二维码状态
         QrCodeInfo info = resultUtil.get(QR_CODE_PREV + qrCodeId);
         if (info == null) {
-            throw new AppException("无效二维码或二维码已过期.");
+            return new QrCodeLoginFetchResponse().setQrCodeStatus(-1);
+            // throw new AppException("无效二维码或二维码已过期.");
         }
 
         QrCodeLoginFetchResponse loginFetchResponse = new QrCodeLoginFetchResponse();

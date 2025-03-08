@@ -95,7 +95,7 @@ public class UserController {
     @PostMapping("/update/current")
     public ResponseResult<User> updateCurrentUser(@RequestBody User user) {
         Long userId = getCurrentUserId();
-        user.setId(userId); // 确保更新的是当前用户
+        user.setId(userId);
         userService.updateById(user);
         return ResultUtil.success(user);
     }

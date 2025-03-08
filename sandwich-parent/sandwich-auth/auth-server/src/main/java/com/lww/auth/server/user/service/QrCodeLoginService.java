@@ -20,6 +20,14 @@ public interface QrCodeLoginService {
     String generateQrCode();
 
     /**
+     * web端轮询二维码状态处理
+     *
+     * @param qrCodeId 二维码id
+     * @return 二维码信息
+     */
+    QrCodeLoginFetchResponse fetch(String qrCodeId);
+
+    /**
      * 扫描二维码响应
      *
      * @param loginScan 二维码id
@@ -34,13 +42,7 @@ public interface QrCodeLoginService {
      */
     void consent(QrCodeLoginConsentRequest loginConsent);
 
-    /**
-     * web端轮询二维码状态处理
-     *
-     * @param qrCodeId 二维码id
-     * @return 二维码信息
-     */
-    QrCodeLoginFetchResponse fetch(String qrCodeId);
+
 
 
 }

@@ -27,13 +27,13 @@ public class QrCodeLoginController {
 
     @GetMapping("/login/generateQrCode")
     public ResponseResult<String> generateQrCode() {
-        // 生成二维码qrcodeId
+        // pc 生成二维码qrcodeId
         return ResultUtil.success(iQrCodeLoginService.generateQrCode());
     }
 
     @GetMapping("/login/fetch/{qrCodeId}")
     public ResponseResult<QrCodeLoginFetchResponse> fetch(@PathVariable String qrCodeId) {
-        // 轮询二维码状态
+        // pc 轮询二维码状态
         return ResultUtil.success(iQrCodeLoginService.fetch(qrCodeId));
     }
 

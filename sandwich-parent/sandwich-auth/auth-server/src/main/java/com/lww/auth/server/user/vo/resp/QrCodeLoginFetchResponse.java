@@ -8,6 +8,7 @@ package com.lww.auth.server.user.vo.resp;
  */
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.Set;
 
@@ -16,12 +17,13 @@ import java.util.Set;
  *
  * @author vains
  */
+@Accessors(chain = true)
 @Data
 public class QrCodeLoginFetchResponse {
 
     /**
      * 二维码状态
-     * 0:待扫描，1:已扫描，2:已确认
+     * -1:无效或已过期 0:待扫描，1:已扫描，2:已确认
      */
     private Integer qrCodeStatus;
 
