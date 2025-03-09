@@ -47,14 +47,6 @@ public class QrCodeLoginFetchResponse {
      */
     private Set<String> scopes;
 
-    /**
-     * 跳转登录之前请求的接口
-     */
-    private String beforeLoginRequestUri;
-
-    /**
-     * 跳转登录之前请求参数
-     */
-    private String beforeLoginQueryString;
+    private String token;
 
 }

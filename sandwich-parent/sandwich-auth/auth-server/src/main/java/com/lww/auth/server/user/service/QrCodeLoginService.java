@@ -1,8 +1,8 @@
 package com.lww.auth.server.user.service;
 
-import com.lww.auth.server.user.vo.req.QrCodeLoginScanRequest;
 import com.lww.auth.server.user.vo.req.*;
 import com.lww.auth.server.user.vo.resp.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 二维码登录服务接口
@@ -30,17 +30,17 @@ public interface QrCodeLoginService {
     /**
      * 扫描二维码响应
      *
-     * @param loginScan 二维码id
+     * @param  qrCodeId 二维码id
      * @return 二维码信息
      */
-    QrCodeLoginScanResponse scan(QrCodeLoginScanRequest loginScan);
+    QrCodeLoginScanResponse scan(String qrCodeId);
 
     /**
      * 二维码登录确认入参
      *
      * @param loginConsent 二维码id
      */
-    void consent(QrCodeLoginConsentRequest loginConsent);
+    void consent(QrCodeLoginConsentRequest loginConsent, HttpServletRequest request);
 
 
 

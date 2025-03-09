@@ -8,6 +8,7 @@ package com.lww.auth.server.user.vo.req;
  */
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.Set;
 
@@ -16,6 +17,7 @@ import java.util.Set;
  *
  * @author vains
  */
+@Accessors(chain = true)
 @Data
 public class QrCodeLoginScanResponse {
 
