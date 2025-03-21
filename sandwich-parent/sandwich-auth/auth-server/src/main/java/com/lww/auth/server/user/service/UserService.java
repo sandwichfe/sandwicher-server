@@ -20,4 +20,12 @@ public interface UserService extends IService<User> {
      * @return 用户信息
      */
     User getUserByUserName(String username);
+
+    /**
+     * 注册
+     * @author lww
+     * @since 2023/8/16 13:59
+     * @param user 用户信息
+     */
+    void registerUser(User user);
 }

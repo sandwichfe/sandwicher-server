@@ -19,13 +19,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
 
-    @Resource
-    private UserService userService;
-
-    @PostMapping("/registerUser")
-    public ResponseResult<Void> registerUser(@RequestBody User user) {
-        userService.registerUser(user);
-        return ResultUtil.response(ResponseCode.SUCCESS, "注册成功！");
-    }
-
 }

@@ -6,18 +6,19 @@ import cn.hutool.http.HttpStatus;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.lww.auth.server.user.entity.User;
+import com.lww.auth.server.user.service.UserService;
 import com.lww.auth.server.user.vo.Oauth2Param;
 import com.lww.common.web.exception.AppException;
+import com.lww.common.web.response.ResponseCode;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,9 @@ import java.util.Random;
 @RequestMapping("/user")
 @RestController
 public class UserLoginController {
+
+    @Resource
+    private UserService userService;
 
     @Value("${oauth2.token-url:http://127.0.0.1:9000/oauth2/token}")
     private String tokenUrl;
@@ -92,6 +96,17 @@ public class UserLoginController {
 
         isValid = true;
         return ResultUtil.success(isValid);
+    }
+
+
+    /**
+     * 新增用户
+     */
+    @Operation(summary = "用户注册")
+    @PostMapping("/register")
+    public ResponseResult<Void> register(@RequestBody User user) {
+        userService.registerUser(user);
+        return ResultUtil.response(ResponseCode.SUCCESS,"注册成功！");
     }
 
     private String getOauth2TokenByPassWord(Oauth2Param oauth2Param) {

@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -47,8 +46,6 @@ import org.springframework.security.oauth2.server.authorization.web.authenticati
 import org.springframework.security.oauth2.server.authorization.web.authentication.OAuth2ClientCredentialsAuthenticationConverter;
 import org.springframework.security.oauth2.server.authorization.web.authentication.OAuth2RefreshTokenAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -184,7 +181,7 @@ class SecurityConfiguration {
                         // 不拦截
                         .requestMatchers(new String[]{"/assets/**", "/webjars/**", "/login", "/logout", "/oauth2/token/**"}).permitAll()
                         // 用户登录相关
-                        .requestMatchers(new String[]{"/user/login","/user/slider/generate","/user/slider/verify","/user/qrCode/**"}).permitAll()
+                        .requestMatchers(new String[]{"/user/login","/user/register","/user/slider/generate","/user/slider/verify","/user/qrCode/**"}).permitAll()
                         // swagger
                         .requestMatchers(new String[]{"/swagger-resources/**",
                                 "/swagger-ui/**",
