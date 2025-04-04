@@ -23,4 +23,12 @@ public interface MenuService extends IService<Menu> {
      */
     List<MenuTreeVO> getMenuTree();
 
+    /**
+     * 获取当前用户的菜单树
+     *
+     * @param userId 当前用户ID
+     * @return 菜单树结构
+     */
+    List<MenuTreeVO> getCurrentUserMenuTree(Long userId);
+
 }

@@ -5,6 +5,7 @@ import com.lww.auth.server.user.entity.Menu;
 import com.lww.auth.server.user.mapper.MenuMapper;
 import com.lww.auth.server.user.service.MenuService;
 import com.lww.auth.server.user.vo.MenuTreeVO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,14 +14,26 @@ import java.util.stream.Collectors;
 /**
  * @author sandw
  */
+@RequiredArgsConstructor
 @Service
 public class AuthorityServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+
+    private final MenuMapper menuMapper;
 
     @Override
     public List<MenuTreeVO> getMenuTree() {
         List<Menu> menus = this.list();
         return buildMenuTree(menus, 0L);
     }
+
+    @Override
+    public List<MenuTreeVO> getCurrentUserMenuTree(Long userId) {
+        // 根据用户ID查询其权限范围内的菜单列表
+        List<Menu> userMenus = menuMapper.selectMenusByUserId(userId);
+        // 构建菜单树
+        return buildMenuTree(userMenus, 0L);
+    }
+
 
     private List<MenuTreeVO> buildMenuTree(List<Menu> menus, Long parentId) {
         return menus.stream()

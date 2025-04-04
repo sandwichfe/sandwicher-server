@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lww.auth.server.user.entity.Menu;
 import com.lww.auth.server.user.service.MenuService;
 import com.lww.auth.server.user.vo.MenuTreeVO;
+import com.lww.auth.server.utils.AuthUserUtils;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.common.web.vo.PageVo;
@@ -13,7 +14,7 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 /**
  * @author sandw
@@ -29,6 +30,7 @@ public class MenuController {
     @Operation(summary = "新增菜单")
     @PostMapping("/create")
     public ResponseResult<Menu> createMenu(@RequestBody Menu menu) {
+        menu.setMenuPid(Optional.ofNullable(menu.getMenuPid()).orElse(0L));
         menuService.save(menu);
         return ResultUtil.success(menu);
     }
@@ -67,5 +69,20 @@ public class MenuController {
     public ResponseResult<List<MenuTreeVO>> getMenuTree() {
         return ResultUtil.success(menuService.getMenuTree());
     }
+
+
+    @Operation(summary = "获取当前用户的菜单")
+    @GetMapping("/current")
+    public ResponseResult<List<MenuTreeVO>> getCurrentUserMenu() {
+        // 获取当前用户ID
+        Long userId = AuthUserUtils.getCurrentUserId();
+
+        // 调用服务层获取当前用户的菜单树
+        List<MenuTreeVO> menuTree = menuService.getCurrentUserMenuTree(userId);
+
+        return ResultUtil.success(menuTree);
+    }
+
+
 
 }

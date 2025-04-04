@@ -33,5 +33,5 @@ public class RoleMenu implements Serializable {
     private Long roleId;
 
     @Schema(description = "权限菜单ID")
-    private Long authorityId;
+    private Long menuId;
 }

@@ -2,6 +2,9 @@ package com.lww.auth.server.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lww.auth.server.user.entity.Menu;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,11 @@ import com.lww.auth.server.user.entity.Menu;
  */
 public interface MenuMapper extends BaseMapper<Menu> {
 
+    /**
+     * 根据用户ID查询菜单
+     *
+     * @param userId 用户ID
+     * @return 菜单列表
+     */
+    List<Menu> selectMenusByUserId(@Param("userId") Long userId);
 }

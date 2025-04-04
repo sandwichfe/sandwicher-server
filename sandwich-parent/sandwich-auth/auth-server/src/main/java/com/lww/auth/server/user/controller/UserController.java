@@ -3,6 +3,7 @@ package com.lww.auth.server.user.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lww.auth.server.user.entity.User;
 import com.lww.auth.server.user.service.UserService;
+import com.lww.auth.server.utils.AuthUserUtils;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.common.web.vo.PageVo;
@@ -67,16 +68,11 @@ public class UserController {
     @Operation(summary = "获取当前登录用户信息")
     @GetMapping("/current")
     public ResponseResult<User> getCurrentUser() {
-        Long userId = getCurrentUserId();
+        Long userId = AuthUserUtils.getCurrentUserId();
         User user = userService.getById(userId);
         return ResultUtil.success(user);
     }
 
-    private static Long getCurrentUserId() {
-        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = jwt.getClaim("userId");
-        return userId;
-    }
 
     /**
      * 更新用户
@@ -94,7 +90,7 @@ public class UserController {
     @Operation(summary = "更新当前登录用户信息")
     @PostMapping("/update/current")
     public ResponseResult<User> updateCurrentUser(@RequestBody User user) {
-        Long userId = getCurrentUserId();
+        Long userId = AuthUserUtils.getCurrentUserId();
         user.setId(userId);
         userService.updateById(user);
         return ResultUtil.success(user);
