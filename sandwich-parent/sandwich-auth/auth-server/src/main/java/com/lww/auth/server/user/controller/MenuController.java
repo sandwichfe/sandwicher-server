@@ -72,7 +72,7 @@ public class MenuController {
 
 
     @Operation(summary = "获取当前用户的菜单")
-    @GetMapping("/current")
+    @GetMapping("/currentUserMenu")
     public ResponseResult<List<MenuTreeVO>> getCurrentUserMenu() {
         // 获取当前用户ID
         Long userId = AuthUserUtils.getCurrentUserId();
