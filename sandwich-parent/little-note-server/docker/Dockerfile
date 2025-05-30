@@ -16,7 +16,7 @@ RUN echo "http://mirrors.aliyun.com/alpine/v3.14/main" > /etc/apk/repositories &
 # 开放端口9000
 EXPOSE 8000
 # 执行命令
-ENTRYPOINT ["java", "-Djasypt.encryptor.password=sandwich_yiru", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-Djasypt.encryptor.password=xxx", "-jar", "/app/app.jar"]
 
 
 #构建镜像 最后面的 . 不要忽略
