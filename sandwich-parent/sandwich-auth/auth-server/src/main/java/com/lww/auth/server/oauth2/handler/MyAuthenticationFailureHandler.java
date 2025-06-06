@@ -1,5 +1,7 @@
 package com.lww.auth.server.oauth2.handler;
 
+import java.io.IOException;
+
 import cn.hutool.http.HttpStatus;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
@@ -7,7 +9,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpResponse;
@@ -15,8 +16,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-
-import java.io.IOException;
 
 /**
  * Oauth2认证成功处理器

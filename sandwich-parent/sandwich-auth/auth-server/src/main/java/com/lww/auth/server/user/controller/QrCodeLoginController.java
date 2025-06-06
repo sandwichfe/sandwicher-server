@@ -1,12 +1,5 @@
 package com.lww.auth.server.user.controller;
 
-/**
- * 二维码登录接口
- *
- * @author lww
- * @since 2024/12/13
- */
-
 import com.lww.auth.server.user.service.QrCodeLoginService;
 import com.lww.auth.server.user.vo.req.QrCodeLoginConsentRequest;
 import com.lww.auth.server.user.vo.req.QrCodeLoginScanResponse;
@@ -17,6 +10,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 二维码登录接口
+ *
+ * @author lww
+ * @since 2024/12/13
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping("/user/qrCode")

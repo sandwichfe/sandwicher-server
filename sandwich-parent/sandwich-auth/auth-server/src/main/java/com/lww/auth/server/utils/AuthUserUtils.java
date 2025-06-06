@@ -10,8 +10,7 @@ public class AuthUserUtils {
 
     public static Long getCurrentUserId() {
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = jwt.getClaim("userId");
-        return userId;
+        return jwt.getClaim("userId");
     }
 
 }

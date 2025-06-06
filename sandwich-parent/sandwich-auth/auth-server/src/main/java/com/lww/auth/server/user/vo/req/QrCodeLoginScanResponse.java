@@ -1,7 +1,7 @@
 package com.lww.auth.server.user.vo.req;
 
 /**
- * todo
+ * QrCodeLoginScanResponse
  *
  * @author lww
  * @since 2024/12/13

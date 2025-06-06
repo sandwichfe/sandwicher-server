@@ -24,6 +24,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -168,7 +169,7 @@ class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 // 关闭csrf 要写在requestMatchers之前
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowCredentials(true);
@@ -179,27 +180,37 @@ class SecurityConfiguration {
                 }))
                 .authorizeHttpRequests(authorize -> authorize
                         // 不拦截
-                        .requestMatchers(new String[]{"/assets/**", "/webjars/**", "/login", "/logout", "/oauth2/token/**"}).permitAll()
+                        .requestMatchers(
+                                "/assets/**",
+                                "/webjars/**",
+                                "/login",
+                                "/logout",
+                                "/oauth2/token/**")
+                        .permitAll()
                         // 用户登录相关
-                        .requestMatchers(new String[]{"/user/login","/user/register","/user/slider/generate","/user/slider/verify","/user/qrCode/**"}).permitAll()
+                        .requestMatchers("/user/login",
+                                "/user/register",
+                                "/user/slider/generate",
+                                "/user/slider/verify",
+                                "/user/qrCode/**").permitAll()
                         // swagger
-                        .requestMatchers(new String[]{"/swagger-resources/**",
+                        .requestMatchers(
+                                "/swagger-resources/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/webjars/**",
                                 // swagger-boostrap-ui
-                                "/doc.html",}).permitAll()
+                                "/doc.html").permitAll()
                         // 其他请求需要认证
                         .anyRequest().authenticated());
-        http.formLogin(form -> form
-                        .disable()
+        http.formLogin(AbstractHttpConfigurer::disable
                         // 自定义登录页面
                         // .loginPage("/login")
                 // 处理登录请求接口
                 // .loginProcessingUrl("/login").permitAll()
         );
         // 添加BearerTokenAuthenticationFilter，将认证服务当做一个资源服务，解析请求头中的token
-        http.oauth2ResourceServer((resourceServer) -> resourceServer
+        http.oauth2ResourceServer(resourceServer -> resourceServer
                 .jwt(Customizer.withDefaults())
                 // 异常处理
                 .accessDeniedHandler(SecurityUtils::exceptionHandler)
@@ -218,7 +229,7 @@ class SecurityConfiguration {
      */
     @Bean
     public OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
-        return (context) -> {
+        return context -> {
             if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
                 Authentication authentication = context.getPrincipal();
                 Object userDetail = authentication.getPrincipal();
@@ -241,7 +252,6 @@ class SecurityConfiguration {
     /**
      * 密码加密方式  DelegatingPasswordEncoder。这种编码器可以根据密码的前缀（如{bcrypt}）自动选择对应的编码器
      * 如果设置成 BCryptPasswordEncoder反而有问题  影响到了oauth客户端的？
-     * @return
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -250,7 +260,7 @@ class SecurityConfiguration {
 
     /**
      * 客户端应用注册
-     * http://localhost:9000/oauth2/authorize?client_id=client_lww&redirect_uri=http://www.baidu.com&scope=read&response_type=code
+     * <a href="http://localhost:9000/oauth2/authorize?client_id=client_lww&redirect_uri=http://www.baidu.com&scope=read&response_type=code">...</a>
      * @author lww
      * @since 2024/11/26
      */
@@ -297,24 +307,8 @@ class SecurityConfiguration {
         return new ImmutableJWKSet<>(jwkSet);
     }
 
-
-
-    public JWKSource<SecurityContext> jwkSourcedefault() throws Exception {
-        KeyPair keyPair = generateRsaKey();
-        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        RSAKey rsaKey = new RSAKey.Builder(publicKey)
-                .privateKey(privateKey)
-                .keyID(UUID.randomUUID().toString())
-                .build();
-        JWKSet jwkSet = new JWKSet(rsaKey);
-        return new ImmutableJWKSet<>(jwkSet);
-    }
-
-
     /**
      * 生成RSA密钥对 默认的方式
-     * @return
      */
     private static KeyPair generateRsaKey() {
         KeyPair keyPair;
@@ -355,20 +349,21 @@ class SecurityConfiguration {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    /**
-     * springSecurity 的用户
-     *
-     * @author lww
-     * @since 2024/11/26
 
-     @Bean
-     public UserDetailsService userDetailsService() {
-     UserDetails userDetails = User.withDefaultPasswordEncoder()
-     .username("lww")
-     .password("123456")
-     .roles("USER")
-     .build();
-     return new InMemoryUserDetailsManager(userDetails);
-     } */
+    // /**
+    //  * springSecurity 的用户
+    //  *
+    //  * @author lww
+    //  * @since 2024/11/26
+    //  */
+    // @Bean
+    // public UserDetailsService userDetailsService() {
+    //     UserDetails userDetails = User.withDefaultPasswordEncoder()
+    //             .username("lww")
+    //             .password("123456")
+    //             .roles("USER")
+    //             .build();
+    //     return new InMemoryUserDetailsManager(userDetails);
+    // }
 
 }
