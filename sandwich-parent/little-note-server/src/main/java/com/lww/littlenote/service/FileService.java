@@ -20,15 +20,6 @@ public interface FileService {
      */
     List<Map<String, String>> getFileList(String path, String keyword);
 
-    /** 
-     * 删除文件/文件夹
-     * @author lww
-     * @since 2022/9/5 15:15
-     * @param path
-     * @return
-     */
-    void deleteFile(String path);
-
     /**
      * 重命名 文件/文件夹
      * @author lww

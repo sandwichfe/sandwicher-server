@@ -2,7 +2,6 @@ package com.lww.littlenote.service.impl;
 
 import com.lww.common.web.exception.AppException;
 import com.lww.littlenote.service.FileService;
-import com.lww.littlenote.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.stereotype.Service;
@@ -38,15 +37,6 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void deleteFile(String path) {
-        if (!StringUtils.hasText(path) || !new File(path).exists()) {
-            throw new AppException("此路径不存在！");
-        }
-        //删除文件
-        FileUtils.delFiles(new File(path));
-    }
-
-    @Override
     public void renameFile(String path,String newName) {
         if (!StringUtils.hasText(path) || !new File(path).exists()) {
             throw new AppException("此路径不存在！");
@@ -54,12 +44,6 @@ public class FileServiceImpl implements FileService {
         File file = new File(path);
         String newPathName = path.substring(0,path.lastIndexOf(File.separator))+File.separator+newName;
         file.renameTo(new File(newPathName));
-    }
-
-    @Test
-    public void tt(){
-        String path = "F:\\apache-maven-3.5.4\\repository";
-        System.out.println(path.substring(0,path.lastIndexOf(File.separator)));
     }
 
 

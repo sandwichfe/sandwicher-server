@@ -1,8 +1,12 @@
 package com.lww.sandwich;
 
-import com.alibaba.fastjson.JSON;
-import com.lww.sandwich.constant.AppConstants;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.lww.redis.util.RedisUtil;
+import com.lww.sandwich.constant.AppConstants;
 import com.lww.sandwich.utils.wx.WxAppUtil;
 import com.lww.sandwich.view.TestInfo;
 import jakarta.annotation.Resource;
@@ -12,11 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
