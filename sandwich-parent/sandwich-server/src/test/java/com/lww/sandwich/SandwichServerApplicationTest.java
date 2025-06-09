@@ -8,7 +8,6 @@ import java.util.Map;
 import com.lww.redis.util.RedisUtil;
 import com.lww.sandwich.constant.AppConstants;
 import com.lww.sandwich.utils.wx.WxAppUtil;
-import com.lww.sandwich.view.TestInfo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.StringEncryptor;
@@ -33,14 +32,6 @@ public class SandwichServerApplicationTest {
 
     @Test
     public void Test(){
-        TestInfo testInfo = new TestInfo();
-        testInfo.setId(1);
-        testInfo.setMoney(230.0);
-
-        redisUtil.set("tt", testInfo);
-        TestInfo tt = redisUtil.get("tt");
-
-        System.out.println(tt);
     }
 
     @Test
