@@ -29,7 +29,7 @@ public class WxAppUtil {
         // aes密钥必须要为16位
         String salt = "sandwich_Key_Key";
         // redis存在
-        if (redisUtil.hasKey(key)){
+        if (Boolean.TRUE.equals(redisUtil.hasKey(key))){
             String accessToken = redisUtil.get(key);
             // 解密返回
             return AesUtil.aesDecrypt(accessToken, salt);
@@ -41,7 +41,7 @@ public class WxAppUtil {
         }
         // 加密存入redis 两小时过期时间
         String encrypt = AesUtil.aesEncrypt(accessToken, salt);
-        redisUtil.set(key,encrypt,60*60*2);
+        redisUtil.set(key, encrypt, (60 * 60 * 2));
         return accessToken;
     }
 
@@ -50,9 +50,9 @@ public class WxAppUtil {
      * 获取微信小程序AccessToken  每两个小时会过期 同时每天有调取限制  建议调取完就放到Redis里 两小时再更新
      * @author lww
      * @since 2023/7/14 16:38
-     * @param appId
-	 * @param appSecret
-     * @return
+     * @param appId appId
+	 * @param appSecret appSecret
+     * @return String
      */
     private String getWxAccessTokenInterface(String appId, String appSecret) {
         log.info("开始获取AccessToken:");
@@ -72,10 +72,10 @@ public class WxAppUtil {
      * 微信小程序发送消息提醒
      * @author lww
      * @since 2023/7/14 16:19
-     * @param openId
-     * @param temId
-     * @param data
-     * @param page
+     * @param openId openId
+     * @param temId 模板id
+     * @param data data
+     * @param page page
      */
     public void sendMsg(String openId, String temId, Map<String,Object> data, String page){
         // 微信接口跳去所需token
@@ -116,8 +116,8 @@ public class WxAppUtil {
      * 将消息数据转换为wx小程序需要的格式
      * @author lww
      * @since 2023/7/14 16:30
-     * @param data
-     * @return
+     * @param data 消息数据
+     * @return Map<String,Map<String,Object>>
      */
     public Map<String,Map<String,Object>> convertData(Map<String,Object> data){
         Map<String,Map<String,Object>> retData = new HashMap<>(5);

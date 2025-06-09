@@ -19,7 +19,7 @@ public interface MenuService extends IService<Menu> {
     /**
      * 获取菜单树
      *
-     * @return
+     * @return 菜单树结构
      */
     List<MenuTreeVO> getMenuTree();
 

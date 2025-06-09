@@ -56,7 +56,7 @@ public final class AesUtil {
      * @return String
      * @throws Exception 异常
      */
-    public static String aesDecrypt(String encrypt) throws Exception {
+    public static String aesDecrypt(String encrypt) {
         return aesDecrypt(encrypt, CRYPT_KEY);
     }
 
@@ -67,7 +67,7 @@ public final class AesUtil {
      * @return String
      * @throws Exception 异常
      */
-    public static String aesEncrypt(String content) throws Exception {
+    public static String aesEncrypt(String content) {
         return aesEncrypt(content, CRYPT_KEY);
     }
 

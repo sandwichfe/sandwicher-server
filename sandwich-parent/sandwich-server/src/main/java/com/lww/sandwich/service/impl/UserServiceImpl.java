@@ -5,11 +5,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lww.common.web.exception.AppException;
 import com.lww.sandwich.entity.User;
 import com.lww.sandwich.mapper.UserMapper;
-import com.lww.common.web.response.ResponseResult;
-import com.lww.common.web.response.ResultUtil;
 import com.lww.sandwich.service.UserService;
 import jakarta.annotation.Resource;
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -37,16 +34,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //}
         // 查询此用户名
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("username",username);
-        User user = userMapper.selectOne(wrapper);
-        return user;
+        wrapper.lambda().eq(User::getUsername,username);
+        return userMapper.selectOne(wrapper);
     }
 
     /**
      * 注册
      * @author lww
      * @since 2023/8/16 13:59
-     * @param user
+     * @param user user
      */
     @Override
     @Transactional(rollbackFor = Exception.class)

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * @description: security用户信息校验相关
- * 替代 @Bean public UserDetailsService userDetailsService()
+ * security用户信息校验相关
+ * 替代 @Bean public UserDetailsService()
  * @author lww
  * @since 2022/7/20 14:43
  */
@@ -26,8 +26,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * 从数据库中获取用户信息  返回一个userDetails对象
      * @author lww
      * @since 2022/7/20 14:57
-     * @param username
-     * @return
+     * @param username 用户名
+     * @return userDetails对象
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

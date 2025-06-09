@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * @param e
+     * @param e e
      * @return 处理 form data方式调用接口对象参数校验失败抛出的异常
      */
     @ExceptionHandler(BindException.class)
@@ -95,7 +95,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * @param e
+     * @param e e
      * @return Content-Type/Accept 异常
      * application/json
      * application/x-www-form-urlencoded
@@ -108,8 +108,8 @@ public class GlobalExceptionHandler {
     /**
      * handlerMapping  接口不存在抛出异常
      *
-     * @param e
-     * @return
+     * @param e e
+     * @return 接口不存在抛出异常
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseResult<Void> noHandlerFoundException(NoHandlerFoundException e) {

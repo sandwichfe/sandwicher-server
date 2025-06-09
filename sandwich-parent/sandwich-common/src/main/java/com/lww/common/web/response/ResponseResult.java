@@ -1,6 +1,7 @@
 package com.lww.common.web.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.Date;
  *   返回结果实体
  * @since 2022/3/11 16:28
  */
+@Data
 @Schema(description = "返回结果实体")
 public class ResponseResult<T> {
 

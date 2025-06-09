@@ -1,12 +1,5 @@
 package com.lww.auth.server.oauth2.password;
 
-/**
- * todo
- *
- * @author lww
- * @since 2024/12/9
- */
-
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;

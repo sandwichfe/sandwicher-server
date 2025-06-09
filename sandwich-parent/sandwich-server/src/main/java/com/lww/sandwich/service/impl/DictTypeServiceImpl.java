@@ -28,7 +28,6 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> i
     @Override
     public ResponseResult<PageDataVo<List<DictType>>> getPage(PageVo pageVo) {
         // !!! pageSize设置为-1 即可查询为全部
-        //设置分页的条件，从第2的开始查询5条记录
         Page<DictType> page = new Page<>(pageVo.getPageNum(),pageVo.getPageSize());
         //分页，默认查询所有的记录
         Page<DictType> accountPage = dictTypeMapper.selectPage(page, null);

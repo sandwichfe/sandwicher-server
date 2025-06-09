@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * minioIO存储适配器
  *
- * @author: lww
- * @since: 2023/10/14
+ * @author lww
+ * @since 2023/10/14
  */
 public class MinioStorageAdapter implements StorageAdapter {
 

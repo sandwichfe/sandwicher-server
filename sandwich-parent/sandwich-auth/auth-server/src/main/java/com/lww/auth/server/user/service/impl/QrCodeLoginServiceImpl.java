@@ -1,5 +1,8 @@
 package com.lww.auth.server.user.service.impl;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.lww.auth.server.user.service.QrCodeLoginService;
 import com.lww.auth.server.user.vo.QrCodeInfo;
@@ -13,12 +16,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * 二维码登录接口实现

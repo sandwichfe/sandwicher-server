@@ -62,13 +62,12 @@ import java.util.stream.Collectors;
 
 
 /**
+ * Security配置
  * EnableWebSecurity 注解有两个作用:
  *  * 1. 加载了WebSecurityConfiguration配置类, 配置安全认证策略。
  *  * 2. 加载了AuthenticationConfiguration, 配置了认证信息。
  * EnableMethodSecurity 注解用于启用Security 方法权限注解。
- *
- * @description: Security配置
- * @author: lww
+ * @author lww
  */
 
 @Configuration

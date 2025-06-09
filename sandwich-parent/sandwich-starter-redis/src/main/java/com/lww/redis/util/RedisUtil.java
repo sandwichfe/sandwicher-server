@@ -25,8 +25,8 @@ public class RedisUtil {
          * 设置过期时间
          *
          * @param key  键
-         * @param expireTime
-         * @return
+         * @param expireTime 过期时间
+         * @return 操作结果
          */
         public  boolean expire(String key, long expireTime) {
             try {
@@ -43,7 +43,7 @@ public class RedisUtil {
         /**
          *  获取key过期时间
          *
-         * @param key
+         * @param key key
          * @return 时间(秒)
          */
         public  Long getExpire(String key) {

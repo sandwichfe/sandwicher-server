@@ -17,8 +17,8 @@ public interface DictTypeService extends IService<DictType> {
 
     /**
      * 分页返回
-     * @param pageVo
-     * @return
+     * @param pageVo 分页参数
+     * @return PageDataVo<List<DictType>>
      */
     ResponseResult<PageDataVo<List<DictType>>> getPage(PageVo pageVo);
 }

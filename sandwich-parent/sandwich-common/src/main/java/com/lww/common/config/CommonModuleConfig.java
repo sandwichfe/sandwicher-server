@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Import;
  * starter自动注入配置类
  *
  * @author lww
- * @since 1.4.0
  */
 @Configuration
 @ComponentScan("com.lww.common")
@@ -20,9 +19,8 @@ public class CommonModuleConfig {
     /**
      * 字典转化 Component
      *
-     * @return
+     * @return DictInitComponent
      * @author lww
-     * @since
      */
     @Bean
     public DictInitComponent dicInitComponent() {

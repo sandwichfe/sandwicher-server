@@ -1,14 +1,19 @@
 package com.lww.littlenote.service.impl;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 import com.lww.common.web.exception.AppException;
 import com.lww.littlenote.service.FileService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import java.io.File;
-import java.util.*;
 
 /**
  *  
@@ -86,9 +91,7 @@ public class FileServiceImpl implements FileService {
 
 
     /**
-     * @Author：
      *  ：获取某个目录下所有直接下级文件，不包括目录下的子目录的下的文件，所以不用递归获取
-     * @since：
      */
     public List<Map<String, String>> getContents(String path) {
         // 盘符根路径 处理

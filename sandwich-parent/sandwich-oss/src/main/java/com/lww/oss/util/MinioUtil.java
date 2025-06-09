@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 /**
  * minio文件操作工具
  *
- * @author: lww
- * @since: 2024
+ * @author lww
+ * @since 2024
  */
 @Component
 public class MinioUtil {

@@ -1,4 +1,4 @@
-package com.lww.sandwich.controller.test;
+package com.lww.sandwich;
 
 import java.util.List;
 import java.util.Map;

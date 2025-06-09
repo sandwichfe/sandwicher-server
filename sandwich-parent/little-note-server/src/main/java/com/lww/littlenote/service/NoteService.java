@@ -18,8 +18,8 @@ public interface NoteService extends IService<Note> {
     /**
      * listNote
      *
-     * @param pageVo
-     * @return
+     * @param pageVo pageVo
+     * @return Page
      */
     Page<Note> listNote(NoteDto pageVo);
 }

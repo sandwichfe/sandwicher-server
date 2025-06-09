@@ -13,13 +13,14 @@ public interface UserService extends IService<User> {
      * 根据用户名查询用户信息
      * @author lww
      * @since 2022/7/20 15:03
-     * @param username
-     * @return
+     * @param username 用户名
+     * @return com.lww.sandwich.entity.User
      */
     User getUserByUserName(String username);
 
     /**
      * 注册
+     * @param user 用户信息
      * @author lww
      * @since 2023/8/16 13:59
      */

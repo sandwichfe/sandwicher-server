@@ -38,8 +38,8 @@ public class MenuController {
     @Operation(summary = "根据ID获取菜单")
     @GetMapping("/get/{id}")
     public ResponseResult<Menu> getMenuById(@PathVariable Long id) {
-        Menu Menu = menuService.getById(id);
-        return ResultUtil.success(Menu);
+        Menu menu = menuService.getById(id);
+        return ResultUtil.success(menu);
     }
 
     @Operation(summary = "获取所有菜单")
@@ -52,9 +52,9 @@ public class MenuController {
 
     @Operation(summary = "更新菜单")
     @PostMapping("/update")
-    public ResponseResult<Menu> updateMenu(@RequestBody Menu Menu) {
-        menuService.updateById(Menu);
-        return ResultUtil.success(Menu);
+    public ResponseResult<Menu> updateMenu(@RequestBody Menu menu) {
+        menuService.updateById(menu);
+        return ResultUtil.success(menu);
     }
 
     @Operation(summary = "删除菜单")

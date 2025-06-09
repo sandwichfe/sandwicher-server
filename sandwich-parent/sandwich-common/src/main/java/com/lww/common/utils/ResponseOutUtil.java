@@ -21,8 +21,8 @@ public class ResponseOutUtil {
 
     /**
      *  使用response输出JSON
-     * @param response
-     * @param resultMap
+     * @param response response
+     * @param resultMap resultMap
      */
     public static void out(HttpServletResponse response, ResponseResult<Object> resultMap){
 

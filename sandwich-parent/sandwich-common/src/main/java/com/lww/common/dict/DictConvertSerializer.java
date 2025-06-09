@@ -1,13 +1,5 @@
 package com.lww.common.dict;
 
-/**
- * 自定义序列化器类  实现 字典转码 转码注解;
- * 该注解只有添加于String类型的属性上、且码表转换后的值不为null时生效
- *
- * @author lww
- * @since 2024-09-12
- */
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -26,6 +18,8 @@ import java.util.Objects;
  * @author lww 2024-09-13
  * 在系列化成json可以做相关操作
  * 例如 字段脱敏  处理数字类型小数点位  这里的字段转换功能 等等
+ * 自定义序列化器类  实现 字典转码 转码注解;
+ * 该注解只有添加于String类型的属性上、且码表转换后的值不为null时生效
  */
 
 public class DictConvertSerializer extends JsonSerializer<String> implements ContextualSerializer {
@@ -53,9 +47,7 @@ public class DictConvertSerializer extends JsonSerializer<String> implements Con
      * 序列化时 做操作
      * 告诉Jackson如何将Java对象转换为JSON
      *
-     * @return
      * @author lww
-     * @since
      */
     @Override
     public void serialize(String fieldValue, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
@@ -80,11 +72,9 @@ public class DictConvertSerializer extends JsonSerializer<String> implements Con
      * createContextual 可以获得字段的类型以及注解。
      * createContextual 方法只会在第一次序列化字段时调用（因为字段的上下文信息在运行期不会改变），所以不用担心影响性能。
      *
-     * @param serializerProvider
-     * @param beanProperty
-     * @return
+     * @param serializerProvider serializerProvider
+     * @param beanProperty        beanProperty
      * @author lww
-     * @since
      */
     @Override
     public JsonSerializer<?> createContextual(SerializerProvider serializerProvider, BeanProperty beanProperty) throws JsonMappingException {

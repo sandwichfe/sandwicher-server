@@ -14,9 +14,9 @@ public interface FileService {
      * 文件目录列表
      * @author lww
      * @since 2022/9/5 15:06
-     * @param path
-	 * @param keyword
-     * @return
+     * @param path path
+	 * @param keyword keyword
+     * @return List
      */
     List<Map<String, String>> getFileList(String path, String keyword);
 
@@ -24,9 +24,8 @@ public interface FileService {
      * 重命名 文件/文件夹
      * @author lww
      * @since 2022/9/5 16:03
-     * @param path
-     * @param path
-     * @return
+     * @param path path
+     * @param newName path
      */
     void renameFile(String path,String newName);
 
@@ -34,9 +33,8 @@ public interface FileService {
      * 创建文件夹
      * @author lww
      * @since 2022/9/28 13:43
-     * @param path
-	 * @param dirName
-     * @return
+     * @param path path
+	 * @param dirName dirName
      */
     void mkdir(String path, String dirName);
 }

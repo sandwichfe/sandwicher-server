@@ -18,8 +18,8 @@ public interface NoteGroupService extends IService<NoteGroup> {
 
     /**
      * listNoteGroup
-     * @param noteDto
-     * @return
+     * @param noteDto noteDto
+     * @return Page
      */
     Page<NoteGroup> listNoteGroup(@Valid PageVo noteDto);
 }

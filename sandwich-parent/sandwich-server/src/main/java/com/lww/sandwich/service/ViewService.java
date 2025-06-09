@@ -20,8 +20,7 @@ public interface ViewService extends IService<View> {
      * view 记录
      * @author lww
      * @since 2022/4/26 10:00
-     * @param ipAddress
-     * @return
+     * @param ipAddress ipAddress
      */
     void addViewRecord(String ipAddress, HttpServletRequest request);
 
@@ -29,8 +28,8 @@ public interface ViewService extends IService<View> {
      * 访问列表
      * @author lww
      * @since 2022/5/26 13:22
-     * @param pageVo
-     * @return
+     * @param pageVo  pageVo
+     * @return PageDataVo<List<ViewVO>>
      */
     PageDataVo<List<ViewVO>> getViewList(PageVo pageVo);
 }

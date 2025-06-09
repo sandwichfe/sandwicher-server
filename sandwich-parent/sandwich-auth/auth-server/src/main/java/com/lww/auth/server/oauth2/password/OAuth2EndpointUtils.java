@@ -26,9 +26,7 @@ public class OAuth2EndpointUtils {
 
     public static final String ACCESS_TOKEN_REQUEST_ERROR_URI = "https://datatracker.ietf.org/doc/html/rfc6749#section-5.2";
 
-
-
-    public OAuth2EndpointUtils() {
+    private OAuth2EndpointUtils() {
     }
 
     public static MultiValueMap<String, String> getParameters(HttpServletRequest request) {

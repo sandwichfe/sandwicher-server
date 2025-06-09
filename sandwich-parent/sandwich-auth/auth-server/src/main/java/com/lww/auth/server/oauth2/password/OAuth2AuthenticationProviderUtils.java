@@ -18,10 +18,11 @@ import org.springframework.security.oauth2.server.authorization.authentication.O
  */
 public class OAuth2AuthenticationProviderUtils {
 
-    public OAuth2AuthenticationProviderUtils() {
+    private OAuth2AuthenticationProviderUtils() {
     }
 
-    public static OAuth2ClientAuthenticationToken getAuthenticatedClientElseThrowInvalidClient(Authentication authentication) {
+    public static OAuth2ClientAuthenticationToken getAuthenticatedClientElseThrowInvalidClient(
+            Authentication authentication) {
         OAuth2ClientAuthenticationToken clientPrincipal = null;
         if (OAuth2ClientAuthenticationToken.class.isAssignableFrom(authentication.getPrincipal().getClass())) {
             clientPrincipal = (OAuth2ClientAuthenticationToken) authentication.getPrincipal();
@@ -32,19 +33,18 @@ public class OAuth2AuthenticationProviderUtils {
         throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_CLIENT);
     }
 
-    public static <T extends OAuth2Token> OAuth2Authorization invalidate(
-            OAuth2Authorization authorization, T token) {
+    public static <T extends OAuth2Token> OAuth2Authorization invalidate(OAuth2Authorization authorization, T token) {
 
         // @formatter:off
         OAuth2Authorization.Builder authorizationBuilder = OAuth2Authorization.from(authorization)
                 .token(token,
-                        (metadata) ->
+                        metadata ->
                                 metadata.put(OAuth2Authorization.Token.INVALIDATED_METADATA_NAME, true));
 
         if (OAuth2RefreshToken.class.isAssignableFrom(token.getClass())) {
             authorizationBuilder.token(
                     authorization.getAccessToken().getToken(),
-                    (metadata) ->
+                    metadata ->
                             metadata.put(OAuth2Authorization.Token.INVALIDATED_METADATA_NAME, true));
 
             OAuth2Authorization.Token<OAuth2AuthorizationCode> authorizationCode =
@@ -52,7 +52,7 @@ public class OAuth2AuthenticationProviderUtils {
             if (authorizationCode != null && !authorizationCode.isInvalidated()) {
                 authorizationBuilder.token(
                         authorizationCode.getToken(),
-                        (metadata) ->
+                        metadata ->
                                 metadata.put(OAuth2Authorization.Token.INVALIDATED_METADATA_NAME, true));
             }
         }
