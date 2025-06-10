@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/little-note-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-auth/auth-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-auth/oauth-client-second/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-auth/oauth-client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-auth/oauth-resources-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-auth/sandwich-auth-resources-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-auth/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-generator/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-oss/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/little-note-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-auth/auth-resource/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-auth/auth-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-auth/oauth-client-second/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-auth/oauth-client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-auth/oauth-resources-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-auth/sandwich-auth-resources-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-auth/spring-auth-client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-auth/spring-auth-resources/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-auth/spring-auth-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-auth/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-generator/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-oss/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/sandwich-starter-redis/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/security-module/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-parent/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sandwich-starter-redis/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>
