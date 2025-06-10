@@ -7,8 +7,10 @@
         <!-- 格式化输出：%date表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
         <property name="LOG_PATTERN" value="%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
         <property name="LOG_PATTERN_COLOR" value="%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{%5p} %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n%xwEx"/>
-        <!-- 存储路径 -->
-        <property name="BASE_DIR" value="./logs/sand-server"/>
+        <!-- 模块名称 -->
+        <property name="MODULE_NAME" value="sandwich-server" />
+        <!-- 日志存储路径(会创建在模块所在目录下) -->
+        <property name="BASE_DIR" value="${sys:user.dir}/${MODULE_NAME}/logs" />
     </Properties>
 
 
