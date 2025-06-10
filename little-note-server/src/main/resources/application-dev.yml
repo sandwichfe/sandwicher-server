@@ -33,9 +33,9 @@ spring:
 
 
 minio:
-  url: http://49.235.149.110:9000
-  accessKey: ENC(++DhoCRIUGTN/piVAvuyhuHSJFGvAQK8vQ7X+SfXVYduDnUjwT+DxqL1NCMnTNUGaV22xRB83jIGtH0mrsCoVQ==)
-  secretKey: ENC(7pfueoPk8MFvfe1xCU8vQQDgBhnL2OgQa10FarQVA4BzrEfnhbDDG28EA2yzvRYyV3RI/Mq2jXH14OApv/jySBfYTarVQ4qDlYwgn3gtuTc=)
+  url: https://yiruserene.top:9000
+  accessKey: ENC(ISUiHSRpdVvMnoOIpl7WkVNvBzMQx64+c+Iu3rmzP/bc8UkzoLogneZsYLmFjgZlIIO/ewSqlY/MXmij/KTVRA==)
+  secretKey: ENC(Zoj228IuIos3APLqLVwx+vpCLpFMp/0KiqDpLkDvzcbfr+SeQTrHg3rwaid8dxZsxLiFJryInHNHoLxmy6Qd/kQc4jwJhR6HOkdaEQwIheg=)
 oss:
   service:
     type: minio
