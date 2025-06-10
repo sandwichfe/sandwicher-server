@@ -10,7 +10,7 @@
         <!-- 模块名称 -->
         <property name="MODULE_NAME" value="auth-server" />
         <!-- 日志存储路径(会创建在模块所在目录下) -->
-        <property name="BASE_DIR" value="${sys:user.dir}/${MODULE_NAME}/logs" />
+        <property name="BASE_DIR" value="logs/${MODULE_NAME}"/>
     </Properties>
 
 
