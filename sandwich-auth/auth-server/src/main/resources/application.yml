@@ -1,5 +1,14 @@
 server:
   port: 9088
+#  ssl:
+#    enabled: true
+#    key-store-type: JKS                     # 改为 JKS
+#    #   key-store: classpath:server.jks         # 如果文件在 resources 目录下
+#    key-store: file:D:/certs/192_168_66_102/server.jks   # 如果使用绝对路径
+#    key-store-password: "123456"            # JKS 文件的密码
+#    key-alias: myapp                        # 必须与 JKS 中的别名一致
+#  http2:
+#    enabled: true
 
 # 学习框架 就应该把 log打开 不知道出错了 完全不知道啥原因
 logging:

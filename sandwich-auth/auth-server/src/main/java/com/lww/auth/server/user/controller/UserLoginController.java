@@ -49,7 +49,7 @@ public class UserLoginController {
 
     @PostMapping(value = "/login")
     @Operation(summary = "用户登录", description = "用户登录")
-    public ResponseResult<String> collectTag(String username, String password) {
+    public ResponseResult<String> userLogin(String username, String password) {
         Oauth2Param oauth2Param = new Oauth2Param()
                 .setGrantType("password")
                 .setClientId("client_password")
