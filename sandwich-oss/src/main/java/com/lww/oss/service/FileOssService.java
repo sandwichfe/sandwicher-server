@@ -1,11 +1,14 @@
 package com.lww.oss.service;
 
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 import com.lww.oss.adapter.StorageAdapter;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 /**
  * 文件存储service
@@ -42,10 +45,14 @@ public class FileOssService {
     /**
      * 上传文件
      */
-    public String uploadFile(MultipartFile uploadFile, String bucket, String dir){
-        storageAdapter.uploadFile(uploadFile,bucket,dir);
-        return storageAdapter.getUrl(bucket,  dir + "/" + uploadFile.getOriginalFilename());
+    public String uploadFile(MultipartFile uploadFile, String bucket, String dir) {
+        // dir 不传默认 为 当前年/月/日
+        String objectKey = StringUtils.hasText(dir) ? dir : DateTimeFormatter.ofPattern("yyyy/MM/dd").format(LocalDate.now());
+        storageAdapter.uploadFile(uploadFile, bucket, objectKey);
+        // 返回标准化路径（bucket/key格式）
+        return bucket+"/"+objectKey + "/" + uploadFile.getOriginalFilename();
     }
+
 }
 
 
