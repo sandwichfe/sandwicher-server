@@ -48,9 +48,7 @@ public class FileOssService {
     public String uploadFile(MultipartFile uploadFile, String bucket, String dir) {
         // dir 不传默认 为 当前年/月/日
         String objectKey = StringUtils.hasText(dir) ? dir : DateTimeFormatter.ofPattern("yyyy/MM/dd").format(LocalDate.now());
-        storageAdapter.uploadFile(uploadFile, bucket, objectKey);
-        // 返回标准化路径（bucket/key格式）
-        return bucket+"/"+objectKey + "/" + uploadFile.getOriginalFilename();
+        return storageAdapter.uploadFile(uploadFile, bucket, objectKey);
     }
 
 }

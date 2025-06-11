@@ -33,6 +33,7 @@ spring:
 
 
 minio:
+  bucket: yiru
   url: https://yiruserene.top:9000
   accessKey: ENC(ISUiHSRpdVvMnoOIpl7WkVNvBzMQx64+c+Iu3rmzP/bc8UkzoLogneZsYLmFjgZlIIO/ewSqlY/MXmij/KTVRA==)
   secretKey: ENC(Zoj228IuIos3APLqLVwx+vpCLpFMp/0KiqDpLkDvzcbfr+SeQTrHg3rwaid8dxZsxLiFJryInHNHoLxmy6Qd/kQc4jwJhR6HOkdaEQwIheg=)

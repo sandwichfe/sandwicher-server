@@ -26,7 +26,7 @@ public interface StorageAdapter {
      * @param bucket 目标存储桶名称
      * @param objectName 文件在存储桶中的唯一标识/路径
      */
-    void uploadFile(MultipartFile uploadFile, String bucket, String objectName);
+    String uploadFile(MultipartFile uploadFile, String bucket, String objectName);
 
     /**
      * 列出所有桶

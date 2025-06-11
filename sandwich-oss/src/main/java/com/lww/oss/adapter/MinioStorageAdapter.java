@@ -5,6 +5,7 @@ import com.lww.oss.util.MinioUtil;
 import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -27,6 +28,9 @@ public class MinioStorageAdapter implements StorageAdapter {
     @Value("${minio.url}")
     private String url;
 
+    @Value("${minio.bucket}")
+    private String bucket;
+
     @Override
     @SneakyThrows
     public void createBucket(String bucket) {
@@ -35,13 +39,18 @@ public class MinioStorageAdapter implements StorageAdapter {
 
     @Override
     @SneakyThrows
-    public void uploadFile(MultipartFile uploadFile, String bucket, String dir) {
+    public String uploadFile(MultipartFile uploadFile, String bucket, String dir) {
+        if (!StringUtils.hasText(bucket)){
+            bucket = this.bucket;
+        }
         minioUtil.createBucket(bucket);
         if (dir != null) {
             minioUtil.uploadFile(uploadFile.getInputStream(), bucket, dir + "/" + uploadFile.getOriginalFilename());
         } else {
             minioUtil.uploadFile(uploadFile.getInputStream(), bucket, uploadFile.getOriginalFilename());
         }
+        // 返回标准化路径（bucket/key格式）
+        return bucket+"/"+dir + "/" + uploadFile.getOriginalFilename();
     }
 
     @Override
