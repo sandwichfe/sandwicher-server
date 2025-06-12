@@ -8,7 +8,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://yiruserene.top:3306/sandwich?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://49.235.149.110:3306/sandwich?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
     username: ENC(jelC1fjDfZ5PG7c8uG/0iRjx/HGJgbHI1A4CtgFF09TPiBe+YyflAxb+hVHY/SOm)
     password: ENC(p5067+1TCj3uIYyTXp5unyyitXAI0q1h5IhxNWNcc0SdiMLm9Xik1ZwtcOPYG78l)
     hikari:
