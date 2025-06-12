@@ -8,6 +8,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
  */
 public class AuthUserUtils {
 
+    private AuthUserUtils() {
+    }
+
     public static Long getCurrentUserId() {
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return jwt.getClaim("userId");

@@ -1,13 +1,14 @@
 package com.lww.sandwich.controller;
 
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.lww.common.web.vo.PageDataVo;
 import com.lww.common.web.vo.PageVo;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.sandwich.vo.ViewVO;
 import com.lww.sandwich.service.ViewService;
-import com.lww.sandwich.utils.IpUtils;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
@@ -46,7 +46,7 @@ public class BaseController {
 
     @GetMapping("/getRequestIp")
     public ResponseResult<String> getRequestIp(HttpServletRequest request) {
-        String ipAddress = IpUtils.getIpAddress(request);
+        String ipAddress = JakartaServletUtil.getClientIP(request);
         viewService.addViewRecord(ipAddress,request);
         return ResultUtil.success(ipAddress);
     }

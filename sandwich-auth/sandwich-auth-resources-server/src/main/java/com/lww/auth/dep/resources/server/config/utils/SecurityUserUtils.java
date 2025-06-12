@@ -11,6 +11,9 @@ import java.util.List;
  */
 public class SecurityUserUtils {
 
+    private SecurityUserUtils() {
+    }
+
     /**
      * 获取当前用户ID
      */

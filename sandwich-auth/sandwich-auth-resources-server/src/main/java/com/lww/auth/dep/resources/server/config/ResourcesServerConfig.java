@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * todo
+ *
  *
  * @author lww
  * @since 2024/12/9

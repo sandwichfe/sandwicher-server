@@ -7,6 +7,7 @@ import io.minio.http.Method;
 import io.minio.messages.Bucket;
 import io.minio.messages.Item;
 import jakarta.annotation.Resource;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -54,11 +55,8 @@ public class MinioUtil {
         CONTENT_TYPE_MAP.put("otf", "font/otf");
         CONTENT_TYPE_MAP.put("eot", "application/vnd.ms-fontobject");
         CONTENT_TYPE_MAP.put("ico", "image/x-icon");
-        CONTENT_TYPE_MAP.put("exe", "application/octet-stream");
-        CONTENT_TYPE_MAP.put("bin", "application/octet-stream");
         CONTENT_TYPE_MAP.put("apk", "application/vnd.android.package-archive");
         CONTENT_TYPE_MAP.put("dmg", "application/x-apple-diskimage");
-        CONTENT_TYPE_MAP.put("iso", "application/octet-stream");
         // 其他类型可以根据需要添加
     }
 
@@ -68,7 +66,8 @@ public class MinioUtil {
     /**
      * 创建bucket桶
      */
-    public void createBucket(String bucket) throws Exception {
+    @SneakyThrows
+    public void createBucket(String bucket)  {
         boolean exists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
         if (!exists) {
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
@@ -78,7 +77,8 @@ public class MinioUtil {
     /**
      * 上传文件
      */
-    public void uploadFile(InputStream inputStream, String bucket, String objectName) throws Exception {
+    @SneakyThrows
+    public void uploadFile(InputStream inputStream, String bucket, String objectName)  {
         minioClient.putObject(PutObjectArgs.builder().bucket(bucket).object(objectName)
                 .stream(inputStream, -1, 5242889L).contentType(getContentType(objectName)).build());
     }
@@ -86,7 +86,8 @@ public class MinioUtil {
     /**
      * 列出所有桶
      */
-    public List<String> getAllBucket() throws Exception {
+    @SneakyThrows
+    public List<String> getAllBucket()  {
         List<Bucket> buckets = minioClient.listBuckets();
         return buckets.stream().map(Bucket::name).collect(Collectors.toList());
     }
@@ -94,7 +95,8 @@ public class MinioUtil {
     /**
      * 列出当前桶及文件
      */
-    public List<FileInfo> getAllFile(String bucket) throws Exception {
+    @SneakyThrows
+    public List<FileInfo> getAllFile(String bucket)  {
         Iterable<Result<Item>> results = minioClient.listObjects(
                 ListObjectsArgs.builder().bucket(bucket).build());
         List<FileInfo> fileInfoList = new LinkedList<>();
@@ -112,7 +114,8 @@ public class MinioUtil {
     /**
      * 下载文件
      */
-    public InputStream downLoad(String bucket, String objectName) throws Exception {
+    @SneakyThrows
+    public InputStream downLoad(String bucket, String objectName)  {
         return minioClient.getObject(
                 GetObjectArgs.builder().bucket(bucket).object(objectName).build()
         );
@@ -121,7 +124,8 @@ public class MinioUtil {
     /**
      * 删除桶
      */
-    public void deleteBucket(String bucket) throws Exception {
+    @SneakyThrows
+    public void deleteBucket(String bucket)  {
         minioClient.removeBucket(
                 RemoveBucketArgs.builder().bucket(bucket).build()
         );
@@ -130,7 +134,8 @@ public class MinioUtil {
     /**
      * 删除文件
      */
-    public void deleteObject(String bucket, String objectName) throws Exception {
+    @SneakyThrows
+    public void deleteObject(String bucket, String objectName)  {
         minioClient.removeObject(
                 RemoveObjectArgs.builder().bucket(bucket).object(objectName).build()
         );
@@ -139,7 +144,8 @@ public class MinioUtil {
     /**
      * 获取文件url
      */
-    public String getPreviewFileUrl(String bucketName, String objectName) throws Exception{
+    @SneakyThrows
+    public String getPreviewFileUrl(String bucketName, String objectName) {
         GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
                 .method(Method.GET)
                 .bucket(bucketName).object(objectName).build();

@@ -7,6 +7,10 @@ import com.lww.common.web.exception.AppException;
  * @author sandw
  */
 public class AssertUtils {
+
+    private AssertUtils() {
+    }
+
     public static void assertTrue(boolean condition, String errorMessage) {
         if (condition) {
             throw new AppException(errorMessage);

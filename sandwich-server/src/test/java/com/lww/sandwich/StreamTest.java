@@ -32,31 +32,9 @@ public class StreamTest {
         // 统计员工的最高薪资、平均薪资、薪资之和。
 
         List<Integer> list = Arrays.asList(7, 6, 9, 3, 8, 2, 1);
-        list.stream().filter(x->x>3).forEach(System.out::println);
-        //
-        List<Integer> integerList = Arrays.asList(1, 2, 3, 4, 5);
-
-
-
-
+        list.stream().filter(x -> x > 3).forEach(System.out::println);
 
     }
-
-    @Test
-    public void test(){
-        
-
-    }
-
-
-    @Test
-    public void test1() {
-        // stream
-        // 从员工集合中筛选出salary大于8000的员工，并放置到新的集合里。
-
-
-    }
-
 
 
 }
