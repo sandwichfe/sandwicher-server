@@ -10,32 +10,24 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="spring-auth-resources" />
-        <module name="oauth-resources-server" />
-        <module name="sandwich-oss" />
-        <module name="oauth-client" />
-        <module name="auth-server" />
-        <module name="oauth-client-second" />
-        <module name="little-note-server" />
-        <module name="sandwich-auth-resources-server" />
         <module name="sandwich-server" />
         <module name="sandwich-starter-redis" />
-        <module name="spring-auth-server" />
+        <module name="sandwich-oss" />
+        <module name="auth-server" />
         <module name="sandwich-generator" />
+        <module name="little-note-server" />
+        <module name="sandwich-auth-resources-server" />
         <module name="sandwich-common" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="auth-resource" target="1.8" />
-      <module name="security-module" target="17" />
-      <module name="spring-auth-client" target="17" />
-      <module name="spring-auth-resources" target="17" />
-      <module name="spring-auth-server" target="17" />
+      <module name="oauth-client" target="17" />
+      <module name="oauth-client-second" target="17" />
+      <module name="oauth-resources-server" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="auth-resource" options="-parameters" />
       <module name="auth-server" options="-parameters" />
       <module name="little-note-server" options="-parameters" />
       <module name="oauth-client" options="-parameters" />
@@ -49,10 +41,6 @@
       <module name="sandwich-parent" options="-parameters" />
       <module name="sandwich-server" options="-parameters" />
       <module name="sandwich-starter-redis" options="-parameters" />
-      <module name="security-module" options="-parameters" />
-      <module name="spring-auth-client" options="-parameters" />
-      <module name="spring-auth-resources" options="-parameters" />
-      <module name="spring-auth-server" options="-parameters" />
     </option>
   </component>
 </project>

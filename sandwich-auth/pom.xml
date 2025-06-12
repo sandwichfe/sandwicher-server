@@ -14,9 +14,6 @@
 
     <modules>
         <module>auth-server</module>
-        <module>oauth-resources-server</module>
-        <module>oauth-client</module>
-        <module>oauth-client-second</module>
     </modules>
 
 

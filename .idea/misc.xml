@@ -4,22 +4,16 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/sandwich-parent/pom.xml" />
-        <option value="$PROJECT_DIR$/sandwich-parent/sandwich-auth/auth-server/pom.xml" />
-        <option value="$PROJECT_DIR$/sandwich-parent/sandwich-auth/auth-resource/pom.xml" />
-        <option value="$PROJECT_DIR$/sandwich-parent/sandwich-auth/oauth-client/pom.xml" />
-        <option value="$PROJECT_DIR$/sandwich-parent/sandwich-auth/pom.xml" />
-        <option value="$PROJECT_DIR$/sandwich-parent/sandwich-auth/spring-auth-server/pom.xml" />
-        <option value="$PROJECT_DIR$/sandwich-parent/sandwich-auth/spring-auth-resources/pom.xml" />
-        <option value="$PROJECT_DIR$/sandwich-parent/sandwich-auth/spring-auth-client/pom.xml" />
-        <option value="$PROJECT_DIR$/sandwich-parent/sandwich-auth/oauth-client-second/pom.xml" />
-        <option value="$PROJECT_DIR$/sandwich-parent/sandwich-auth/oauth-resources-server/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/sandwich-auth/sandwich-auth-resources-server/pom.xml" />
+        <option value="$PROJECT_DIR$/sandwich-oss/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
-        <option value="$PROJECT_DIR$/sandwich-parent/sandwich-auth/auth-resource/pom.xml" />
+        <option value="$PROJECT_DIR$/sandwich-auth/oauth-client-second/pom.xml" />
+        <option value="$PROJECT_DIR$/sandwich-auth/oauth-client/pom.xml" />
+        <option value="$PROJECT_DIR$/sandwich-auth/oauth-resources-server/pom.xml" />
       </set>
     </option>
   </component>
