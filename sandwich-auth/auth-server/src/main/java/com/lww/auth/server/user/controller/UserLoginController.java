@@ -10,6 +10,7 @@ import com.lww.auth.server.user.entity.User;
 import com.lww.auth.server.user.service.UserService;
 import com.lww.auth.server.user.vo.Oauth2Param;
 import com.lww.common.web.exception.AppException;
+import com.lww.common.web.log.Loggable;
 import com.lww.common.web.response.ResponseCode;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
@@ -49,6 +50,7 @@ public class UserLoginController {
 
     @PostMapping(value = "/login")
     @Operation(summary = "用户登录", description = "用户登录")
+    @Loggable(module = "login", type = "login", description = "用户登录")
     public ResponseResult<String> userLogin(String username, String password) {
         Oauth2Param oauth2Param = new Oauth2Param()
                 .setGrantType("password")
