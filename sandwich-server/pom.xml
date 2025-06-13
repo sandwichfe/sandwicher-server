@@ -38,13 +38,6 @@
             <version>6.2.2</version>
         </dependency>
 
-        <!--地区ip2region库-->
-        <dependency>
-            <groupId>net.dreamlu</groupId>
-            <artifactId>mica-ip2region</artifactId>
-            <version>3.3.2</version>
-        </dependency>
-
     </dependencies>
 
 
