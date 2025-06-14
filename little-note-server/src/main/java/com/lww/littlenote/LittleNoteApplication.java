@@ -13,8 +13,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LittleNoteApplication {
 
     public static void main(String[] args) {
-        System.setProperty("socksProxyHost", "127.0.0.1");
-        System.setProperty("socksProxyPort", "1089");
+        // System.setProperty("socksProxyHost", "127.0.0.1");
+        // System.setProperty("socksProxyPort", "1089");
         SpringApplication.run(LittleNoteApplication.class, args);
     }
 
