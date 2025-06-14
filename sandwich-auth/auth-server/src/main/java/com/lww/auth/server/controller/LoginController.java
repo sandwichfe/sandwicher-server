@@ -1,5 +1,6 @@
 package com.lww.auth.server.controller;
 
+import com.lww.common.web.log.Loggable;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;

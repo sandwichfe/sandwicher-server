@@ -1,6 +1,7 @@
 package com.lww.oss.controller;
 
 
+import com.lww.common.web.log.Loggable;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.oss.service.FileOssService;
@@ -31,12 +32,14 @@ public class FileOssController {
     @Resource
     private StringEncryptor stringEncryptor;
 
+    @Loggable(module = "oss", type = "CREATE", description = "testGetAllBuckets")
     @GetMapping("/list-oss")
     public ResponseResult<List<String>> testGetAllBuckets() {
         List<String> allBucket = fileService.getAllBucket();
         return ResultUtil.success(allBucket);
     }
 
+    @Loggable(module = "oss", type = "CREATE", description = "getUrl")
     @GetMapping("/getUrl")
     public ResponseResult<String> getUrl(String bucketName, String objectName) {
         return ResultUtil.success(fileService.getUrl(bucketName, objectName));
