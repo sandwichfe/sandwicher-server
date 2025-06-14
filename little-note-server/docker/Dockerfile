@@ -5,14 +5,15 @@ LABEL description="描述"
 WORKDIR /app
 COPY little-note-server-1.0.0.jar /app/app.jar
 COPY application.yml /app/application.yml
-# 安装 bash 以及镜像设置为北京时间
 RUN echo "http://mirrors.aliyun.com/alpine/v3.14/main" > /etc/apk/repositories && \
     echo "http://mirrors.aliyun.com/alpine/v3.14/community" >> /etc/apk/repositories && \
     apk update && \
     apk add --no-cache bash tzdata && \
+    # 设置时区
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
-    apk del tzdata
+    # 清理缓存（不要删除 tzdata！）
+    rm -rf /var/cache/apk/*
 # 开放端口9000
 EXPOSE 8000
 # 执行命令
