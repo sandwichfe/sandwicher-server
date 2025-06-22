@@ -63,18 +63,6 @@ public class UserController {
     }
 
     /**
-     * 获取当前登录用户信息
-     */
-    @Operation(summary = "获取当前登录用户信息")
-    @GetMapping("/current")
-    public ResponseResult<User> getCurrentUser() {
-        Long userId = AuthUserUtils.getCurrentUserId();
-        User user = userService.getById(userId);
-        return ResultUtil.success(user);
-    }
-
-
-    /**
      * 更新用户
      */
     @Operation(summary = "更新用户")
@@ -84,17 +72,6 @@ public class UserController {
         return ResultUtil.success(user);
     }
 
-    /**
-     * 更新当前登录用户信息
-     */
-    @Operation(summary = "更新当前登录用户信息")
-    @PostMapping("/update/current")
-    public ResponseResult<User> updateCurrentUser(@RequestBody User user) {
-        Long userId = AuthUserUtils.getCurrentUserId();
-        user.setId(userId);
-        userService.updateById(user);
-        return ResultUtil.success(user);
-    }
 
     /**
      * 删除用户
@@ -104,5 +81,30 @@ public class UserController {
     public ResponseResult<Void> deleteUser(@PathVariable Long id) {
         userService.removeById(id);
         return ResultUtil.success();
+    }
+
+
+    /**
+     * 获取当前登录用户信息
+     */
+    @Operation(summary = "获取当前登录用户信息")
+    @GetMapping("/getCurrentUser")
+    public ResponseResult<User> getCurrentUser() {
+        Long userId = AuthUserUtils.getCurrentUserId();
+        User user = userService.getById(userId);
+        return ResultUtil.success(user);
+    }
+
+
+    /**
+     * 更新当前登录用户信息
+     */
+    @Operation(summary = "更新当前登录用户信息")
+    @PostMapping("/updateCurrentUser")
+    public ResponseResult<User> updateCurrentUser(@RequestBody User user) {
+        Long userId = AuthUserUtils.getCurrentUserId();
+        user.setId(userId);
+        userService.updateById(user);
+        return ResultUtil.success(user);
     }
 }
