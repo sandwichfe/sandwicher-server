@@ -11,7 +11,6 @@
     <packaging>jar</packaging>
 
     <name>sandwich-server</name>
-    <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,13 +20,20 @@
 
         <dependency>
             <groupId>com.lww</groupId>
-            <artifactId>sandwich-starter-redis</artifactId>
+            <artifactId>sandwich-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--auth-->
+        <dependency>
+            <groupId>com.lww</groupId>
+            <artifactId>sandwich-auth-resources-server</artifactId>
             <version>1.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.lww</groupId>
-            <artifactId>sandwich-common</artifactId>
+            <artifactId>sandwich-starter-redis</artifactId>
             <version>1.0.0</version>
         </dependency>
 
@@ -55,8 +61,20 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>
 
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
     </build>
 
 </project>

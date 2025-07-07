@@ -1,19 +1,5 @@
 #开发环境
-server:
-  port: 1241
-  servlet:
-    context-path: /sandwich
-
-
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://49.235.149.110:3306/sandwich?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
-    username: ENC(jelC1fjDfZ5PG7c8uG/0iRjx/HGJgbHI1A4CtgFF09TPiBe+YyflAxb+hVHY/SOm)
-    password: ENC(p5067+1TCj3uIYyTXp5unyyitXAI0q1h5IhxNWNcc0SdiMLm9Xik1ZwtcOPYG78l)
-    hikari:
-      connection-timeout: 30000
-      maximum-pool-size: 10
   data:
     redis:
       host: 49.235.149.110
@@ -26,30 +12,51 @@ spring:
           max-active: 2000
           max-wait: 1000
       timeout: 5000
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://49.235.149.110:3306/sandwich?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
+    username: ENC(jelC1fjDfZ5PG7c8uG/0iRjx/HGJgbHI1A4CtgFF09TPiBe+YyflAxb+hVHY/SOm)
+    password: ENC(p5067+1TCj3uIYyTXp5unyyitXAI0q1h5IhxNWNcc0SdiMLm9Xik1ZwtcOPYG78l)
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # 如果 带着token认证 总是显示不合法 可能是这里配置ip的问题
+          # Jwt中claims的iss属性，也就是jwt的签发地址，即认证服务器的根路径   验证token的真实性
+          # 资源服务器会进一步的配置，通过该地址获取公钥以解析jwt
+          issuer-uri: http://127.0.0.1:9088
 
 
-# 忽略权限控制
+
+minio:
+  bucket: yiru
+  url: https://yiruserene.top:9000
+  accessKey: ENC(ISUiHSRpdVvMnoOIpl7WkVNvBzMQx64+c+Iu3rmzP/bc8UkzoLogneZsYLmFjgZlIIO/ewSqlY/MXmij/KTVRA==)
+  secretKey: ENC(Zoj228IuIos3APLqLVwx+vpCLpFMp/0KiqDpLkDvzcbfr+SeQTrHg3rwaid8dxZsxLiFJryInHNHoLxmy6Qd/kQc4jwJhR6HOkdaEQwIheg=)
+oss:
+  service:
+    type: minio
+#忽略token认证
 security:
   permit:
     urls:
-    - /base/getRequestIp
-    - /base/test
-    - /test/**
-    - /user/registerUser
-  oauth2:
-    client:
-      client-id: UserManagement
-      client-secret: user123
-      access-token-uri: http://localhost:8080/oauth/token
-      user-authorization-uri: http://localhost:8080/oauth/authorize
-    resource:
-      jwt:
-        key-uri: http://localhost:8080/oauth/token_key
+      - /base/getRequestIp
+      - /base/test
+      - /test/**
+      - /user/registerUser
 
 
-logging:
-  level:
-    org:
-     springframework:
-      security: DEBUG
-
+#server:
+#  ssl:
+#    enabled: true
+#    key-store-type: JKS                     # 改为 JKS
+#    #   key-store: classpath:server.jks         # 如果文件在 resources 目录下
+#    key-store: file:D:/certs/192_168_66_102/server.jks   # 如果使用绝对路径
+#    key-store-password: "123456"            # JKS 文件的密码
+#    key-alias: myapp                        # 必须与 JKS 中的别名一致
+#  http2:
+#    enabled: true
