@@ -24,11 +24,11 @@
         </dependency>
 
         <!--auth-->
-        <dependency>
-            <groupId>com.lww</groupId>
-            <artifactId>sandwich-auth-resources-server</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+        <!-- <dependency> -->
+        <!--     <groupId>com.lww</groupId> -->
+        <!--     <artifactId>sandwich-auth-resources-server</artifactId> -->
+        <!--     <version>1.0.0</version> -->
+        <!-- </dependency> -->
 
         <dependency>
             <groupId>com.lww</groupId>
