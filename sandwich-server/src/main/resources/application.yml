@@ -1,5 +1,5 @@
 server:
-  port: 1241
+  port: 12410
 #启动模式
 spring:
   profiles:
