@@ -28,7 +28,8 @@ public class TodoUserRewardServiceImpl extends ServiceImpl<TodoUserRewardMapper,
         Page<TodoUserReward> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<TodoUserReward> queryWrapper = new LambdaQueryWrapper<>();
         
-        queryWrapper.eq(TodoUserReward::getUserId, userId)
+        queryWrapper
+                .eq(TodoUserReward::getUserId, userId)
                 .eq(StringUtils.hasText(status), TodoUserReward::getStatus, status)
                 .orderByDesc(TodoUserReward::getObtainedDate);
         

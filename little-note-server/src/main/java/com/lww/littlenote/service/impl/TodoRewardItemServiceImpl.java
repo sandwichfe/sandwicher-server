@@ -55,7 +55,7 @@ public class TodoRewardItemServiceImpl extends ServiceImpl<TodoRewardItemMapper,
     @Transactional(rollbackFor = Exception.class)
     public boolean exchangeReward(Long rewardId, Long userId) {
         TodoRewardItem reward = this.getById(rewardId);
-        if (reward == null || !reward.getUserId().equals(userId) || !"active".equals(reward.getStatus())) {
+        if (reward == null || !reward.getUserId().equals(userId) || reward.getStatus()!=1) {
             return false;
         }
         
@@ -77,7 +77,6 @@ public class TodoRewardItemServiceImpl extends ServiceImpl<TodoRewardItemMapper,
             userReward.setPointsCost(reward.getPoints());
             userReward.setUserId(userId);
             userReward.setObtainedDate(LocalDate.now());
-            userReward.setStatus(1);
             userReward.setCreateTime(LocalDateTime.now());
             userReward.setCreateBy(userId);
             
