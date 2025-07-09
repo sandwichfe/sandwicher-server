@@ -1,5 +1,6 @@
 package com.lww.littlenote.dto;
 
+import com.lww.common.web.vo.PageVo;
 import lombok.Data;
 
 /**
@@ -11,17 +12,7 @@ import lombok.Data;
  * @since 2025-01-06
  */
 @Data
-public class TodoRewardDto {
-
-    /**
-     * 页码
-     */
-    private Integer pageNum = 1;
-
-    /**
-     * 页大小
-     */
-    private Integer pageSize = 10;
+public class TodoRewardDto extends PageVo {
 
     /**
      * 用户ID
