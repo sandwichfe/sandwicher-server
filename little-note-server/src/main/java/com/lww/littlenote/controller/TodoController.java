@@ -16,9 +16,8 @@ import com.lww.littlenote.service.TodoRewardItemService;
 import com.lww.littlenote.service.TodoTaskService;
 import com.lww.littlenote.service.TodoUserPointsService;
 import com.lww.littlenote.service.TodoUserRewardService;
-import lombok.NoArgsConstructor;
+import com.lww.littlenote.vo.TaskStatsVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,7 +53,7 @@ public class TodoController {
      * 分页查询任务列表
      */
     @PostMapping("/tasks/list")
-    public ResponseResult listTasks(@RequestBody TodoTaskDto todoTaskDto) {
+    public ResponseResult<Page<TodoTask>> listTasks(@RequestBody TodoTaskDto todoTaskDto) {
         Long userId = SecurityUserUtils.getUserId();
         todoTaskDto.setUserId(userId);
         Page<TodoTask> page = todoTaskService.listTasks(todoTaskDto);
@@ -65,7 +64,7 @@ public class TodoController {
      * 获取任务详情
      */
     @GetMapping("/tasks/{id}")
-    public ResponseResult getTask(@PathVariable Long id) {
+    public ResponseResult<TodoTask> getTask(@PathVariable Long id) {
         Long userId = SecurityUserUtils.getUserId();
         TodoTask task = todoTaskService.getById(id);
         if (task == null || !task.getUserId().equals(userId)) {
@@ -78,7 +77,7 @@ public class TodoController {
      * 添加任务
      */
     @PostMapping("/tasks")
-    public ResponseResult addTask(@RequestBody TodoTask task) {
+    public ResponseResult<TodoTask> addTask(@RequestBody TodoTask task) {
         Long userId = SecurityUserUtils.getUserId();
         task.setUserId(userId);
         task.setCompletedCount(0);
@@ -97,7 +96,7 @@ public class TodoController {
      * 编辑任务
      */
     @PutMapping("/tasks/{id}")
-    public ResponseResult editTask(@PathVariable Long id, @RequestBody TodoTask task) {
+    public ResponseResult<TodoTask> editTask(@PathVariable Long id, @RequestBody TodoTask task) {
         Long userId = SecurityUserUtils.getUserId();
         TodoTask existingTask = todoTaskService.getById(id);
         if (existingTask == null || !existingTask.getUserId().equals(userId)) {
@@ -117,32 +116,31 @@ public class TodoController {
      * 删除任务
      */
     @DeleteMapping("/tasks/{id}")
-    public ResponseResult deleteTask(@PathVariable Long id) {
+    public ResponseResult<Void> deleteTask(@PathVariable Long id) {
         Long userId = SecurityUserUtils.getUserId();
         TodoTask task = todoTaskService.getById(id);
         if (task == null || !task.getUserId().equals(userId)) {
             return ResultUtil.error("任务不存在");
         }
-        
-        boolean deleted = todoTaskService.removeById(id);
-        return deleted ? ResultUtil.success("删除成功") : ResultUtil.error("删除失败");
+        todoTaskService.removeById(id);
+        return ResultUtil.success();
     }
 
     /**
      * 完成任务一次
      */
     @PostMapping("/tasks/{id}/complete")
-    public ResponseResult completeTask(@PathVariable Long id) {
+    public ResponseResult<Void> completeTask(@PathVariable Long id) {
         Long userId = SecurityUserUtils.getUserId();
-        boolean completed = todoTaskService.completeTaskOnce(id, userId);
-        return completed ? ResultUtil.success("任务完成") : ResultUtil.error("完成失败");
+        todoTaskService.completeTaskOnce(id, userId);
+        return ResultUtil.success();
     }
 
     /**
      * 复制任务到每日待办
      */
     @PostMapping("/tasks/{id}/copy-to-daily")
-    public ResponseResult copyToDaily(@PathVariable Long id) {
+    public ResponseResult<Long> copyToDaily(@PathVariable Long id) {
         Long userId = SecurityUserUtils.getUserId();
         Long newTaskId = todoTaskService.copyToDaily(id, userId);
         return newTaskId != null ? ResultUtil.success(newTaskId) : ResultUtil.error("复制失败");
@@ -152,17 +150,16 @@ public class TodoController {
      * 获取任务统计
      */
     @GetMapping("/tasks/stats")
-    public ResponseResult getTaskStats(@RequestParam(required = false) String category) {
+    public ResponseResult<TaskStatsVO> getTaskStats(@RequestParam(required = false) String category) {
         Long userId = SecurityUserUtils.getUserId();
-        Object stats = todoTaskService.getTaskStats(userId, category);
-        return ResultUtil.success(stats);
+        return ResultUtil.success(todoTaskService.getTaskStats(userId, category));
     }
 
     /**
      * 获取用户积分信息
      */
     @GetMapping("/points")
-    public ResponseResult getUserPoints() {
+    public ResponseResult<TodoUserPoints> getUserPoints() {
         Long userId = SecurityUserUtils.getUserId();
         TodoUserPoints userPoints = todoUserPointsService.getUserPoints(userId);
         return ResultUtil.success(userPoints);
@@ -172,7 +169,7 @@ public class TodoController {
      * 分页查询奖励商品列表
      */
     @PostMapping("/rewards/list")
-    public ResponseResult listRewards(@RequestBody TodoRewardDto todoRewardDto) {
+    public ResponseResult<Page<TodoRewardItem>> listRewards(@RequestBody TodoRewardDto todoRewardDto) {
         Long userId = SecurityUserUtils.getUserId();
         todoRewardDto.setUserId(userId);
         Page<TodoRewardItem> page = todoRewardItemService.listRewards(todoRewardDto);
@@ -183,7 +180,7 @@ public class TodoController {
      * 获取奖励详情
      */
     @GetMapping("/rewards/{id}")
-    public ResponseResult getReward(@PathVariable Long id) {
+    public ResponseResult<TodoRewardItem> getReward(@PathVariable Long id) {
         Long userId = SecurityUserUtils.getUserId();
         TodoRewardItem reward = todoRewardItemService.getById(id);
         if (reward == null || !reward.getUserId().equals(userId)) {
@@ -196,22 +193,22 @@ public class TodoController {
      * 添加奖励商品
      */
     @PostMapping("/rewards")
-    public ResponseResult addReward(@RequestBody TodoRewardItem reward) {
+    public ResponseResult<Void> addReward(@RequestBody TodoRewardItem reward) {
         Long userId = SecurityUserUtils.getUserId();
         reward.setUserId(userId);
         reward.setStatus(1);
         reward.setCreateTime(LocalDateTime.now());
         reward.setCreateBy(userId);
         
-        boolean saved = todoRewardItemService.save(reward);
-        return saved ? ResultUtil.success(reward) : ResultUtil.error("添加失败");
+        todoRewardItemService.save(reward);
+        return ResultUtil.success();
     }
 
     /**
      * 编辑奖励商品
      */
     @PutMapping("/rewards/{id}")
-    public ResponseResult editReward(@PathVariable Long id, @RequestBody TodoRewardItem reward) {
+    public ResponseResult<Void> editReward(@PathVariable Long id, @RequestBody TodoRewardItem reward) {
         Long userId = SecurityUserUtils.getUserId();
         TodoRewardItem existingReward = todoRewardItemService.getById(id);
         if (existingReward == null || !existingReward.getUserId().equals(userId)) {
@@ -223,40 +220,40 @@ public class TodoController {
         reward.setUpdateTime(LocalDateTime.now());
         reward.setUpdateBy(userId);
         
-        boolean updated = todoRewardItemService.updateById(reward);
-        return updated ? ResultUtil.success(reward) : ResultUtil.error("更新失败");
+        todoRewardItemService.updateById(reward);
+        return ResultUtil.success();
     }
 
     /**
      * 删除奖励商品
      */
     @DeleteMapping("/rewards/{id}")
-    public ResponseResult deleteReward(@PathVariable Long id) {
+    public ResponseResult<Void> deleteReward(@PathVariable Long id) {
         Long userId = SecurityUserUtils.getUserId();
         TodoRewardItem reward = todoRewardItemService.getById(id);
         if (reward == null || !reward.getUserId().equals(userId)) {
             return ResultUtil.error("奖励不存在");
         }
         
-        boolean deleted = todoRewardItemService.removeById(id);
-        return deleted ? ResultUtil.success("删除成功") : ResultUtil.error("删除失败");
+        todoRewardItemService.removeById(id);
+        return ResultUtil.success();
     }
 
     /**
      * 兑换奖励
      */
     @PostMapping("/rewards/{id}/exchange")
-    public ResponseResult exchangeReward(@PathVariable Long id) {
+    public ResponseResult<Void> exchangeReward(@PathVariable Long id) {
         Long userId = SecurityUserUtils.getUserId();
-        boolean exchanged = todoRewardItemService.exchangeReward(id, userId);
-        return exchanged ? ResultUtil.success("兑换成功") : ResultUtil.error("兑换失败");
+        todoRewardItemService.exchangeReward(id, userId);
+        return ResultUtil.success();
     }
 
     /**
      * 分页查询用户奖励列表
      */
     @GetMapping("/user-rewards")
-    public ResponseResult listUserRewards(@RequestParam(defaultValue = "1") Integer pageNum,
+    public ResponseResult<Page<TodoUserReward>> listUserRewards(@RequestParam(defaultValue = "1") Integer pageNum,
                                          @RequestParam(defaultValue = "10") Integer pageSize,
                                          @RequestParam(required = false) String status) {
         Long userId = SecurityUserUtils.getUserId();
@@ -268,9 +265,9 @@ public class TodoController {
      * 使用奖励
      */
     @PostMapping("/user-rewards/{id}/use")
-    public ResponseResult useReward(@PathVariable Long id) {
+    public ResponseResult<Void> useReward(@PathVariable Long id) {
         Long userId = SecurityUserUtils.getUserId();
-        boolean used = todoUserRewardService.useReward(id, userId);
-        return used ? ResultUtil.success("使用成功") : ResultUtil.error("使用失败");
+        todoUserRewardService.useReward(id, userId);
+        return ResultUtil.success();
     }
 }

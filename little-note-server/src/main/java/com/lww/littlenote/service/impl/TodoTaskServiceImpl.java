@@ -1,5 +1,8 @@
 package com.lww.littlenote.service.impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -8,15 +11,13 @@ import com.lww.littlenote.entity.TodoTask;
 import com.lww.littlenote.mapper.TodoTaskMapper;
 import com.lww.littlenote.service.TodoTaskService;
 import com.lww.littlenote.service.TodoUserPointsService;
+import com.lww.littlenote.vo.TaskStatsVO;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * <p>
@@ -27,10 +28,10 @@ import java.util.Map;
  * @since 2025-01-06
  */
 @Service
+@RequiredArgsConstructor
 public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> implements TodoTaskService {
 
-    @Autowired
-    private TodoUserPointsService todoUserPointsService;
+    private final TodoUserPointsService todoUserPointsService;
 
     @Override
     public Page<TodoTask> listTasks(TodoTaskDto todoTaskDto) {
@@ -47,7 +48,7 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean completeTaskOnce(Long taskId, Long userId) {
         TodoTask task = this.getById(taskId);
         if (task == null || !task.getUserId().equals(userId)) {
@@ -101,7 +102,7 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     }
 
     @Override
-    public Object getTaskStats(Long userId, String category) {
+    public TaskStatsVO getTaskStats(Long userId, String category) {
         LambdaQueryWrapper<TodoTask> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(TodoTask::getUserId, userId);
         
@@ -118,13 +119,14 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
         // 统计已完成的任务（completedCount >= targetCount）
         queryWrapper.apply("completed_count >= target_count");
         long completedTasks = this.count(queryWrapper);
-        
-        Map<String, Object> stats = new HashMap<>();
-        stats.put("totalTasks", totalTasks);
-        stats.put("completedTasks", completedTasks);
-        stats.put("pendingTasks", totalTasks - completedTasks);
-        stats.put("completionRate", totalTasks > 0 ? (double) completedTasks / totalTasks : 0.0);
-        
-        return stats;
+
+
+        TaskStatsVO taskStatsVO = new TaskStatsVO(totalTasks, completedTasks);
+        taskStatsVO.setTotalTasks(totalTasks);
+        taskStatsVO.setCompletedTasks(totalTasks);
+        taskStatsVO.setPendingTasks(totalTasks - completedTasks);
+        taskStatsVO.setCompletionRate(totalTasks > 0 ? (double) completedTasks / totalTasks : 0.0);
+
+        return taskStatsVO;
     }
 }

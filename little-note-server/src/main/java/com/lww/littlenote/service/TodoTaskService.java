@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.littlenote.dto.TodoTaskDto;
 import com.lww.littlenote.entity.TodoTask;
+import com.lww.littlenote.vo.TaskStatsVO;
 
 /**
  * <p>
@@ -48,5 +49,5 @@ public interface TodoTaskService extends IService<TodoTask> {
      * @param category 任务类别
      * @return 统计信息
      */
-    Object getTaskStats(Long userId, String category);
+    TaskStatsVO getTaskStats(Long userId, String category);
 }
