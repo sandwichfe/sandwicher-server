@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.lww.auth.server.user.entity.User;
 import com.lww.auth.server.user.service.UserService;
 import com.lww.auth.server.user.vo.Oauth2Param;
+import com.lww.auth.server.utils.AESUtil;
 import com.lww.common.web.exception.AppException;
 import com.lww.common.web.log.Loggable;
 import com.lww.common.web.response.ResponseCode;
@@ -52,12 +53,15 @@ public class UserLoginController {
     @Operation(summary = "用户登录", description = "用户登录")
     @Loggable(module = "login", type = "login", description = "用户登录")
     public ResponseResult<String> userLogin(String username, String password) {
+        // 对前端传输的密码进行AES解密
+        String decryptedPassword = AESUtil.decryptPassword(password);
+        
         Oauth2Param oauth2Param = new Oauth2Param()
                 .setGrantType("password")
                 .setClientId("client_password")
                 .setClientSecret("123456")
                 .setUsername(username)
-                .setPassword(password);
+                .setPassword(decryptedPassword);
         String token = getOauth2TokenByPassWord(oauth2Param);
 
         return ResultUtil.success(token);

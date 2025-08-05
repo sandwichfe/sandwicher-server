@@ -7,6 +7,7 @@ import com.lww.auth.server.user.entity.User;
 import com.lww.auth.server.user.mapper.UserMapper;
 import com.lww.auth.server.user.service.UserService;
 import com.lww.common.utils.AssertUtils;
+import com.lww.auth.server.utils.AESUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -58,14 +59,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         AssertUtils.assertTrue(user == null, "用户不存在");
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        
+        // 解密前端传来的密码
+        String decryptedOldPassword = AESUtil.decryptPassword(oldPassword);
+        String decryptedNewPassword = AESUtil.decryptPassword(newPassword);
+        
         // 验证原密码
-        boolean matches = passwordEncoder.matches(oldPassword, user.getPassword());
+        boolean matches = passwordEncoder.matches(decryptedOldPassword, user.getPassword());
         AssertUtils.assertTrue(!matches, "原密码错误");
         
         // 更新密码
         User updateUser = new User();
         updateUser.setId(userId);
-        updateUser.setPassword(passwordEncoder.encode(newPassword));
+        updateUser.setPassword(passwordEncoder.encode(decryptedNewPassword));
         
         return baseMapper.updateById(updateUser) > 0;
     }
