@@ -10,6 +10,7 @@ import com.lww.common.utils.AssertUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import jakarta.annotation.Resource;
 
 /**
  * <p>
@@ -48,5 +49,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         addUser.setPassword(new BCryptPasswordEncoder().encode(password));
         baseMapper.insert(addUser);
 
+    }
+
+    @Override
+    public boolean changePassword(Long userId, String oldPassword, String newPassword) {
+        // 获取用户信息
+        User user = baseMapper.selectById(userId);
+        AssertUtils.assertTrue(user == null, "用户不存在");
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        // 验证原密码
+        boolean matches = passwordEncoder.matches(oldPassword, user.getPassword());
+        AssertUtils.assertTrue(!matches, "原密码错误");
+        
+        // 更新密码
+        User updateUser = new User();
+        updateUser.setId(userId);
+        updateUser.setPassword(passwordEncoder.encode(newPassword));
+        
+        return baseMapper.updateById(updateUser) > 0;
     }
 }

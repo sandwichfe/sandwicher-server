@@ -28,4 +28,13 @@ public interface UserService extends IService<User> {
      * @param user 用户信息
      */
     void registerUser(User user);
+
+    /**
+     * 修改密码
+     * @param userId 用户ID
+     * @param oldPassword 原密码
+     * @param newPassword 新密码
+     * @return 是否修改成功
+     */
+    boolean changePassword(Long userId, String oldPassword, String newPassword);
 }
