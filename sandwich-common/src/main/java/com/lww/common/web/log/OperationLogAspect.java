@@ -118,7 +118,7 @@ public class OperationLogAspect {
     }
 
     private void saveLog(OperationLog logContext) {
-        log.info("[操作日志] {} - {} | 耗时: {}ms | 参数: {} | 结果: {} | 错误: {}",
+        log.info("[操作日志] {} - {} | 耗时: {}ms | 参数: {} | 结果: {} ",
                 logContext.getModule(),
                 logContext.getDescription(),
                 logContext.getDuration(),
