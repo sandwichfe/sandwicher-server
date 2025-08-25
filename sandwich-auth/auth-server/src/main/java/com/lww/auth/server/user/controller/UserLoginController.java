@@ -36,7 +36,7 @@ import java.util.Random;
  * @since 2024/12/9
  */
 @Slf4j
-@RequestMapping("/user")
+@RequestMapping("/api/user-center/user")
 @RestController
 public class UserLoginController {
 

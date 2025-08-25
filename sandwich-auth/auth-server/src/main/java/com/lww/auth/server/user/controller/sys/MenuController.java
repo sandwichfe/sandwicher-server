@@ -1,4 +1,4 @@
-package com.lww.auth.server.user.controller;
+package com.lww.auth.server.user.controller.sys;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lww.auth.server.user.entity.Menu;
@@ -21,7 +21,7 @@ import java.util.Optional;
  */
 @Tag(name = "菜单管理")
 @RestController
-@RequestMapping("/sys/menu")
+@RequestMapping("/api/sys/menu")
 public class MenuController {
 
     @Resource
@@ -69,20 +69,6 @@ public class MenuController {
     public ResponseResult<List<MenuTreeVO>> getMenuTree() {
         return ResultUtil.success(menuService.getMenuTree());
     }
-
-
-    @Operation(summary = "获取当前用户的菜单")
-    @GetMapping("/currentUserMenu")
-    public ResponseResult<List<MenuTreeVO>> getCurrentUserMenu() {
-        // 获取当前用户ID
-        Long userId = AuthUserUtils.getCurrentUserId();
-
-        // 调用服务层获取当前用户的菜单树
-        List<MenuTreeVO> menuTree = menuService.getCurrentUserMenuTree(userId);
-
-        return ResultUtil.success(menuTree);
-    }
-
 
 
 }

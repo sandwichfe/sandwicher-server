@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.common.web.vo.PageVo;
+import com.lww.littlenote.config.api.ApiLittleNoteRestController;
 import com.lww.littlenote.entity.NoteGroup;
 import com.lww.littlenote.service.NoteGroupService;
 import jakarta.annotation.Resource;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author lww
  * @since 2025-01-22 00:00:35
  */
-@RestController
+@ApiLittleNoteRestController
 @RequestMapping("/noteGroup")
 public class NoteGroupController {
 

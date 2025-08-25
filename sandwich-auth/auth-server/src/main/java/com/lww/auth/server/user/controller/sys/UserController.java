@@ -1,14 +1,11 @@
-package com.lww.auth.server.user.controller;
+package com.lww.auth.server.user.controller.sys;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lww.auth.server.user.entity.User;
 import com.lww.auth.server.user.service.UserService;
-import com.lww.auth.server.user.vo.req.ChangePasswordRequest;
-import com.lww.auth.server.utils.AuthUserUtils;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.common.web.vo.PageVo;
-import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -26,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Tag(name = "用户管理")
 @RestController
-@RequestMapping("/sys/user")
+@RequestMapping("/api/sys/user")
 public class UserController {
 
     @Resource
@@ -86,27 +83,4 @@ public class UserController {
     }
 
 
-    /**
-     * 获取当前登录用户信息
-     */
-    @Operation(summary = "获取当前登录用户信息")
-    @GetMapping("/getCurrentUser")
-    public ResponseResult<User> getCurrentUser() {
-        Long userId = AuthUserUtils.getCurrentUserId();
-        User user = userService.getById(userId);
-        return ResultUtil.success(user);
-    }
-
-
-    /**
-     * 更新当前登录用户信息
-     */
-    @Operation(summary = "更新当前登录用户信息")
-    @PostMapping("/updateCurrentUser")
-    public ResponseResult<User> updateCurrentUser(@RequestBody User user) {
-        Long userId = AuthUserUtils.getCurrentUserId();
-        user.setId(userId);
-        userService.updateById(user);
-        return ResultUtil.success(user);
-    }
 }

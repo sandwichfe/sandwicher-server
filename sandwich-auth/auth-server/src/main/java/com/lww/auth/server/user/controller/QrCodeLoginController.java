@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/user/qrCode")
+@RequestMapping("/api/user-center/user/qrCode")
 public class QrCodeLoginController {
 
     private final QrCodeLoginService iQrCodeLoginService;

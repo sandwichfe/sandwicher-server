@@ -1,4 +1,4 @@
-package com.lww.auth.server.user.controller;
+package com.lww.auth.server.user.controller.sys;
 
 import com.lww.auth.server.user.service.RoleMenuService;
 import com.lww.common.web.response.ResponseResult;
@@ -18,7 +18,7 @@ import com.lww.auth.server.user.vo.req.AssignMenusToRoleRequest;
  * @since 2024-12-16 11:53:37
  */
 @RestController
-@RequestMapping("/sys/role-menu")
+@RequestMapping("/api/sys/role-menu")
 @RequiredArgsConstructor
 public class RoleMenuController {
 

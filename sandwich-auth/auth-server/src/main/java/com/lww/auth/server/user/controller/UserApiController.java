@@ -1,6 +1,11 @@
 package com.lww.auth.server.user.controller;
 
+import java.util.List;
+
+import com.lww.auth.server.user.entity.User;
+import com.lww.auth.server.user.service.MenuService;
 import com.lww.auth.server.user.service.UserService;
+import com.lww.auth.server.user.vo.MenuTreeVO;
 import com.lww.auth.server.user.vo.req.ChangePasswordRequest;
 import com.lww.auth.server.utils.AuthUserUtils;
 import com.lww.common.web.response.ResponseResult;
@@ -22,11 +27,51 @@ import org.springframework.web.bind.annotation.*;
  */
 @Tag(name = "用户API")
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/user-center/user")
 public class UserApiController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private MenuService menuService;
+
+    /**
+     * 获取当前登录用户信息
+     */
+    @Operation(summary = "获取当前登录用户信息")
+    @GetMapping("/getCurrentUser")
+    public ResponseResult<User> getCurrentUser() {
+        Long userId = AuthUserUtils.getCurrentUserId();
+        User user = userService.getById(userId);
+        return ResultUtil.success(user);
+    }
+
+
+    /**
+     * 更新当前登录用户信息
+     */
+    @Operation(summary = "更新当前登录用户信息")
+    @PostMapping("/updateCurrentUser")
+    public ResponseResult<User> updateCurrentUser(@RequestBody User user) {
+        Long userId = AuthUserUtils.getCurrentUserId();
+        user.setId(userId);
+        userService.updateById(user);
+        return ResultUtil.success(user);
+    }
+
+    @Operation(summary = "获取当前用户的菜单")
+    @GetMapping("/currentUserMenu")
+    public ResponseResult<List<MenuTreeVO>> getCurrentUserMenu() {
+        // 获取当前用户ID
+        Long userId = AuthUserUtils.getCurrentUserId();
+
+        // 调用服务层获取当前用户的菜单树
+        List<MenuTreeVO> menuTree = menuService.getCurrentUserMenuTree(userId);
+
+        return ResultUtil.success(menuTree);
+    }
+
 
     /**
      * 修改密码

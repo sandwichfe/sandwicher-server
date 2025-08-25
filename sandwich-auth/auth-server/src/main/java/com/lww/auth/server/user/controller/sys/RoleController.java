@@ -1,4 +1,4 @@
-package com.lww.auth.server.user.controller;
+package com.lww.auth.server.user.controller.sys;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lww.auth.server.user.entity.Role;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Tag(name = "角色管理")
 @RestController
-@RequestMapping("/sys/role")
+@RequestMapping("/api/sys/role")
 public class RoleController {
 
     @Resource

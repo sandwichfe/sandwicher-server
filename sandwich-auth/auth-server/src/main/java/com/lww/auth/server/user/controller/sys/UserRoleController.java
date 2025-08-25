@@ -1,4 +1,4 @@
-package com.lww.auth.server.user.controller;
+package com.lww.auth.server.user.controller.sys;
 
 import com.lww.auth.server.user.service.UserRoleService;
 import com.lww.common.web.response.ResponseResult;
@@ -18,7 +18,7 @@ import com.lww.auth.server.user.vo.req.AssignRolesToUserRequest;
  * @since 2024-12-16 11:53:38
  */
 @RestController
-@RequestMapping("/sys/user-role")
+@RequestMapping("/api/sys/user-role")
 @RequiredArgsConstructor
 public class UserRoleController {
 
