@@ -1,4 +1,4 @@
-package com.lww.auth.server.dep.resources.server.config.utils;
+package com.lww.auth.resources_server.utils;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

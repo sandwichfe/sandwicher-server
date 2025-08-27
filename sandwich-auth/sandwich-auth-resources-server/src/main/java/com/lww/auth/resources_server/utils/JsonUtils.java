@@ -1,4 +1,4 @@
-package com.lww.auth.server.dep.resources.server.config.utils;
+package com.lww.auth.resources_server.utils;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

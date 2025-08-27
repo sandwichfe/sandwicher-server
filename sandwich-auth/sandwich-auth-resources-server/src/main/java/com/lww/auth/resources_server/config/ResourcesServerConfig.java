@@ -1,4 +1,4 @@
-package com.lww.auth.server.dep.resources.server.config;
+package com.lww.auth.resources_server.config;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 2024/12/9
  */
 @Configuration
-@ComponentScan(basePackages = "com.lww.auth.dep.resources.server.config")
+@ComponentScan(basePackages = "com.lww.auth.resources_server.config")
 @Slf4j
 public class ResourcesServerConfig {
 

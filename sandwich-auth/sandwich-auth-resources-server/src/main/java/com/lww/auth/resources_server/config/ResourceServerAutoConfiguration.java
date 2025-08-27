@@ -1,4 +1,4 @@
-package com.lww.auth.server.dep.resources.server.config;
+package com.lww.auth.resources_server.config;
 
 /**
  *
@@ -7,7 +7,7 @@ package com.lww.auth.server.dep.resources.server.config;
  * @since 2024/11/13
  */
 
-import com.lww.auth.server.dep.resources.server.config.utils.SecurityUtils;
+import com.lww.auth.resources_server.utils.SecurityUtils;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,8 +39,6 @@ public class ResourceServerAutoConfiguration {
                     return config;
                 }))
                 .authorizeHttpRequests(authorize -> authorize
-                        // 必须显式放行OPTIONS方法
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // 下边一行是放行接口的配置，被放行的接口上不能有权限注解，e.g. @PreAuthorize，否则无效
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers(AUTH_TEST_LIST).permitAll()

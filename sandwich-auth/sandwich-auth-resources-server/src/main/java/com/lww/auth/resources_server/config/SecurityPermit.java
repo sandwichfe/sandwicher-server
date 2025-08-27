@@ -1,4 +1,4 @@
-package com.lww.auth.server.dep.resources.server.config;
+package com.lww.auth.resources_server.config;
 
 /**
  * 忽略权限校验接口

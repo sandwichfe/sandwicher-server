@@ -3,7 +3,7 @@ package com.lww.littlenote.controller;
 import java.time.LocalDateTime;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lww.auth.server.dep.resources.server.config.utils.SecurityUserUtils;
+import com.lww.auth.resources_server.utils.SecurityUserUtils;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.littlenote.config.api.ApiLittleNoteRestController;

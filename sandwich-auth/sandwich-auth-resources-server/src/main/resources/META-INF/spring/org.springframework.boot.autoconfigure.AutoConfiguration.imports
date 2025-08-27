@@ -1,2 +1,2 @@
 #spring3.x config here
-com.lww.auth.server.dep.resources.server.config.ResourcesServerConfig
+com.lww.auth.resources_server.config.ResourcesServerConfig
