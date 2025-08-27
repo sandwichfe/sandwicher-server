@@ -19,7 +19,7 @@ public class ApiLittleNotePrefixConfig implements WebMvcConfigurer {
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.addPathPrefix(API_PREFIX, c -> AnnotationUtils.findAnnotation(c, ApiLittleNotePrefix.class) != null);
+        // configurer.addPathPrefix(API_PREFIX, c -> AnnotationUtils.findAnnotation(c, ApiLittleNotePrefix.class) != null);
     }
 
 }

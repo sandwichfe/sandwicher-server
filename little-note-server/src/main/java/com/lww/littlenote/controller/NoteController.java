@@ -1,7 +1,7 @@
 package com.lww.littlenote.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lww.auth.dep.resources.server.config.utils.SecurityUserUtils;
+import com.lww.auth.server.dep.resources.server.config.utils.SecurityUserUtils;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.littlenote.config.api.ApiLittleNoteRestController;
@@ -17,8 +17,9 @@ import java.time.LocalDateTime;
 /**
  * @author lww
  */
-@ApiLittleNoteRestController
-@RequestMapping("/note")
+// @ApiLittleNoteRestController
+@RestController
+@RequestMapping("/api/little-note/note")
 public class NoteController {
 
     @Resource

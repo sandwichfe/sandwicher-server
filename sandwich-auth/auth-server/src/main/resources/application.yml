@@ -38,6 +38,16 @@ spring:
           max-wait: 1000
       timeout: 5000
 
+#忽略token认证
+security:
+  permit:
+    urls:
+      - /api/user-center/user/login
+      - /api/user-center/user/register
+      - /api/user-center/user/slider/generate
+      - /api/user-center/user/slider/verify
+      - /api/user-center/user/qrCode/**
+
 #请求密码模式的token用的 和spring oauth自己的配置没什么关系
 oauth2:
   token-url: "http://127.0.0.1:9088/oauth2/token"

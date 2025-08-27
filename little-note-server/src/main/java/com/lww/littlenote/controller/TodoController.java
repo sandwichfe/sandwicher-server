@@ -3,7 +3,7 @@ package com.lww.littlenote.controller;
 import java.time.LocalDateTime;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lww.auth.dep.resources.server.config.utils.SecurityUserUtils;
+import com.lww.auth.server.dep.resources.server.config.utils.SecurityUserUtils;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.littlenote.config.api.ApiLittleNoteRestController;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
