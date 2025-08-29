@@ -1,5 +1,6 @@
 package com.lww.auth.server.user_center.controller.user;
 
+import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpStatus;
@@ -115,26 +116,49 @@ public class UserLoginController {
         return ResultUtil.response(ResponseCode.SUCCESS,"注册成功！");
     }
 
+    /**
+     * 通过密码模式获取OAuth2 token
+     * @param oauth2Param OAuth2参数对象
+     * @return 带Bearer前缀的token字符串
+     * @throws AppException 获取token失败时抛出异常
+     */
     private String getOauth2TokenByPassWord(Oauth2Param oauth2Param) {
-        // OAuth token endpoint  请求的域名 要和ResourceServer配置的issuer-uri 一致 不然jwt会认证失败
-        // 通过 Hu tool HttpRequest 构建请求体和请求头
-        log.info("tokenUrl:{}", tokenUrl);
-        log.info("oauth2Param:{}", oauth2Param);
-        HttpResponse response = HttpRequest.post(tokenUrl)
+        // OAuth token endpoint 请求的域名要和ResourceServer配置的issuer-uri一致，否则JWT会认证失败
+        log.info("请求OAuth2 token，tokenUrl: {}, 参数: {}", tokenUrl, oauth2Param);
+
+        // 使用try-with-resources确保HttpResponse资源自动关闭
+        try (HttpResponse response = HttpRequest.post(tokenUrl)
                 .form("grant_type", oauth2Param.getGrantType())
                 .form("client_id", oauth2Param.getClientId())
                 .form("client_secret", oauth2Param.getClientSecret())
                 .form("username", oauth2Param.getUsername())
                 .form("password", oauth2Param.getPassword())
-                .execute();
-        // 获取返回的响应体
-        String responseBody = response.body();
-        String token = extractAccessToken(responseBody);
-        if (!StringUtils.hasText(token)) {
-            throw new AppException("登录失败");
+                // 设置连接超时时间为30秒（30000毫秒）
+                .setConnectionTimeout(30000)
+                // 设置读取超时时间为60秒（60000毫秒）
+                .setReadTimeout(60000).execute()) {
+
+            // 检查响应状态码
+            if (!response.isOk()) {
+                String errorBody = response.body();
+                log.error("获取OAuth2 token失败，HTTP状态码: {}, 响应体: {}", response.getStatus(), errorBody);
+                throw new AppException("认证服务返回错误: " + errorBody);
+            }
+
+            // 获取返回的响应体
+            String responseBody = response.body();
+            log.debug("OAuth2 token响应: {}", responseBody);
+
+            String token = extractAccessToken(responseBody);
+            if (!StringUtils.hasText(token)) {
+                log.error("从响应中解析token失败，响应体: {}", responseBody);
+                throw new AppException("登录失败: 无法解析token");
+            }
+
+            return "Bearer " + token;
         }
-        return "Bearer "+token;
     }
+
 
     /**
      * 获取 access_token

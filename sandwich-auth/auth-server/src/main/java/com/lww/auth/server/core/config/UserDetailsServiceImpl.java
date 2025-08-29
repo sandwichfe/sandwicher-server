@@ -4,6 +4,7 @@ package com.lww.auth.server.core.config;
 import com.lww.auth.server.user_center.entity.User;
 import com.lww.auth.server.user_center.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
  * @author lww
  * @since 2022/7/20 14:43
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -31,6 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("用户名：{}", username);
         User user  = userService.getUserByUserName(username);
         if (user == null){
             throw new UsernameNotFoundException("用户名不存在");
