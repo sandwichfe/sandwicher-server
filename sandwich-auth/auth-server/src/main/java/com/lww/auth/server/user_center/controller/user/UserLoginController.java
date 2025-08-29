@@ -141,21 +141,14 @@ public class UserLoginController {
             // 检查响应状态码
             if (!response.isOk()) {
                 String errorBody = response.body();
-                log.error("获取OAuth2 token失败，HTTP状态码: {}, 响应体: {}", response.getStatus(), errorBody);
+                log.error("请求OAuth2 token失败，HTTP状态码: {}, 响应体: {}", response.getStatus(), errorBody);
                 throw new AppException("认证服务返回错误: " + errorBody);
             }
 
             // 获取返回的响应体
             String responseBody = response.body();
             log.debug("OAuth2 token响应: {}", responseBody);
-
-            String token = extractAccessToken(responseBody);
-            if (!StringUtils.hasText(token)) {
-                log.error("从响应中解析token失败，响应体: {}", responseBody);
-                throw new AppException("登录失败: 无法解析token");
-            }
-
-            return "Bearer " + token;
+            return "Bearer " + extractAccessToken(responseBody);
         }
     }
 
@@ -173,7 +166,8 @@ public class UserLoginController {
             // 解析根级 JSON
             JSONObject rootNode = JSON.parseObject(responseBody);
             if (HttpStatus.HTTP_OK!=rootNode.getInteger("code")){
-                throw new AppException(rootNode.getString("msg"));
+                log.error("oauth2认证失败，响应:{}", responseBody);
+                throw new AppException("账号或密码错误");
             }
             // 提取 access_token
             JSONObject data = (JSONObject) rootNode.get("data");
