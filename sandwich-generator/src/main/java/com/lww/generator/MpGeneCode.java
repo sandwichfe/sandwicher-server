@@ -44,51 +44,56 @@ public class MpGeneCode {
         FastAutoGenerator.create(url, username, password)
                 // 全局配置
                 .globalConfig(builder ->
-                    builder.author("lww") // 设置作者
-                            // .enableSwagger() // 开启 swagger 模式
-                            .enableSpringdoc() // 文档为springdoc
-                            .commentDate("yyyy-MM-dd HH:mm:ss")
-                                                        // .fileOverride() // 覆盖已生成文件
-                            .disableOpenDir() // 生成完不弹出对应目录
-                            .outputDir(BASE_OUT_PUT_DIR) // 指定输出目录
+                        builder.author("lww") // 设置作者
+                                // .enableSwagger() // 开启 swagger 模式
+                                .enableSpringdoc() // 文档为springdoc
+                                .commentDate("yyyy-MM-dd HH:mm:ss")
+                                .disableOpenDir() // 生成完不弹出对应目录
+                                .outputDir(BASE_OUT_PUT_DIR) // 指定输出目录
                 )
                 // 包配置相关
                 .packageConfig(builder ->
-                    builder.parent("com.lww") // 设置父包名
-                            .moduleName("generator")// 设置父包模块名
-                            .pathInfo(Collections.singletonMap(OutputFile.xml, BASE_OUT_PUT_MAPPER_DIR)) // 设置mapperXml生成路径
+                        builder.parent("com.lww") // 设置父包名
+                                .moduleName("generator")// 设置父包模块名
+                                .pathInfo(Collections.singletonMap(OutputFile.xml, BASE_OUT_PUT_MAPPER_DIR)) // 设置mapperXml生成路径
                 )
                 // 策略配置
                 .strategyConfig(builder ->
-                    builder.addInclude(TABLE_NAMES) // 设置需要生成的表名
-                            .addTablePrefix("t_", "c_") // 设置过滤表前缀
-                            // controller
-                            .controllerBuilder().enableRestStyle()   // rest风格
-                            // service
-                            .serviceBuilder().formatServiceFileName("%sService") //service文件命名
-                            .formatServiceImplFileName("%sServiceImpl")
-                            // entity
-                            .entityBuilder()     //实体类相关 builder
-                            .enableLombok()    //开启lombok
+                        builder.addInclude(TABLE_NAMES) // 设置需要生成的表名
+                                .addTablePrefix("t_", "c_") // 设置过滤表前缀
+                                // controller
+                                .controllerBuilder()
+                                // rest风格
+                                .enableRestStyle()
+                                // service
+                                .serviceBuilder()
+                                // service文件命名
+                                .formatServiceFileName("%sService")
+                                .formatServiceImplFileName("%sServiceImpl")
+                                // entity
+                                .entityBuilder()
+                                .enableLombok()
+                                // 覆盖文件
+                                .enableFileOverride()
                 )
                 //自定义模板
                 .templateConfig(builder ->
                         builder
-                        //.disable(TemplateType.ENTITY)   //  暂时没发现有啥用
-                        .controller("/templates/controller.java")
-                        .service("/templates/service.java")
-                        .serviceImpl("/templates/serviceImpl.java")
-                        .entity("/templates/entity.java")
-                        .mapper("/templates/mapper.java")
-                        .xml("/templates/mapper.xml")
-                        .build())
+                                //.disable(TemplateType.ENTITY)   //  暂时没发现有啥用
+                                .controller("/templates/controller.java")
+                                .service("/templates/service.java")
+                                .serviceImpl("/templates/serviceImpl.java")
+                                .entity("/templates/entity.java")
+                                .mapper("/templates/mapper.java")
+                                .xml("/templates/mapper.xml")
+                                .build())
                 // 使用Freemarker引擎模板，默认的是Velocity引擎模板
                 .templateEngine(new FreemarkerTemplateEngine())
                 // 其他注入设置
                 .injectionConfig(builder ->
-                    builder.beforeOutputFile((tableInfo, objectMap) -> {
-                        //System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
-                    }).build()
+                        builder.beforeOutputFile((tableInfo, objectMap) -> {
+                            //System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
+                        }).build()
                 ).execute();
         log.info("gene successful");
     }
