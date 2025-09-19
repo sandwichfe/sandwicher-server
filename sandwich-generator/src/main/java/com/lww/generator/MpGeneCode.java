@@ -48,15 +48,14 @@ public class MpGeneCode {
             }
 
             // 构建最终路径src/main/java/，使用Path.resolve确保兼容性
-            baseOutPutDir = parentPath.resolve("src")
-                    .resolve("main")
-                    .resolve("java") + File.separator;
+            baseOutPutDir = parentPath
+                    .resolve("src").resolve("main").resolve("java")
+                    + File.separator;
 
             // src/main/resources/mapper/
-            baseOutPutMapperDir = parentPath.resolve("src")
-                    .resolve("main")
-                    .resolve("resources")
-                    .resolve("mapper") + File.separator;
+            baseOutPutMapperDir = parentPath
+                    .resolve("src").resolve("main").resolve("resources").resolve("mapper")
+                    + File.separator;
         } catch (URISyntaxException e) {
             log.error("获取当前类路径失败", e);
         }
