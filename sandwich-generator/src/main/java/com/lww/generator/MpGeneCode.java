@@ -1,8 +1,10 @@
 package com.lww.generator;
 
 
+import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 
@@ -38,12 +40,23 @@ public class MpGeneCode {
             // 获取当前类的路径
             URL location = MpGeneCode.class.getProtectionDomain().getCodeSource().getLocation();
             // 转换为绝对路径
-            String parentPath = Paths.get(location.toURI()).toAbsolutePath().toString()
-                    .replace("\\", "//")
-                    .replace("//target//classes", "");
-            
-            baseOutPutDir = parentPath+"//src//main//java//";
-            baseOutPutMapperDir = parentPath+"//src//main//resources//mapper//";
+            Path parentPath = Paths.get(location.toURI()).toAbsolutePath();
+
+            // 处理目标路径(移除target/classes部分)
+            if (parentPath.endsWith("target/classes") || parentPath.endsWith("target\\classes")) {
+                parentPath = parentPath.getParent().getParent();
+            }
+
+            // 构建最终路径src/main/java/，使用Path.resolve确保兼容性
+            baseOutPutDir = parentPath.resolve("src")
+                    .resolve("main")
+                    .resolve("java") + File.separator;
+
+            // src/main/resources/mapper/
+            baseOutPutMapperDir = parentPath.resolve("src")
+                    .resolve("main")
+                    .resolve("resources")
+                    .resolve("mapper") + File.separator;
         } catch (URISyntaxException e) {
             log.error("获取当前类路径失败", e);
         }
