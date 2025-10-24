@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * minio配置管理
  *
+ * @author lww
  */
 @Configuration
 @Data
