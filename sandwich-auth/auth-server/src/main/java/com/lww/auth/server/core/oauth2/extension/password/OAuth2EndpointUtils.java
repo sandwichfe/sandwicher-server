@@ -1,4 +1,4 @@
-package com.lww.auth.server.core.oauth2.password;
+package com.lww.auth.server.core.oauth2.extension.password;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;

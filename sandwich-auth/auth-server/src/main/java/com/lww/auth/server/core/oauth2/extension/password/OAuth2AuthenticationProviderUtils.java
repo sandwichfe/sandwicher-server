@@ -1,4 +1,4 @@
-package com.lww.auth.server.core.oauth2.password;
+package com.lww.auth.server.core.oauth2.extension.password;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;

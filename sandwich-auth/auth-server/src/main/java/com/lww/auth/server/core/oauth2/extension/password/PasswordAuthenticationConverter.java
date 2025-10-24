@@ -1,4 +1,4 @@
-package com.lww.auth.server.core.oauth2.password;
+package com.lww.auth.server.core.oauth2.extension.password;
 
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;

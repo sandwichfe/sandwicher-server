@@ -1,0 +1,8 @@
+/**
+ * password模式 相关支持
+ *
+ * @author lww
+ * @since 2025/10/24
+ */
+
+package com.lww.auth.server.core.oauth2.extension.password;
