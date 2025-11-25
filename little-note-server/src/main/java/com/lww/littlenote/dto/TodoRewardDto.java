@@ -2,6 +2,7 @@ package com.lww.littlenote.dto;
 
 import com.lww.common.web.vo.PageVo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * <p>
@@ -12,6 +13,7 @@ import lombok.Data;
  * @since 2025-01-06
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class TodoRewardDto extends PageVo {
 
     /**
