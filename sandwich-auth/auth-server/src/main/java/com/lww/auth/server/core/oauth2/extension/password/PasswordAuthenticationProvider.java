@@ -61,8 +61,8 @@ public class PasswordAuthenticationProvider implements AuthenticationProvider {
      * @since 0.2.3
      */
     public PasswordAuthenticationProvider(AuthenticationManager authenticationManager,
-                                          OAuth2AuthorizationService authorizationService,
-                                          OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator
+            OAuth2AuthorizationService authorizationService,
+            OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator
     ) {
         Assert.notNull(authorizationService, "authorizationService cannot be null");
         Assert.notNull(tokenGenerator, "tokenGenerator cannot be null");
@@ -80,7 +80,8 @@ public class PasswordAuthenticationProvider implements AuthenticationProvider {
         RegisteredClient registeredClient = clientPrincipal.getRegisteredClient();
 
         // 验证客户端是否支持授权类型(grant_type=password)
-        if (!registeredClient.getAuthorizationGrantTypes().contains(AuthorizationGrantType.PASSWORD)) {
+        Assert.notNull(registeredClient, "registeredClient cannot be null");
+        if (!registeredClient.getAuthorizationGrantTypes().contains(PasswordAuthenticationToken.PASSWORD)) {
             throw new OAuth2AuthenticationException(OAuth2ErrorCodes.UNAUTHORIZED_CLIENT);
         }
 
@@ -96,7 +97,7 @@ public class PasswordAuthenticationProvider implements AuthenticationProvider {
         try {
             usernamePasswordAuthentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("用户名密码身份验证失败，用户名：{}", username, e);
             // 需要将其他类型的异常转换为 OAuth2AuthenticationException 才能被自定义异常捕获处理，逻辑源码 OAuth2TokenEndpointFilter#doFilterInternal
             throw new OAuth2AuthenticationException(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
         }
@@ -117,12 +118,14 @@ public class PasswordAuthenticationProvider implements AuthenticationProvider {
         // 访问令牌(Access Token) 构造器
         DefaultOAuth2TokenContext.Builder tokenContextBuilder = DefaultOAuth2TokenContext.builder()
                 .registeredClient(registeredClient)
-                .principal(usernamePasswordAuthentication) // 身份验证成功的认证信息(用户名、权限等信息)
+                // 身份验证成功的认证信息(用户名、权限等信息)
+                .principal(usernamePasswordAuthentication)
                 .authorizationServerContext(AuthorizationServerContextHolder.getContext())
                 .authorizedScopes(authorizedScopes)
-                .authorizationGrantType(AuthorizationGrantType.PASSWORD) // 授权方式
-                .authorizationGrant(resourceOwnerPasswordAuthentication) // 授权具体对象
-                ;
+                // 授权方式
+                .authorizationGrantType(PasswordAuthenticationToken.PASSWORD)
+                // 授权具体对象
+                .authorizationGrant(resourceOwnerPasswordAuthentication);
 
         // 生成访问令牌(Access Token)
         OAuth2TokenContext tokenContext = tokenContextBuilder.tokenType((OAuth2TokenType.ACCESS_TOKEN)).build();
@@ -143,9 +146,10 @@ public class PasswordAuthenticationProvider implements AuthenticationProvider {
 
         OAuth2Authorization.Builder authorizationBuilder = OAuth2Authorization.withRegisteredClient(registeredClient)
                 .principalName(usernamePasswordAuthentication.getName())
-                .authorizationGrantType(AuthorizationGrantType.PASSWORD)
+                .authorizationGrantType(PasswordAuthenticationToken.PASSWORD)
                 .authorizedScopes(authorizedScopes)
-                .attribute(Principal.class.getName(), usernamePasswordAuthentication); // attribute 字段
+                // attribute 字段
+                .attribute(Principal.class.getName(), usernamePasswordAuthentication);
         if (generatedAccessToken instanceof ClaimAccessor) {
             authorizationBuilder.token(accessToken, (metadata) ->
                     metadata.put(OAuth2Authorization.Token.CLAIMS_METADATA_NAME, ((ClaimAccessor) generatedAccessToken).getClaims()));
@@ -185,8 +189,8 @@ public class PasswordAuthenticationProvider implements AuthenticationProvider {
      * <p>
      * ProviderManager#authenticate 遍历 providers 找到支持对应认证请求的 provider-迭代器模式
      *
-     * @param authentication
-     * @return
+     * @param authentication authentication 认证请求对象
+     * @return 是否支持当前认证请求对象
      */
     @Override
     public boolean supports(Class<?> authentication) {

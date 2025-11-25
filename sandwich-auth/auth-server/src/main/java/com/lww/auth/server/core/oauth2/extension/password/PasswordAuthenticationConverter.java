@@ -1,21 +1,20 @@
 package com.lww.auth.server.core.oauth2.extension.password;
 
-import cn.hutool.core.util.StrUtil;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
-import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
-import org.springframework.security.web.authentication.AuthenticationConverter;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import cn.hutool.core.text.CharSequenceUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
+import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
+import org.springframework.security.web.authentication.AuthenticationConverter;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 
 /**
  * 密码模式参数解析器
@@ -33,7 +32,7 @@ public class PasswordAuthenticationConverter implements AuthenticationConverter 
 
         // 授权类型 (必需)
         String grantType = request.getParameter(OAuth2ParameterNames.GRANT_TYPE);
-        if (!AuthorizationGrantType.PASSWORD.getValue().equals(grantType)) {
+        if (!PasswordAuthenticationToken.PASSWORD.getValue().equals(grantType)) {
             return null;
         }
 
@@ -59,7 +58,7 @@ public class PasswordAuthenticationConverter implements AuthenticationConverter 
 
         // 用户名验证(必需)
         String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
-        if (StrUtil.isBlank(username)) {
+        if (CharSequenceUtil.isBlank(username)) {
             OAuth2EndpointUtils.throwError(
                     OAuth2ErrorCodes.INVALID_REQUEST,
                     OAuth2ParameterNames.USERNAME,
@@ -69,7 +68,7 @@ public class PasswordAuthenticationConverter implements AuthenticationConverter 
 
         // 密码验证(必需)
         String password = parameters.getFirst(OAuth2ParameterNames.PASSWORD);
-        if (StrUtil.isBlank(password)) {
+        if (CharSequenceUtil.isBlank(password)) {
             OAuth2EndpointUtils.throwError(
                     OAuth2ErrorCodes.INVALID_REQUEST,
                     OAuth2ParameterNames.PASSWORD,

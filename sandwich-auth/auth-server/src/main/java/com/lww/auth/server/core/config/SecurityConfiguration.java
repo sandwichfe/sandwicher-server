@@ -99,64 +99,61 @@ class SecurityConfiguration {
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http,
-                                                                      AuthenticationManager authenticationManager,
-                                                                      OAuth2AuthorizationService authorizationService,
-                                                                      OAuth2TokenGenerator<?> tokenGenerator) throws Exception {
-        //授权服务器的安全交给security的过滤器处理
-        OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+            AuthenticationManager authenticationManager,
+            OAuth2AuthorizationService authorizationService,
+            OAuth2TokenGenerator<?> tokenGenerator) throws Exception {
+        // 创建授权服务器配置器，用于注册授权端点（authorize、token、jwks、OIDC 等）
+        OAuth2AuthorizationServerConfigurer authorizationServerConfigurer = new OAuth2AuthorizationServerConfigurer();
+        // 仅将本条 SecurityFilterChain 作用于授权端点，避免与其他过滤链冲突
+        http.securityMatcher(authorizationServerConfigurer.getEndpointsMatcher());
+        // 授权端点统一要求已认证（登录用户或完成客户端认证）
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
+        // 对授权端点忽略 CSRF 校验，保证令牌发放等 POST 请求不被拦截
+        http.csrf(csrf -> csrf.ignoringRequestMatchers(authorizationServerConfigurer.getEndpointsMatcher()));
         // 自定义配置
-        http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
+        http.with(authorizationServerConfigurer, authorizationServer -> authorizationServer
                 // 自定义授权页
                 .authorizationEndpoint(auth -> auth.consentPage("/consent"))
                 // 开启oidc
-                .oidc(Customizer.withDefaults());
-
-        http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
+                .oidc(Customizer.withDefaults())
                 // 自定义授权模式转换器(Converter)
                 .tokenEndpoint(tokenEndpoint -> tokenEndpoint
-                        .accessTokenRequestConverters(
-                                authenticationConverters -> // <1>
-                                        // 自定义授权模式转换器(Converter)
-                                        authenticationConverters.addAll(
-                                                List.of(
-                                                        new OAuth2ClientCredentialsAuthenticationConverter(),
-                                                        // 加入密码模式转换器
-                                                        new PasswordAuthenticationConverter(),
-                                                        new OAuth2AuthorizationCodeAuthenticationConverter(),
-                                                        new OAuth2RefreshTokenAuthenticationConverter()
-                                                )
-                                        )
+                        .accessTokenRequestConverters(authenticationConverters ->
+                                // 自定义授权模式转换器(Converter)
+                                authenticationConverters.addAll(List.of(
+                                        new OAuth2ClientCredentialsAuthenticationConverter(),
+                                        // 加入密码模式转换器
+                                        new PasswordAuthenticationConverter(),
+                                        new OAuth2AuthorizationCodeAuthenticationConverter(),
+                                        new OAuth2RefreshTokenAuthenticationConverter()
+                                ))
                         )
-                        .authenticationProviders(
-                                authenticationProviders -> // <2>
-                                        // 自定义授权模式提供者(Provider)
-                                        authenticationProviders.addAll(
-                                                List.of(
-                                                        new OAuth2ClientCredentialsAuthenticationProvider(authorizationService, tokenGenerator),
-                                                        // 加入密码Provider
-                                                        new PasswordAuthenticationProvider(authenticationManager, authorizationService, tokenGenerator),
-                                                        new OAuth2AuthorizationCodeAuthenticationProvider(authorizationService, tokenGenerator),
-                                                        new OAuth2RefreshTokenAuthenticationProvider(authorizationService, tokenGenerator)
-                                                )
-                                        )
+                        .authenticationProviders(authenticationProviders ->
+                                // 自定义授权模式提供者(Provider)
+                                authenticationProviders.addAll(List.of(
+                                        new OAuth2ClientCredentialsAuthenticationProvider(authorizationService, tokenGenerator),
+                                        // 加入密码Provider
+                                        new PasswordAuthenticationProvider(authenticationManager, authorizationService, tokenGenerator),
+                                        new OAuth2AuthorizationCodeAuthenticationProvider(authorizationService, tokenGenerator),
+                                        new OAuth2RefreshTokenAuthenticationProvider(authorizationService, tokenGenerator)
+                                ))
                         )
-                        .accessTokenResponseHandler(new MyAuthenticationSuccessHandler()) // 自定义成功响应
-                        .errorResponseHandler(new MyAuthenticationFailureHandler()) // 自定义失败响应
-                );
+                        // 自定义成功响应
+                        .accessTokenResponseHandler(new MyAuthenticationSuccessHandler())
+                        // 自定义失败响应
+                        .errorResponseHandler(new MyAuthenticationFailureHandler())
+                )
+        );
 
         // 未认证的请求异常处理（/Login）    指向到login地址
-        http.exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint(new LoginAuthenticationJsonEntryPoint())
-                )
+        http.exceptionHandling(
+                        exceptions -> exceptions.authenticationEntryPoint(new LoginAuthenticationJsonEntryPoint()))
                 // 接受用户信息和/或客户端注册的访问令牌
-                .oauth2ResourceServer(resourceServer -> resourceServer
-                        .jwt(Customizer.withDefaults())
+                .oauth2ResourceServer(resourceServer -> resourceServer.jwt(Customizer.withDefaults())
                         // 异常处理
                         .accessDeniedHandler(SecurityUtils::exceptionHandler)
                         // 认证失败处理
-                        .authenticationEntryPoint(SecurityUtils::exceptionHandler)
-                );
-
+                        .authenticationEntryPoint(SecurityUtils::exceptionHandler));
         return http.build();
     }
 
