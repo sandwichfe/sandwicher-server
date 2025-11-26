@@ -1,5 +1,7 @@
 package com.lww.auth.server.core.utils;
 
+import com.lww.common.web.exception.AppException;
+import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
@@ -13,14 +15,19 @@ import java.util.Base64;
  * @author lww
  * @since 2024-12-16
  */
+@UtilityClass
 @Component
-public class AESUtil {
+public class AesUtil {
 
-    // AES算法
+    /**
+     * AES算法
+     */
     private static final String ALGORITHM = "AES";
     private static final String TRANSFORMATION = "AES/ECB/PKCS5Padding";
-    
-    // AES密钥 - 与前端保持一致
+
+    /**
+     * AES密钥 - 与前端保持一致
+     */
     private static final String SECRET_KEY = "8F6B2CK33DZE20A08O74C231B47AC8F9";
 
     /**
@@ -38,7 +45,7 @@ public class AESUtil {
             byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedText));
             return new String(decryptedBytes, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            throw new RuntimeException("AES解密失败", e);
+            throw new AppException("AES解密失败");
         }
     }
 

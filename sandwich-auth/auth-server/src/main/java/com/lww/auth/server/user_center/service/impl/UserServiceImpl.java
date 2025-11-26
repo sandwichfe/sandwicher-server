@@ -3,11 +3,11 @@ package com.lww.auth.server.user_center.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lww.auth.server.core.utils.AesUtil;
 import com.lww.auth.server.user_center.entity.User;
 import com.lww.auth.server.user_center.mapper.UserMapper;
 import com.lww.auth.server.user_center.service.UserService;
 import com.lww.common.utils.AssertUtils;
-import com.lww.auth.server.core.utils.AESUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -60,8 +60,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         
         // 解密前端传来的密码
-        String decryptedOldPassword = AESUtil.decryptPassword(oldPassword);
-        String decryptedNewPassword = AESUtil.decryptPassword(newPassword);
+        String decryptedOldPassword = AesUtil.decryptPassword(oldPassword);
+        String decryptedNewPassword = AesUtil.decryptPassword(newPassword);
         
         // 验证原密码
         boolean matches = passwordEncoder.matches(decryptedOldPassword, user.getPassword());

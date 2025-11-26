@@ -1,16 +1,19 @@
 package com.lww.auth.server.user_center.controller.user;
 
-import cn.hutool.http.HttpException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpStatus;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.lww.auth.server.core.utils.AesUtil;
 import com.lww.auth.server.user_center.entity.User;
 import com.lww.auth.server.user_center.service.UserService;
 import com.lww.auth.server.user_center.vo.Oauth2Param;
-import com.lww.auth.server.core.utils.AESUtil;
 import com.lww.common.web.exception.AppException;
 import com.lww.common.web.log.Loggable;
 import com.lww.common.web.response.ResponseCode;
@@ -20,12 +23,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 注意：本来这个服务只是用来做 授权认证的
@@ -55,7 +57,7 @@ public class UserLoginController {
     @Loggable(module = "login", type = "login", description = "用户登录")
     public ResponseResult<String> userLogin(String username, String password) {
         // 对前端传输的密码进行AES解密
-        String decryptedPassword = AESUtil.decryptPassword(password);
+        String decryptedPassword = AesUtil.decryptPassword(password);
         
         Oauth2Param oauth2Param = new Oauth2Param()
                 .setGrantType("password")
