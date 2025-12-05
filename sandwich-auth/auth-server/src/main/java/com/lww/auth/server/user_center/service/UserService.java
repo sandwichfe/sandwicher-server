@@ -36,5 +36,37 @@ public interface UserService extends IService<User> {
      * @param newPassword 新密码
      * @return 是否修改成功
      */
+    /**
+     * 修改密码
+     * @param userId 用户ID
+     * @param oldPassword 原密码
+     * @param newPassword 新密码
+     * @return 是否修改成功
+     */
     boolean changePassword(Long userId, String oldPassword, String newPassword);
+
+    /**
+     * 创建用户（包含部门关联）
+     * @param user 用户信息
+     */
+    void createUser(User user);
+
+    /**
+     * 更新用户（包含部门关联）
+     * @param user 用户信息
+     */
+    void updateUser(User user);
+
+    /**
+     * 获取用户详情（包含部门关联）
+     * @param id 用户ID
+     * @return 用户信息
+     */
+    User getUserWithDepts(Long id);
+
+    /**
+     * 删除用户（包含部门关联）
+     * @param id 用户ID
+     */
+    void deleteUser(Long id);
 }

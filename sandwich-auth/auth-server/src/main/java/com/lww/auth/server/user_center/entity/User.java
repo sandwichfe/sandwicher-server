@@ -1,6 +1,7 @@
 package com.lww.auth.server.user_center.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,6 +10,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -47,6 +49,10 @@ public class User implements Serializable {
 
     @Schema(description = "头像地址")
     private String avatarUrl;
+
+    @Schema(description = "部门ID列表")
+    @TableField(exist = false)
+    private List<Long> deptIds;
 
     @Schema(description = "是否已删除")
     private Boolean deleted;

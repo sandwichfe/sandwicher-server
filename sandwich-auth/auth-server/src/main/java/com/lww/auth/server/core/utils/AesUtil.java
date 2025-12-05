@@ -16,7 +16,6 @@ import java.util.Base64;
  * @since 2024-12-16
  */
 @UtilityClass
-@Component
 public class AesUtil {
 
     /**

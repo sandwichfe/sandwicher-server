@@ -5,12 +5,19 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lww.auth.server.core.utils.AesUtil;
 import com.lww.auth.server.user_center.entity.User;
+import com.lww.auth.server.user_center.entity.UserDept;
+import com.lww.auth.server.user_center.mapper.UserDeptMapper;
 import com.lww.auth.server.user_center.mapper.UserMapper;
 import com.lww.auth.server.user_center.service.UserService;
 import com.lww.common.utils.AssertUtils;
+import jakarta.annotation.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -22,6 +29,9 @@ import org.springframework.util.StringUtils;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Resource
+    private UserDeptMapper userDeptMapper;
 
     @Override
     public User getUserByUserName(String username) {
@@ -73,5 +83,53 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         updateUser.setPassword(passwordEncoder.encode(decryptedNewPassword));
         
         return baseMapper.updateById(updateUser) > 0;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void createUser(User user) {
+        if (StringUtils.hasText(user.getPassword())) {
+            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        }
+        this.save(user);
+        saveUserDepts(user.getId(), user.getDeptIds());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateUser(User user) {
+        this.updateById(user);
+        // 删除原有部门关联
+        userDeptMapper.delete(new LambdaQueryWrapper<UserDept>().eq(UserDept::getUserId, user.getId()));
+        // 保存新的部门关联
+        saveUserDepts(user.getId(), user.getDeptIds());
+    }
+
+    private void saveUserDepts(Long userId, List<Long> deptIds) {
+        if (deptIds != null && !deptIds.isEmpty()) {
+            for (Long deptId : deptIds) {
+                UserDept userDept = new UserDept();
+                userDept.setUserId(userId);
+                userDept.setDeptId(deptId);
+                userDeptMapper.insert(userDept);
+            }
+        }
+    }
+
+    @Override
+    public User getUserWithDepts(Long id) {
+        User user = this.getById(id);
+        if (user != null) {
+            List<UserDept> userDepts = userDeptMapper.selectList(new LambdaQueryWrapper<UserDept>().eq(UserDept::getUserId, id));
+            user.setDeptIds(userDepts.stream().map(UserDept::getDeptId).collect(Collectors.toList()));
+        }
+        return user;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteUser(Long id) {
+        this.removeById(id);
+        userDeptMapper.delete(new LambdaQueryWrapper<UserDept>().eq(UserDept::getUserId, id));
     }
 }

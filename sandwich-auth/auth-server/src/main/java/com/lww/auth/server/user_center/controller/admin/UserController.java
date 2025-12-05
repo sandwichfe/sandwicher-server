@@ -1,17 +1,22 @@
 package com.lww.auth.server.user_center.controller.admin;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lww.auth.server.user_center.entity.User;
 import com.lww.auth.server.user_center.service.UserService;
+import com.lww.auth.server.user_center.vo.UserPageQuery;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
-import com.lww.common.web.vo.PageVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -35,7 +40,7 @@ public class UserController {
     @Operation(summary = "新增用户")
     @PostMapping("/create")
     public ResponseResult<User> createUser(@RequestBody User user) {
-        userService.save(user);
+        userService.createUser(user);
         return ResultUtil.success(user);
     }
 
@@ -45,7 +50,7 @@ public class UserController {
     @Operation(summary = "根据ID获取用户")
     @GetMapping("/get/{id}")
     public ResponseResult<User> getUserById(@PathVariable Long id) {
-        User user = userService.getById(id);
+        User user = userService.getUserWithDepts(id);
         return ResultUtil.success(user);
     }
 
@@ -54,10 +59,14 @@ public class UserController {
      */
     @Operation(summary = "获取所有用户（分页）")
     @PostMapping("/list")
-    public ResponseResult<Page<User>> getAllUsers(@RequestBody PageVo pageVo) {
-        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public ResponseResult<Page<User>> getAllUsers(@RequestBody UserPageQuery pageVo) {
         Page<User> page = new Page<>(pageVo.getPageNum(), pageVo.getPageSize());
-        Page<User> users = userService.page(page);
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        if (pageVo.getDeptId() != null) {
+            // 关联查询，筛选出属于该部门的用户
+            wrapper.inSql(User::getId, "select user_id from t_user_dept where dept_id = " + pageVo.getDeptId());
+        }
+        Page<User> users = userService.page(page, wrapper);
         return ResultUtil.success(users);
     }
 
@@ -67,7 +76,7 @@ public class UserController {
     @Operation(summary = "更新用户")
     @PostMapping("/update")
     public ResponseResult<User> updateUser(@RequestBody User user) {
-        userService.updateById(user);
+        userService.updateUser(user);
         return ResultUtil.success(user);
     }
 
@@ -78,7 +87,7 @@ public class UserController {
     @Operation(summary = "删除用户")
     @DeleteMapping("/delete/{id}")
     public ResponseResult<Void> deleteUser(@PathVariable Long id) {
-        userService.removeById(id);
+        userService.deleteUser(id);
         return ResultUtil.success();
     }
 
