@@ -8,6 +8,7 @@ import com.lww.auth.server.user_center.vo.MenuTreeVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,32 +37,34 @@ public class AuthorityServiceImpl extends ServiceImpl<MenuMapper, Menu> implemen
 
 
     private List<MenuTreeVO> buildMenuTree(List<Menu> menus, Long parentId) {
+        // 对菜单列表按 sort 字段进行升序排序，确保同一层级菜单有序处理
+        menus.sort(Comparator.comparing(Menu::getSort, Comparator.nullsFirst(Comparator.naturalOrder())));
         return menus.stream()
-            .filter(menu -> menu.getMenuPid().equals(parentId))
-            .map(menu -> {
-                MenuTreeVO menuTreeVO = new MenuTreeVO();
-                menuTreeVO.setId(menu.getId());
-                menuTreeVO.setParentId(menu.getMenuPid());
-                menuTreeVO.setTitle(menu.getName());
-                menuTreeVO.setSort(menu.getSort());
-                menuTreeVO.setType(menu.getType());
-                menuTreeVO.setPath(menu.getPath());
-                menuTreeVO.setName(menu.getName());
-                menuTreeVO.setComponent(menu.getPath());
-                menuTreeVO.setRedirect(null);
-                menuTreeVO.setIcon(null);
-                menuTreeVO.setIsExternal(false);
-                menuTreeVO.setIsCache(false);
-                menuTreeVO.setIsHidden(false);
-                menuTreeVO.setPermission(menu.getAuthority());
-                menuTreeVO.setStatus(menu.getDeleted() ? 0 : 1);
-                menuTreeVO.setCreateUser(menu.getCreateUserId());
-                menuTreeVO.setCreateUserString("系统管理员");
-                menuTreeVO.setCreateTime(menu.getCreateTime().toString());
-                menuTreeVO.setDisabled(null);
-                menuTreeVO.setChildren(buildMenuTree(menus, menu.getId()));
-                return menuTreeVO;
-            })
-            .collect(Collectors.toList());
+                .filter(menu -> menu.getMenuPid().equals(parentId))
+                .sorted(Comparator.comparing(Menu::getSort, Comparator.nullsFirst(Comparator.naturalOrder())))
+                .map(menu -> {
+                    MenuTreeVO menuTreeVO = new MenuTreeVO();
+                    menuTreeVO.setId(menu.getId());
+                    menuTreeVO.setParentId(menu.getMenuPid());
+                    menuTreeVO.setTitle(menu.getName());
+                    menuTreeVO.setSort(menu.getSort());
+                    menuTreeVO.setType(menu.getType());
+                    menuTreeVO.setPath(menu.getPath());
+                    menuTreeVO.setName(menu.getName());
+                    menuTreeVO.setComponent(menu.getPath());
+                    menuTreeVO.setRedirect(null);
+                    menuTreeVO.setIcon(null);
+                    menuTreeVO.setIsExternal(false);
+                    menuTreeVO.setIsCache(false);
+                    menuTreeVO.setIsHidden(false);
+                    menuTreeVO.setPermission(menu.getAuthority());
+                    menuTreeVO.setStatus(menu.getDeleted() ? 0 : 1);
+                    menuTreeVO.setCreateUser(menu.getCreateUserId());
+                    menuTreeVO.setCreateUserString("系统管理员");
+                    menuTreeVO.setCreateTime(menu.getCreateTime().toString());
+                    menuTreeVO.setDisabled(null);
+                    menuTreeVO.setChildren(buildMenuTree(menus, menu.getId()));
+                    return menuTreeVO;
+                }).collect(Collectors.toList());
     }
 }
