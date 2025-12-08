@@ -7,9 +7,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
 /**
  * <p>
  * 部门表
@@ -22,7 +19,7 @@ import java.time.LocalDateTime;
 @Setter
 @TableName("t_dept")
 @Schema(name = "Dept", description = "部门表")
-public class Dept implements Serializable {
+public class Dept extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,9 +33,6 @@ public class Dept implements Serializable {
     @Schema(description = "部门名称")
     private String name;
 
-    @Schema(description = "显示顺序")
-    private Integer sort;
-
     @Schema(description = "负责人")
     private String leader;
 
@@ -50,19 +44,4 @@ public class Dept implements Serializable {
 
     @Schema(description = "部门状态（0正常 1停用）")
     private Boolean status;
-
-    @Schema(description = "删除标志（0代表存在 1代表删除）")
-    private Boolean deleted;
-
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
-
-    @Schema(description = "创建人")
-    private Long createUserId;
-
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
-
-    @Schema(description = "更新人")
-    private Long updateUserId;
 }
