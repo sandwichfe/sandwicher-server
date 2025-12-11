@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.lww.common.web.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +25,7 @@ import java.time.LocalDateTime;
 @Setter
 @TableName("t_menu")
 @Schema(name = "menu", description = "系统菜单表")
-public class Menu implements Serializable {
+public class Menu extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -44,20 +45,6 @@ public class Menu implements Serializable {
     @Schema(description = "所需权限")
     private String authority;
 
-    @Schema(description = "排序")
-    private Integer sort;
-
     @Schema(description = "0:菜单,1:接口")
     private Byte type;
-
-    @Schema(description = "0:启用,1:删除")
-    private Boolean deleted;
-
-    @Schema(description = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-
-    @Schema(description = "创建人")
-    @TableField(fill = FieldFill.INSERT)
-    private Long createUserId;
 }

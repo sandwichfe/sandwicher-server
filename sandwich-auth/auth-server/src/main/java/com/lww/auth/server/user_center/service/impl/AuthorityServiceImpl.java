@@ -58,9 +58,8 @@ public class AuthorityServiceImpl extends ServiceImpl<MenuMapper, Menu> implemen
                     menuTreeVO.setIsCache(false);
                     menuTreeVO.setIsHidden(false);
                     menuTreeVO.setPermission(menu.getAuthority());
-                    menuTreeVO.setStatus(menu.getDeleted() ? 0 : 1);
-                    menuTreeVO.setCreateUser(menu.getCreateUserId());
-                    menuTreeVO.setCreateUserString("系统管理员");
+                    menuTreeVO.setStatus(menu.getDeleted());
+                    menuTreeVO.setCreateUser(menu.getCreateBy());
                     menuTreeVO.setCreateTime(menu.getCreateTime().toString());
                     menuTreeVO.setDisabled(null);
                     menuTreeVO.setChildren(buildMenuTree(menus, menu.getId()));

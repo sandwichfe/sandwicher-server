@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.lww.common.web.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +25,7 @@ import java.util.List;
 @Setter
 @TableName("t_user")
 @Schema(name = "User", description = "基础用户信息表")
-public class User implements Serializable {
+public class User extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,15 +55,7 @@ public class User implements Serializable {
     @TableField(exist = false)
     private List<Long> deptIds;
 
-    @Schema(description = "是否已删除")
-    private Boolean deleted;
-
     @Schema(description = "用户来源")
     private String sourceFrom;
 
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
-
-    @Schema(description = "修改时间")
-    private LocalDateTime updateTime;
 }

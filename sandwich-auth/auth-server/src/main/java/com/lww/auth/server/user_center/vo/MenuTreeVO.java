@@ -25,7 +25,6 @@ public class MenuTreeVO {
     private String permission;
     private Integer status;
     private Long createUser;
-    private String createUserString;
     private String createTime;
     private Boolean disabled;
     private List<MenuTreeVO> children;

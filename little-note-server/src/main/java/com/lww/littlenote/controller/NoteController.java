@@ -1,6 +1,8 @@
 package com.lww.littlenote.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import java.time.LocalDateTime;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.lww.auth.resources_server.utils.SecurityUserUtils;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
@@ -8,11 +10,13 @@ import com.lww.littlenote.config.api.ApiLittleNoteRestController;
 import com.lww.littlenote.dto.NoteDto;
 import com.lww.littlenote.entity.Note;
 import com.lww.littlenote.service.NoteService;
+import com.lww.littlenote.vo.NoteVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author lww
@@ -25,11 +29,10 @@ public class NoteController {
     private NoteService noteService;
 
     @PostMapping("/listNote")
-    public ResponseResult<Page<Note>> listNote(@Valid NoteDto noteDto) {
-        // 在 Controller/Service 中直接调用
+    public ResponseResult<IPage<NoteVo>> listNote(@Valid NoteDto noteDto) {
         Long userId = SecurityUserUtils.getUserId();
         noteDto.setUserId(userId);
-        Page<Note> pages = noteService.listNote(noteDto);
+        IPage<NoteVo> pages = noteService.listNote(noteDto);
         return ResultUtil.success(pages);
     }
 

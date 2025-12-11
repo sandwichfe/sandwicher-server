@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+
+import com.lww.common.web.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +22,7 @@ import lombok.Setter;
 @Setter
 @TableName("note_group")
 @Schema(name = "NoteGroup", description = "")
-public class NoteGroup implements Serializable {
+public class NoteGroup extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

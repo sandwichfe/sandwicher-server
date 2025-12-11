@@ -3,6 +3,7 @@ package com.lww.auth.server.user_center.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.lww.common.web.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +22,7 @@ import java.io.Serializable;
 @Setter
 @TableName("t_user_role")
 @Schema(name = "UserRole", description = "")
-public class UserRole implements Serializable {
+public class UserRole extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

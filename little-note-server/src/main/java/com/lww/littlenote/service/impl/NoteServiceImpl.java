@@ -1,13 +1,17 @@
 package com.lww.littlenote.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lww.common.utils.CustomBeanUtils;
 import com.lww.littlenote.dto.NoteDto;
 import com.lww.littlenote.entity.Note;
 import com.lww.littlenote.mapper.NoteMapper;
 import com.lww.littlenote.service.NoteService;
+import com.lww.littlenote.vo.NoteVo;
 import jakarta.annotation.Resource;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,13 +30,15 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
     private NoteMapper noteMapper;
 
     @Override
-    public Page<Note> listNote(NoteDto noteDto) {
+    public IPage<NoteVo> listNote(NoteDto noteDto) {
         LambdaQueryWrapper<Note> wrapper = new LambdaQueryWrapper<>();
         wrapper
                 .select(Note::getId, Note::getTitle, Note::getCreateTime, Note::getUpdateTime,Note::getGroupId,Note::getUserId)
                 .eq(noteDto.getGroupId() != null, Note::getGroupId, noteDto.getGroupId())
                 .eq(noteDto.getUserId() != null, Note::getUserId, noteDto.getUserId())
                 .orderByDesc(Note::getUpdateTime);
-        return noteMapper.selectPage(new Page<>(noteDto.getPageNum(), noteDto.getPageSize()), wrapper);
+
+        Page<Note> notePage = noteMapper.selectPage(new Page<>(noteDto.getPageNum(), noteDto.getPageSize()), wrapper);
+        return notePage.convert(note -> CustomBeanUtils.copyProperties(note, NoteVo.class));
     }
 }

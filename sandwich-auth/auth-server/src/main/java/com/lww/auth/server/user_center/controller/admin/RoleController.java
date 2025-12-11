@@ -1,8 +1,11 @@
 package com.lww.auth.server.user_center.controller.admin;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lww.auth.server.user_center.entity.Role;
 import com.lww.auth.server.user_center.service.RoleService;
+import com.lww.auth.server.user_center.vo.RoleVo;
+import com.lww.common.utils.CustomBeanUtils;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.common.web.vo.PageVo;
@@ -44,9 +47,9 @@ public class RoleController {
 
     @Operation(summary = "获取所有角色")
     @PostMapping("/list")
-    public ResponseResult<Page<Role>> getAllRoles(@RequestBody PageVo pageVo) {
+    public ResponseResult<IPage<RoleVo>> getAllRoles(@RequestBody PageVo pageVo) {
         Page<Role> page = new Page<>(pageVo.getPageNum(), pageVo.getPageSize());
-        Page<Role> roles = roleService.page(page);
+        IPage<RoleVo> roles = roleService.page(page).convert(e -> CustomBeanUtils.copyProperties(e, RoleVo.class));
         return ResultUtil.success(roles);
     }
 

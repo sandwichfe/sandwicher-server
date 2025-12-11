@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lww.common.web.entity.BaseEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @TableName("todo_reward_item")
-public class TodoRewardItem implements Serializable {
+public class TodoRewardItem extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
