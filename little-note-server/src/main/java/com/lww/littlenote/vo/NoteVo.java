@@ -3,10 +3,7 @@ package com.lww.littlenote.vo;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lww.common.web.entity.BaseEntity;
 import lombok.Data;
 
 /**
@@ -18,7 +15,7 @@ import lombok.Data;
  * @since 2024-06-13
  */
 @Data
-public class NoteVo extends BaseEntity implements Serializable {
+public class NoteVo  implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

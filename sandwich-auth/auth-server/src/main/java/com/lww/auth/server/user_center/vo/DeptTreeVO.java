@@ -1,8 +1,8 @@
 package com.lww.auth.server.user_center.vo;
 
-import lombok.Data;
-
 import java.util.List;
+
+import lombok.Data;
 
 /**
  * @author lww
