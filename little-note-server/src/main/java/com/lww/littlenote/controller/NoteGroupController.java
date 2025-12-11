@@ -1,14 +1,19 @@
 package com.lww.littlenote.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lww.common.utils.CustomBeanUtils;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.common.web.vo.PageVo;
 import com.lww.littlenote.config.api.ApiLittleNoteRestController;
 import com.lww.littlenote.entity.NoteGroup;
+import com.lww.littlenote.req.NoteGroupReq;
 import com.lww.littlenote.service.NoteGroupService;
+import com.lww.littlenote.vo.NoteGroupVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,19 +36,23 @@ public class NoteGroupController {
     private NoteGroupService noteGroupService;
 
     @PostMapping("/listNoteGroup")
-    public ResponseResult<Page<NoteGroup>> listNoteGroup(@Valid PageVo pageVo) {
+    public ResponseResult<IPage<NoteGroupVo>> listNoteGroup(@Valid PageVo pageVo) {
         Page<NoteGroup> pages = noteGroupService.listNoteGroup(pageVo);
-        return ResultUtil.success(pages);
+        IPage<NoteGroupVo> pageVoList = pages.convert(item -> CustomBeanUtils.copyProperties(item, NoteGroupVo.class));
+        return ResultUtil.success(pageVoList);
     }
 
     @GetMapping("/getNoteGroup")
-    public NoteGroup getNote(Long id) {
-        return noteGroupService.getById(id);
+    public ResponseResult<NoteGroupVo> getNote(Long id) {
+        NoteGroup noteGroup = noteGroupService.getById(id);
+        return ResultUtil.success(CustomBeanUtils.copyProperties(noteGroup, NoteGroupVo.class));
     }
 
 
     @PostMapping("/addNoteGroup")
-    public ResponseResult<Long> addNote(@RequestBody NoteGroup note) {
+    public ResponseResult<Long> addNote(@RequestBody NoteGroupReq noteReq) {
+        NoteGroup note = new NoteGroup();
+        BeanUtils.copyProperties(noteReq, note);
         noteGroupService.save(note);
         Long id = note.getId();
         return ResultUtil.success(id);
@@ -51,7 +60,9 @@ public class NoteGroupController {
     }
 
     @PostMapping("/editNoteGroup")
-    public ResponseResult<Void> editNote(@RequestBody NoteGroup note) {
+    public ResponseResult<Void> editNote(@RequestBody NoteGroupReq noteReq) {
+        NoteGroup note = new NoteGroup();
+        BeanUtils.copyProperties(noteReq, note);
         noteGroupService.updateById(note);
         return ResultUtil.success();
     }

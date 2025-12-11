@@ -3,17 +3,21 @@ package com.lww.auth.server.user_center.controller.user;
 import java.util.List;
 
 import com.lww.auth.server.user_center.entity.User;
+import com.lww.auth.server.user_center.req.UserReq;
 import com.lww.auth.server.user_center.service.MenuService;
 import com.lww.auth.server.user_center.service.UserService;
 import com.lww.auth.server.user_center.vo.MenuTreeVO;
+import com.lww.auth.server.user_center.vo.UserVo;
 import com.lww.auth.server.user_center.vo.req.ChangePasswordRequest;
 import com.lww.auth.server.core.utils.AuthUserUtils;
+import com.lww.common.utils.CustomBeanUtils;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,10 +45,12 @@ public class UserApiController {
      */
     @Operation(summary = "获取当前登录用户信息")
     @GetMapping("/getCurrentUser")
-    public ResponseResult<User> getCurrentUser() {
+    public ResponseResult<UserVo> getCurrentUser() {
         Long userId = AuthUserUtils.getCurrentUserId();
         User user = userService.getById(userId);
-        return ResultUtil.success(user);
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(user, userVo);
+        return ResultUtil.success(userVo);
     }
 
 
@@ -53,11 +59,13 @@ public class UserApiController {
      */
     @Operation(summary = "更新当前登录用户信息")
     @PostMapping("/updateCurrentUser")
-    public ResponseResult<User> updateCurrentUser(@RequestBody User user) {
+    public ResponseResult<UserVo> updateCurrentUser(@RequestBody UserReq userReq) {
         Long userId = AuthUserUtils.getCurrentUserId();
+        User user = new User();
+        BeanUtils.copyProperties(userReq, user);
         user.setId(userId);
         userService.updateById(user);
-        return ResultUtil.success(user);
+        return ResultUtil.success(CustomBeanUtils.copyProperties(user, UserVo.class));
     }
 
     @Operation(summary = "获取当前用户的菜单")
