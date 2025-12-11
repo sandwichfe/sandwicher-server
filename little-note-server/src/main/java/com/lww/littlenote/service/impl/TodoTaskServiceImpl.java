@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lww.littlenote.dto.TodoTaskDto;
 import com.lww.littlenote.entity.TodoTask;
 import com.lww.littlenote.mapper.TodoTaskMapper;
+import com.lww.littlenote.req.TodoTaskQueryReq;
 import com.lww.littlenote.service.TodoTaskService;
 import com.lww.littlenote.service.TodoUserPointsService;
 import com.lww.littlenote.vo.TaskStatsVO;
@@ -34,14 +34,14 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     private final TodoUserPointsService todoUserPointsService;
 
     @Override
-    public Page<TodoTask> listTasks(TodoTaskDto todoTaskDto) {
-        Page<TodoTask> page = new Page<>(todoTaskDto.getPageNum(), todoTaskDto.getPageSize());
+    public Page<TodoTask> listTasks(TodoTaskQueryReq todoTaskQueryReq) {
+        Page<TodoTask> page = new Page<>(todoTaskQueryReq.getPageNum(), todoTaskQueryReq.getPageSize());
         LambdaQueryWrapper<TodoTask> queryWrapper = new LambdaQueryWrapper<>();
         
-        queryWrapper.eq(TodoTask::getUserId, todoTaskDto.getUserId())
-                .eq(StringUtils.hasText(todoTaskDto.getTaskType()), TodoTask::getTaskType, todoTaskDto.getTaskType())
-                .eq(StringUtils.hasText(todoTaskDto.getCategory()), TodoTask::getCategory, todoTaskDto.getCategory())
-                .eq(todoTaskDto.getTodoDate() != null, TodoTask::getTodoDate, todoTaskDto.getTodoDate())
+        queryWrapper.eq(TodoTask::getUserId, todoTaskQueryReq.getUserId())
+                .eq(StringUtils.hasText(todoTaskQueryReq.getTaskType()), TodoTask::getTaskType, todoTaskQueryReq.getTaskType())
+                .eq(StringUtils.hasText(todoTaskQueryReq.getCategory()), TodoTask::getCategory, todoTaskQueryReq.getCategory())
+                .eq(todoTaskQueryReq.getTodoDate() != null, TodoTask::getTodoDate, todoTaskQueryReq.getTodoDate())
                 .orderByDesc(TodoTask::getCreateTime);
         
         return this.page(page, queryWrapper);

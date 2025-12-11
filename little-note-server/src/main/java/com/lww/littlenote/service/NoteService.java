@@ -3,8 +3,8 @@ package com.lww.littlenote.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lww.littlenote.dto.NoteDto;
 import com.lww.littlenote.entity.Note;
+import com.lww.littlenote.req.NoteQueryReq;
 import com.lww.littlenote.vo.NoteVo;
 
 /**
@@ -23,5 +23,5 @@ public interface NoteService extends IService<Note> {
      * @param pageVo pageVo
      * @return Page
      */
-    IPage<NoteVo> listNote(NoteDto pageVo);
+    IPage<NoteVo> listNote(NoteQueryReq pageVo);
 }

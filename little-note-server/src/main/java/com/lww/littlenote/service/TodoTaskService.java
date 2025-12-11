@@ -2,8 +2,8 @@ package com.lww.littlenote.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lww.littlenote.dto.TodoTaskDto;
 import com.lww.littlenote.entity.TodoTask;
+import com.lww.littlenote.req.TodoTaskQueryReq;
 import com.lww.littlenote.vo.TaskStatsVO;
 
 /**
@@ -19,10 +19,10 @@ public interface TodoTaskService extends IService<TodoTask> {
     /**
      * 分页查询任务列表
      *
-     * @param todoTaskDto 查询条件
+     * @param todoTaskQueryReq 查询条件
      * @return 分页结果
      */
-    Page<TodoTask> listTasks(TodoTaskDto todoTaskDto);
+    Page<TodoTask> listTasks(TodoTaskQueryReq todoTaskQueryReq);
 
     /**
      * 完成任务一次

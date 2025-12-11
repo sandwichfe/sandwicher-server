@@ -4,11 +4,11 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lww.littlenote.dto.TodoRewardDto;
 import com.lww.littlenote.entity.TodoRewardItem;
 import com.lww.littlenote.entity.TodoUserPoints;
 import com.lww.littlenote.entity.TodoUserReward;
 import com.lww.littlenote.mapper.TodoRewardItemMapper;
+import com.lww.littlenote.req.TodoRewardQueryReq;
 import com.lww.littlenote.service.TodoRewardItemService;
 import com.lww.littlenote.service.TodoUserPointsService;
 import com.lww.littlenote.service.TodoUserRewardService;
@@ -38,14 +38,14 @@ public class TodoRewardItemServiceImpl extends ServiceImpl<TodoRewardItemMapper,
     private TodoUserRewardService todoUserRewardService;
 
     @Override
-    public Page<TodoRewardItem> listRewards(TodoRewardDto todoRewardDto) {
-        Page<TodoRewardItem> page = new Page<>(todoRewardDto.getPageNum(), todoRewardDto.getPageSize());
+    public Page<TodoRewardItem> listRewards(TodoRewardQueryReq todoRewardQueryReq) {
+        Page<TodoRewardItem> page = new Page<>(todoRewardQueryReq.getPageNum(), todoRewardQueryReq.getPageSize());
         LambdaQueryWrapper<TodoRewardItem> queryWrapper = new LambdaQueryWrapper<>();
         
-        queryWrapper.eq(TodoRewardItem::getUserId, todoRewardDto.getUserId())
-                .eq(ObjectUtil.isNotNull(todoRewardDto.getStatus()), TodoRewardItem::getStatus, todoRewardDto.getStatus())
-                .ge(todoRewardDto.getMinPoints() != null, TodoRewardItem::getPoints, todoRewardDto.getMinPoints())
-                .le(todoRewardDto.getMaxPoints() != null, TodoRewardItem::getPoints, todoRewardDto.getMaxPoints())
+        queryWrapper.eq(TodoRewardItem::getUserId, todoRewardQueryReq.getUserId())
+                .eq(ObjectUtil.isNotNull(todoRewardQueryReq.getStatus()), TodoRewardItem::getStatus, todoRewardQueryReq.getStatus())
+                .ge(todoRewardQueryReq.getMinPoints() != null, TodoRewardItem::getPoints, todoRewardQueryReq.getMinPoints())
+                .le(todoRewardQueryReq.getMaxPoints() != null, TodoRewardItem::getPoints, todoRewardQueryReq.getMaxPoints())
                 .orderByAsc(TodoRewardItem::getPoints);
         
         return this.page(page, queryWrapper);
