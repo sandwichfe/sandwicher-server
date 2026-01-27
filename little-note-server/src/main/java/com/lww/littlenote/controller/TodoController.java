@@ -125,6 +125,10 @@ public class TodoController {
         task.setUpdateTime(LocalDateTime.now());
         task.setUpdateBy(userId);
         
+        if (task.getTargetCount() != null && task.getTargetCount() <= 0) {
+            task.setTargetCount(1);
+        }
+        
         boolean updated = todoTaskService.updateById(task);
         if (updated) {
             return ResultUtil.success(CustomBeanUtils.copyProperties(task, TodoTaskVo.class));

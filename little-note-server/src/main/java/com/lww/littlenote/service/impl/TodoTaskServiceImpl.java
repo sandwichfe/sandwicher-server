@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lww.common.web.exception.AppException;
 import com.lww.littlenote.entity.TodoTask;
 import com.lww.littlenote.mapper.TodoTaskMapper;
 import com.lww.littlenote.req.TodoTaskQueryReq;
@@ -49,19 +50,28 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean completeTaskOnce(Long taskId, Long userId) {
+    public void completeTaskOnce(Long taskId, Long userId) {
         TodoTask task = this.getById(taskId);
         if (task == null || !task.getUserId().equals(userId)) {
-            return false;
+            throw new AppException("任务不存在或不属于该用户");
         }
         
         // 检查是否已完成
         if (task.getCompletedCount() >= task.getTargetCount()) {
-            return false;
+            throw new AppException("任务已完成，不能重复完成");
+        }
+
+        // 检查每日限制
+        if ( Integer.valueOf(1).equals(task.getIsDailyLimit())) {
+            if (task.getLastCompleteTime() != null && 
+                task.getLastCompleteTime().toLocalDate().isEqual(LocalDate.now())) {
+                throw new AppException("今日已完成，不能重复完成");
+            }
         }
         
         // 增加完成次数
         task.setCompletedCount(task.getCompletedCount() + 1);
+        task.setLastCompleteTime(LocalDateTime.now());
         task.setUpdateTime(LocalDateTime.now());
         task.setUpdateBy(userId);
         
@@ -72,8 +82,6 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
             todoUserPointsService.addPoints(userId, task.getPoints(), "task_complete", taskId, 
                     "完成任务：" + task.getContent());
         }
-        
-        return updated;
     }
 
     @Override
@@ -90,6 +98,7 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
         dailyTask.setPoints(originalTask.getPoints());
         dailyTask.setEncouragement(originalTask.getEncouragement());
         dailyTask.setTargetCount(originalTask.getTargetCount());
+        dailyTask.setIsDailyLimit(originalTask.getIsDailyLimit());
         dailyTask.setCompletedCount(0);
         dailyTask.setOriginalTaskId(originalTaskId);
         dailyTask.setTodoDate(LocalDate.now());

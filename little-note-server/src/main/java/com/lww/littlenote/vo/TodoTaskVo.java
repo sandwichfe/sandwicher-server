@@ -16,6 +16,7 @@ public class TodoTaskVo implements Serializable {
     private String encouragement;
     private Integer targetCount;
     private Integer completedCount;
+    private Integer isDailyLimit;
     private Long originalTaskId;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate todoDate;
@@ -24,4 +25,6 @@ public class TodoTaskVo implements Serializable {
     private LocalDateTime createTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime updateTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime lastCompleteTime;
 }

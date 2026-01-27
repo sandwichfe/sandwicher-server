@@ -13,5 +13,10 @@ public class TodoTaskReq implements Serializable {
     private Integer points;
     private String encouragement;
     private Integer targetCount;
+    private Integer isDailyLimit;
     private LocalDate todoDate;
+
+    public void setType(String type) {
+        this.taskType = type;
+    }
 }

@@ -100,4 +100,15 @@ public class TodoTask extends BaseEntity implements Serializable {
      * 更新人
      */
     private Long updateBy;
+
+    /**
+     * 是否每日仅可完成一次: 0-否, 1-是
+     */
+    private Integer isDailyLimit;
+
+    /**
+     * 上次完成时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime lastCompleteTime;
 }

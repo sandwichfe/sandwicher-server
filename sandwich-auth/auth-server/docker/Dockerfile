@@ -15,8 +15,8 @@ RUN echo "http://mirrors.aliyun.com/alpine/v3.14/main" > /etc/apk/repositories &
     echo "Asia/Shanghai" > /etc/timezone && \
     # 清理缓存（不要删除 tzdata！）
     rm -rf /var/cache/apk/*
-# 开放端口9000
-EXPOSE 9088
+
+
 # 执行命令
 ENTRYPOINT ["java","-jar","/app/app.jar"]
 

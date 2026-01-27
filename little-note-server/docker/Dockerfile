@@ -13,9 +13,8 @@ RUN echo "http://mirrors.aliyun.com/alpine/v3.14/main" > /etc/apk/repositories &
     cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
     # 清理缓存（不要删除 tzdata！）
-    rm -rf /var/cache/apk/*
-# 开放端口9000
-EXPOSE 8000
+    rm -rf /var/cache/apk/* \
+
 # 执行命令
 ENTRYPOINT ["java", "-Djasypt.encryptor.password=xxx", "-jar", "/app/app.jar"]
 
