@@ -75,6 +75,12 @@ public class TodoTask extends BaseEntity implements Serializable {
     private LocalDate todoDate;
 
     /**
+     * 截止时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime deadline;
+
+    /**
      * 用户ID
      */
     private Long userId;

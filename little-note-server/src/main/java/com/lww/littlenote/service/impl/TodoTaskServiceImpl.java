@@ -13,9 +13,7 @@ import com.lww.littlenote.req.TodoTaskQueryReq;
 import com.lww.littlenote.service.TodoTaskService;
 import com.lww.littlenote.service.TodoUserPointsService;
 import com.lww.littlenote.vo.TaskStatsVO;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -43,6 +41,8 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
                 .eq(StringUtils.hasText(todoTaskQueryReq.getTaskType()), TodoTask::getTaskType, todoTaskQueryReq.getTaskType())
                 .eq(StringUtils.hasText(todoTaskQueryReq.getCategory()), TodoTask::getCategory, todoTaskQueryReq.getCategory())
                 .eq(todoTaskQueryReq.getTodoDate() != null, TodoTask::getTodoDate, todoTaskQueryReq.getTodoDate())
+                .apply("pending".equals(todoTaskQueryReq.getStatus()), "completed_count < target_count")
+                .apply("completed".equals(todoTaskQueryReq.getStatus()), "completed_count >= target_count")
                 .orderByDesc(TodoTask::getCreateTime);
         
         return this.page(page, queryWrapper);
@@ -102,6 +102,7 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
         dailyTask.setCompletedCount(0);
         dailyTask.setOriginalTaskId(originalTaskId);
         dailyTask.setTodoDate(LocalDate.now());
+        dailyTask.setDeadline(originalTask.getDeadline());
         dailyTask.setUserId(userId);
         dailyTask.setCreateTime(LocalDateTime.now());
         dailyTask.setCreateBy(userId);

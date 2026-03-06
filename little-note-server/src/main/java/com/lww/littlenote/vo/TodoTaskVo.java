@@ -1,10 +1,11 @@
 package com.lww.littlenote.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Data
 public class TodoTaskVo implements Serializable {
@@ -20,6 +21,8 @@ public class TodoTaskVo implements Serializable {
     private Long originalTaskId;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate todoDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime deadline;
     private Long userId;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createTime;
