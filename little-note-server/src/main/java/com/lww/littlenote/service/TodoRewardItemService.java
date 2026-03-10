@@ -1,9 +1,7 @@
 package com.lww.littlenote.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.littlenote.entity.TodoRewardItem;
-import com.lww.littlenote.req.TodoRewardQueryReq;
 
 /**
  * <p>
@@ -15,20 +13,4 @@ import com.lww.littlenote.req.TodoRewardQueryReq;
  */
 public interface TodoRewardItemService extends IService<TodoRewardItem> {
 
-    /**
-     * 分页查询奖励商品列表
-     *
-     * @param todoRewardQueryReq 查询条件
-     * @return 分页结果
-     */
-    Page<TodoRewardItem> listRewards(TodoRewardQueryReq todoRewardQueryReq);
-
-    /**
-     * 兑换奖励
-     *
-     * @param rewardId 奖励ID
-     * @param userId 用户ID
-     * @return 是否成功
-     */
-    boolean exchangeReward(Long rewardId, Long userId);
 }

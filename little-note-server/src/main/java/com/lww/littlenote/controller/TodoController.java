@@ -9,14 +9,10 @@ import com.lww.common.utils.CustomBeanUtils;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.littlenote.config.api.ApiLittleNoteRestController;
-import com.lww.littlenote.entity.TodoRewardItem;
 import com.lww.littlenote.entity.TodoTask;
 import com.lww.littlenote.entity.TodoUserPoints;
-import com.lww.littlenote.entity.TodoUserReward;
 import com.lww.littlenote.req.DayViewReq;
 import com.lww.littlenote.req.MonthViewReq;
-import com.lww.littlenote.req.TodoRewardItemReq;
-import com.lww.littlenote.req.TodoRewardQueryReq;
 import com.lww.littlenote.req.TodoTaskQueryReq;
 import com.lww.littlenote.req.TodoTaskReq;
 import com.lww.littlenote.req.WeekViewReq;
@@ -27,10 +23,8 @@ import com.lww.littlenote.service.TodoUserRewardService;
 import com.lww.littlenote.vo.DayViewVO;
 import com.lww.littlenote.vo.MonthViewVO;
 import com.lww.littlenote.vo.TaskStatsVO;
-import com.lww.littlenote.vo.TodoRewardItemVo;
 import com.lww.littlenote.vo.TodoTaskVo;
 import com.lww.littlenote.vo.TodoUserPointsVo;
-import com.lww.littlenote.vo.TodoUserRewardVo;
 import com.lww.littlenote.vo.WeekViewVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -168,16 +162,6 @@ public class TodoController {
     }
 
     /**
-     * 复制任务到每日待办
-     */
-    @PostMapping("/tasks/{id}/copy-to-daily")
-    public ResponseResult<Long> copyToDaily(@PathVariable Long id) {
-        Long userId = SecurityUserUtils.getUserId();
-        Long newTaskId = todoTaskService.copyToDaily(id, userId);
-        return newTaskId != null ? ResultUtil.success(newTaskId) : ResultUtil.error("复制失败");
-    }
-
-    /**
      * 获取任务统计
      */
     @GetMapping("/tasks/stats")
@@ -223,115 +207,4 @@ public class TodoController {
         return ResultUtil.success(CustomBeanUtils.copyProperties(userPoints, TodoUserPointsVo.class));
     }
 
-    /**
-     * 分页查询奖励商品列表
-     */
-    @PostMapping("/rewards/list")
-    public ResponseResult<IPage<TodoRewardItemVo>> listRewards(@RequestBody TodoRewardQueryReq todoRewardQueryReq) {
-        Long userId = SecurityUserUtils.getUserId();
-        todoRewardQueryReq.setUserId(userId);
-        Page<TodoRewardItem> page = todoRewardItemService.listRewards(todoRewardQueryReq);
-        IPage<TodoRewardItemVo> pageVo = page.convert(item -> CustomBeanUtils.copyProperties(item, TodoRewardItemVo.class));
-        return ResultUtil.success(pageVo);
-    }
-
-    /**
-     * 获取奖励详情
-     */
-    @GetMapping("/rewards/{id}")
-    public ResponseResult<TodoRewardItemVo> getReward(@PathVariable Long id) {
-        Long userId = SecurityUserUtils.getUserId();
-        TodoRewardItem reward = todoRewardItemService.getById(id);
-        if (reward == null || !reward.getUserId().equals(userId)) {
-            return ResultUtil.error("奖励不存在");
-        }
-        return ResultUtil.success(CustomBeanUtils.copyProperties(reward, TodoRewardItemVo.class));
-    }
-
-    /**
-     * 添加奖励商品
-     */
-    @PostMapping("/rewards")
-    public ResponseResult<Void> addReward(@RequestBody TodoRewardItemReq rewardReq) {
-        Long userId = SecurityUserUtils.getUserId();
-        TodoRewardItem reward = new TodoRewardItem();
-        BeanUtils.copyProperties(rewardReq, reward);
-        reward.setUserId(userId);
-        reward.setStatus(1);
-        reward.setCreateTime(LocalDateTime.now());
-        reward.setCreateBy(userId);
-        
-        todoRewardItemService.save(reward);
-        return ResultUtil.success();
-    }
-
-    /**
-     * 编辑奖励商品
-     */
-    @PutMapping("/rewards/{id}")
-    public ResponseResult<Void> editReward(@PathVariable Long id, @RequestBody TodoRewardItemReq rewardReq) {
-        Long userId = SecurityUserUtils.getUserId();
-        TodoRewardItem existingReward = todoRewardItemService.getById(id);
-        if (existingReward == null || !existingReward.getUserId().equals(userId)) {
-            return ResultUtil.error("奖励不存在");
-        }
-        
-        TodoRewardItem reward = new TodoRewardItem();
-        BeanUtils.copyProperties(rewardReq, reward);
-        reward.setId(id);
-        reward.setUserId(userId);
-        reward.setUpdateTime(LocalDateTime.now());
-        reward.setUpdateBy(userId);
-        
-        todoRewardItemService.updateById(reward);
-        return ResultUtil.success();
-    }
-
-    /**
-     * 删除奖励商品
-     */
-    @DeleteMapping("/rewards/{id}")
-    public ResponseResult<Void> deleteReward(@PathVariable Long id) {
-        Long userId = SecurityUserUtils.getUserId();
-        TodoRewardItem reward = todoRewardItemService.getById(id);
-        if (reward == null || !reward.getUserId().equals(userId)) {
-            return ResultUtil.error("奖励不存在");
-        }
-        
-        todoRewardItemService.removeById(id);
-        return ResultUtil.success();
-    }
-
-    /**
-     * 兑换奖励
-     */
-    @PostMapping("/rewards/{id}/exchange")
-    public ResponseResult<Void> exchangeReward(@PathVariable Long id) {
-        Long userId = SecurityUserUtils.getUserId();
-        todoRewardItemService.exchangeReward(id, userId);
-        return ResultUtil.success();
-    }
-
-    /**
-     * 分页查询用户奖励列表
-     */
-    @GetMapping("/user-rewards")
-    public ResponseResult<IPage<TodoUserRewardVo>> listUserRewards(@RequestParam(defaultValue = "1") Integer pageNum,
-                                         @RequestParam(defaultValue = "10") Integer pageSize,
-                                         @RequestParam(required = false) String status) {
-        Long userId = SecurityUserUtils.getUserId();
-        Page<TodoUserReward> page = todoUserRewardService.listUserRewards(userId, pageNum, pageSize, status);
-        IPage<TodoUserRewardVo> pageVo = page.convert(item -> CustomBeanUtils.copyProperties(item, TodoUserRewardVo.class));
-        return ResultUtil.success(pageVo);
-    }
-
-    /**
-     * 使用奖励
-     */
-    @PostMapping("/user-rewards/{id}/use")
-    public ResponseResult<Void> useReward(@PathVariable Long id) {
-        Long userId = SecurityUserUtils.getUserId();
-        todoUserRewardService.useReward(id, userId);
-        return ResultUtil.success();
-    }
 }

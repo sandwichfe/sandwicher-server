@@ -1,5 +1,6 @@
 package com.lww.littlenote.vo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -14,21 +15,25 @@ public class TaskStatsVO {
     /**
      * 总任务数
      */
+    @Schema(description = "总任务数")
     private Long totalTasks;
 
     /**
      * 已完成任务数
      */
+    @Schema(description = "已完成任务数")
     private Long completedTasks;
 
     /**
      * 待完成任务数
      */
+    @Schema(description = "待完成任务数")
     private Long pendingTasks;
 
     /**
      * 任务完成率(0.0到1.0之间)
      */
+    @Schema(description = "任务完成率(0.0到1.0之间)")
     private Double completionRate;
 
     /**

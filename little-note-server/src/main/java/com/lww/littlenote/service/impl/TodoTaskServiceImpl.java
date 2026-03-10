@@ -101,32 +101,6 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
         }
     }
 
-    @Override
-    public Long copyToDaily(Long originalTaskId, Long userId) {
-        TodoTask originalTask = this.getById(originalTaskId);
-        if (originalTask == null || !originalTask.getUserId().equals(userId)) {
-            return null;
-        }
-        
-        TodoTask dailyTask = new TodoTask();
-        dailyTask.setContent(originalTask.getContent());
-        dailyTask.setTaskType(originalTask.getTaskType());
-        dailyTask.setCategory("daily");
-        dailyTask.setPoints(originalTask.getPoints());
-        dailyTask.setTargetCount(originalTask.getTargetCount());
-        dailyTask.setIsDailyLimit(originalTask.getIsDailyLimit());
-        dailyTask.setCompletedCount(0);
-        dailyTask.setStatus(0);
-        dailyTask.setOriginalTaskId(originalTaskId);
-        dailyTask.setTodoDate(LocalDate.now());
-        dailyTask.setDeadline(originalTask.getDeadline());
-        dailyTask.setUserId(userId);
-        dailyTask.setCreateTime(LocalDateTime.now());
-        dailyTask.setCreateBy(userId);
-        
-        boolean saved = this.save(dailyTask);
-        return saved ? dailyTask.getId() : null;
-    }
 
     @Override
     public TaskStatsVO getTaskStats(Long userId, String category) {

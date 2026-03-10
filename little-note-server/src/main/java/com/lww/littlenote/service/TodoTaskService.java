@@ -37,15 +37,6 @@ public interface TodoTaskService extends IService<TodoTask> {
     void completeTaskOnce(Long taskId, Long userId);
 
     /**
-     * 复制任务到每日待办
-     *
-     * @param originalTaskId 原始任务ID
-     * @param userId 用户ID
-     * @return 新任务ID
-     */
-    Long copyToDaily(Long originalTaskId, Long userId);
-
-    /**
      * 获取用户任务统计
      *
      * @param userId 用户ID
