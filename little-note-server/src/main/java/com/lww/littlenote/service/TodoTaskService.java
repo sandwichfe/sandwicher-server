@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.littlenote.entity.TodoTask;
 import com.lww.littlenote.req.TodoTaskQueryReq;
+import com.lww.littlenote.vo.DayViewVO;
+import com.lww.littlenote.vo.MonthViewVO;
 import com.lww.littlenote.vo.TaskStatsVO;
+import com.lww.littlenote.vo.WeekViewVO;
 
 /**
  * <p>
@@ -50,4 +53,33 @@ public interface TodoTaskService extends IService<TodoTask> {
      * @return 统计信息
      */
     TaskStatsVO getTaskStats(Long userId, String category);
+
+    /**
+     * 日视图
+     *
+     * @param date   日期，格式 yyyy-MM-dd
+     * @param userId 用户ID
+     * @return 日视图数据
+     */
+    DayViewVO getDayView(String date, Long userId);
+
+    /**
+     * 周视图
+     *
+     * @param year   年份
+     * @param week   ISO周数
+     * @param userId 用户ID
+     * @return 周视图数据
+     */
+    WeekViewVO getWeekView(Integer year, Integer week, Long userId);
+
+    /**
+     * 月视图
+     *
+     * @param year   年份
+     * @param month  月份
+     * @param userId 用户ID
+     * @return 月视图数据
+     */
+    MonthViewVO getMonthView(Integer year, Integer month, Long userId);
 }

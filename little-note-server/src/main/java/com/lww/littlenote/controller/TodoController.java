@@ -13,19 +13,25 @@ import com.lww.littlenote.entity.TodoRewardItem;
 import com.lww.littlenote.entity.TodoTask;
 import com.lww.littlenote.entity.TodoUserPoints;
 import com.lww.littlenote.entity.TodoUserReward;
+import com.lww.littlenote.req.DayViewReq;
+import com.lww.littlenote.req.MonthViewReq;
 import com.lww.littlenote.req.TodoRewardItemReq;
 import com.lww.littlenote.req.TodoRewardQueryReq;
 import com.lww.littlenote.req.TodoTaskQueryReq;
 import com.lww.littlenote.req.TodoTaskReq;
+import com.lww.littlenote.req.WeekViewReq;
 import com.lww.littlenote.service.TodoRewardItemService;
 import com.lww.littlenote.service.TodoTaskService;
 import com.lww.littlenote.service.TodoUserPointsService;
 import com.lww.littlenote.service.TodoUserRewardService;
+import com.lww.littlenote.vo.DayViewVO;
+import com.lww.littlenote.vo.MonthViewVO;
 import com.lww.littlenote.vo.TaskStatsVO;
 import com.lww.littlenote.vo.TodoRewardItemVo;
 import com.lww.littlenote.vo.TodoTaskVo;
 import com.lww.littlenote.vo.TodoUserPointsVo;
 import com.lww.littlenote.vo.TodoUserRewardVo;
+import com.lww.littlenote.vo.WeekViewVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -93,6 +99,7 @@ public class TodoController {
         BeanUtils.copyProperties(taskReq, task);
         task.setUserId(userId);
         task.setCompletedCount(0);
+        task.setStatus(0);
         task.setCreateTime(LocalDateTime.now());
         task.setCreateBy(userId);
         
@@ -177,6 +184,33 @@ public class TodoController {
     public ResponseResult<TaskStatsVO> getTaskStats(@RequestParam(required = false) String category) {
         Long userId = SecurityUserUtils.getUserId();
         return ResultUtil.success(todoTaskService.getTaskStats(userId, category));
+    }
+
+    /**
+     * 日视图
+     */
+    @PostMapping("/tasks/day-view")
+    public ResponseResult<DayViewVO> getDayView(@RequestBody DayViewReq req) {
+        Long userId = SecurityUserUtils.getUserId();
+        return ResultUtil.success(todoTaskService.getDayView(req.getDate(), userId));
+    }
+
+    /**
+     * 周视图
+     */
+    @PostMapping("/tasks/week-view")
+    public ResponseResult<WeekViewVO> getWeekView(@RequestBody WeekViewReq req) {
+        Long userId = SecurityUserUtils.getUserId();
+        return ResultUtil.success(todoTaskService.getWeekView(req.getYear(), req.getWeek(), userId));
+    }
+
+    /**
+     * 月视图
+     */
+    @PostMapping("/tasks/month-view")
+    public ResponseResult<MonthViewVO> getMonthView(@RequestBody MonthViewReq req) {
+        Long userId = SecurityUserUtils.getUserId();
+        return ResultUtil.success(todoTaskService.getMonthView(req.getYear(), req.getMonth(), userId));
     }
 
     /**

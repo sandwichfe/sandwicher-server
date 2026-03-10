@@ -49,11 +49,6 @@ public class TodoTask extends BaseEntity implements Serializable {
     private Integer points;
 
     /**
-     * 鼓励语
-     */
-    private String encouragement;
-
-    /**
      * 目标完成次数
      */
     private Integer targetCount;
@@ -106,6 +101,11 @@ public class TodoTask extends BaseEntity implements Serializable {
      * 更新人
      */
     private Long updateBy;
+
+    /**
+     * 任务状态: 0-未完成, 1-已完成
+     */
+    private Integer status;
 
     /**
      * 是否每日仅可完成一次: 0-否, 1-是

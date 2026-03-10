@@ -14,9 +14,9 @@ public class TodoTaskVo implements Serializable {
     private String taskType;
     private String category;
     private Integer points;
-    private String encouragement;
     private Integer targetCount;
     private Integer completedCount;
+    private Integer status;
     private Integer isDailyLimit;
     private Long originalTaskId;
     @JsonFormat(pattern = "yyyy-MM-dd")
