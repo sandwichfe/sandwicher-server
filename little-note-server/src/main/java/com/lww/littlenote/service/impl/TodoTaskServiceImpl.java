@@ -49,9 +49,18 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
         
         queryWrapper.eq(TodoTask::getUserId, todoTaskQueryReq.getUserId())
                 .eq(StringUtils.hasText(todoTaskQueryReq.getTaskType()), TodoTask::getTaskType, todoTaskQueryReq.getTaskType())
-                .eq(TodoTask::getStatus, todoTaskQueryReq.getStatus())
-                .orderByDesc(TodoTask::getCreateTime);
-        
+                .eq(TodoTask::getStatus, todoTaskQueryReq.getStatus());
+
+        if ("1".equals(todoTaskQueryReq.getStatus())){
+            // 已完成任务，先根据完成时间排序
+            queryWrapper.orderByDesc(TodoTask::getLastCompleteTime);
+        }else{
+            queryWrapper
+                    // 先根据deadline
+                    .orderByDesc(TodoTask::getDeadline)
+                    .orderByDesc(TodoTask::getLastCompleteTime)
+                    .orderByDesc(TodoTask::getCreateTime);
+        }
         return this.page(page, queryWrapper);
     }
 

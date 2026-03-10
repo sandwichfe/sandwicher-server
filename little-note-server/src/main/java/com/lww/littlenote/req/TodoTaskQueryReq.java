@@ -38,7 +38,7 @@ public class TodoTaskQueryReq implements Serializable {
 
 
     /**
-     * 完成状态: pending-待完成, completed-已完成
+     * 完成状态: 0-待完成, 1-已完成
      */
     private String status;
 }
