@@ -38,10 +38,6 @@ public class TodoTask extends BaseEntity implements Serializable {
      */
     private String taskType;
 
-    /**
-     * 任务类别: global-全局任务, daily-每日待办
-     */
-    private String category;
 
     /**
      * 积分奖励
@@ -57,17 +53,6 @@ public class TodoTask extends BaseEntity implements Serializable {
      * 已完成次数
      */
     private Integer completedCount;
-
-    /**
-     * 原始任务ID(从全局任务复制到每日待办时)
-     */
-    private Long originalTaskId;
-
-    /**
-     * 待办日期(仅每日待办使用)
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate todoDate;
 
     /**
      * 截止时间

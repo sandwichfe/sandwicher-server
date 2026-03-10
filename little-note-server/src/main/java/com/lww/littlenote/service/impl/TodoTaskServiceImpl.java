@@ -20,7 +20,6 @@ import com.lww.littlenote.entity.TodoTask;
 import com.lww.littlenote.mapper.TodoTaskMapper;
 import com.lww.littlenote.req.TodoTaskQueryReq;
 import com.lww.littlenote.service.TodoTaskService;
-import com.lww.littlenote.service.TodoUserPointsService;
 import com.lww.littlenote.vo.DayViewVO;
 import com.lww.littlenote.vo.MonthViewVO;
 import com.lww.littlenote.vo.TaskStatsVO;
@@ -43,8 +42,6 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> implements TodoTaskService {
 
-    private final TodoUserPointsService todoUserPointsService;
-
     @Override
     public Page<TodoTask> listTasks(TodoTaskQueryReq todoTaskQueryReq) {
         Page<TodoTask> page = new Page<>(todoTaskQueryReq.getPageNum(), todoTaskQueryReq.getPageSize());
@@ -52,8 +49,6 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
         
         queryWrapper.eq(TodoTask::getUserId, todoTaskQueryReq.getUserId())
                 .eq(StringUtils.hasText(todoTaskQueryReq.getTaskType()), TodoTask::getTaskType, todoTaskQueryReq.getTaskType())
-                .eq(StringUtils.hasText(todoTaskQueryReq.getCategory()), TodoTask::getCategory, todoTaskQueryReq.getCategory())
-                .eq(todoTaskQueryReq.getTodoDate() != null, TodoTask::getTodoDate, todoTaskQueryReq.getTodoDate())
                 .eq(TodoTask::getStatus, todoTaskQueryReq.getStatus())
                 .orderByDesc(TodoTask::getCreateTime);
         
@@ -92,13 +87,7 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
             task.setStatus(1);
         }
 
-        boolean updated = this.updateById(task);
-        
-        // 奖励积分
-        if (updated && task.getPoints() != null && task.getPoints() > 0) {
-            todoUserPointsService.addPoints(userId, task.getPoints(), "task_complete", taskId, 
-                    "完成任务：" + task.getContent());
-        }
+        this.updateById(task);
     }
 
 
@@ -106,14 +95,6 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     public TaskStatsVO getTaskStats(Long userId, String category) {
         LambdaQueryWrapper<TodoTask> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(TodoTask::getUserId, userId);
-        
-        if (StringUtils.hasText(category)) {
-            queryWrapper.eq(TodoTask::getCategory, category);
-        }
-        
-        if ("daily".equals(category)) {
-            queryWrapper.eq(TodoTask::getTodoDate, LocalDate.now());
-        }
         
         long totalTasks = this.count(queryWrapper);
 
@@ -135,23 +116,14 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     public DayViewVO getDayView(String dateStr, Long userId) {
         LocalDate date = LocalDate.parse(dateStr);
 
-        // 查询daily任务（按todoDate匹配）
-        LambdaQueryWrapper<TodoTask> dailyWrapper = new LambdaQueryWrapper<>();
-        dailyWrapper.eq(TodoTask::getUserId, userId)
-                .eq(TodoTask::getCategory, "daily")
-                .eq(TodoTask::getTodoDate, date);
-        List<TodoTask> dailyTasks = this.list(dailyWrapper);
-
-        // 查询global任务（按deadline日期匹配）
+        // 查询任务（按deadline日期匹配）
         LambdaQueryWrapper<TodoTask> globalWrapper = new LambdaQueryWrapper<>();
         globalWrapper.eq(TodoTask::getUserId, userId)
-                .eq(TodoTask::getCategory, "global")
                 .apply("DATE(deadline) = {0}", dateStr);
         List<TodoTask> globalTasks = this.list(globalWrapper);
 
-        // 合并所有任务
-        List<TodoTask> allTasks = new ArrayList<>(dailyTasks);
-        allTasks.addAll(globalTasks);
+        // 所有任务
+        List<TodoTask> allTasks = new ArrayList<>(globalTasks);
 
         // 按deadline小时分组
         Map<String, List<TodoTaskVo>> timeMap = new LinkedHashMap<>();
@@ -297,21 +269,11 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     // ===== 视图辅助方法 =====
 
     private List<TodoTask> queryTasksInDateRange(Long userId, LocalDate startDate, LocalDate endDate) {
-        LambdaQueryWrapper<TodoTask> dailyWrapper = new LambdaQueryWrapper<>();
-        dailyWrapper.eq(TodoTask::getUserId, userId)
-                .eq(TodoTask::getCategory, "daily")
-                .between(TodoTask::getTodoDate, startDate, endDate);
-        List<TodoTask> dailyTasks = this.list(dailyWrapper);
 
         LambdaQueryWrapper<TodoTask> globalWrapper = new LambdaQueryWrapper<>();
         globalWrapper.eq(TodoTask::getUserId, userId)
-                .eq(TodoTask::getCategory, "global")
                 .apply("DATE(deadline) BETWEEN {0} AND {1}", startDate.toString(), endDate.toString());
-        List<TodoTask> globalTasks = this.list(globalWrapper);
-
-        List<TodoTask> allTasks = new ArrayList<>(dailyTasks);
-        allTasks.addAll(globalTasks);
-        return allTasks;
+        return this.list(globalWrapper);
     }
 
     private Map<LocalDate, List<TodoTask>> groupTasksByDate(List<TodoTask> tasks) {
@@ -326,9 +288,6 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     }
 
     private LocalDate getTaskDate(TodoTask task) {
-        if ("daily".equals(task.getCategory())) {
-            return task.getTodoDate();
-        }
         return task.getDeadline() != null ? task.getDeadline().toLocalDate() : null;
     }
 

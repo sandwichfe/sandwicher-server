@@ -23,9 +23,6 @@ public class TodoTaskVo implements Serializable {
     @Schema(description = "任务类型")
     private String taskType;
 
-    @Schema(description = "任务分类")
-    private String category;
-
     @Schema(description = "任务积分")
     private Integer points;
 
@@ -40,9 +37,6 @@ public class TodoTaskVo implements Serializable {
 
     @Schema(description = "是否开启每日限制")
     private Integer isDailyLimit;
-
-    @Schema(description = "原始任务ID")
-    private Long originalTaskId;
 
     @Schema(description = "任务日期")
     @JsonFormat(pattern = "yyyy-MM-dd")

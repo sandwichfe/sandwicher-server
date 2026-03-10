@@ -10,21 +10,16 @@ import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.littlenote.config.api.ApiLittleNoteRestController;
 import com.lww.littlenote.entity.TodoTask;
-import com.lww.littlenote.entity.TodoUserPoints;
 import com.lww.littlenote.req.DayViewReq;
 import com.lww.littlenote.req.MonthViewReq;
 import com.lww.littlenote.req.TodoTaskQueryReq;
 import com.lww.littlenote.req.TodoTaskReq;
 import com.lww.littlenote.req.WeekViewReq;
-import com.lww.littlenote.service.TodoRewardItemService;
 import com.lww.littlenote.service.TodoTaskService;
-import com.lww.littlenote.service.TodoUserPointsService;
-import com.lww.littlenote.service.TodoUserRewardService;
 import com.lww.littlenote.vo.DayViewVO;
 import com.lww.littlenote.vo.MonthViewVO;
 import com.lww.littlenote.vo.TaskStatsVO;
 import com.lww.littlenote.vo.TodoTaskVo;
-import com.lww.littlenote.vo.TodoUserPointsVo;
 import com.lww.littlenote.vo.WeekViewVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -52,12 +47,6 @@ public class TodoController {
 
     private final TodoTaskService todoTaskService;
     
-    private final TodoUserPointsService todoUserPointsService;
-    
-    private final TodoRewardItemService todoRewardItemService;
-    
-    private final TodoUserRewardService todoUserRewardService;
-
     /**
      * 分页查询任务列表
      */
@@ -195,16 +184,6 @@ public class TodoController {
     public ResponseResult<MonthViewVO> getMonthView(@RequestBody MonthViewReq req) {
         Long userId = SecurityUserUtils.getUserId();
         return ResultUtil.success(todoTaskService.getMonthView(req.getYear(), req.getMonth(), userId));
-    }
-
-    /**
-     * 获取用户积分信息
-     */
-    @GetMapping("/points")
-    public ResponseResult<TodoUserPointsVo> getUserPoints() {
-        Long userId = SecurityUserUtils.getUserId();
-        TodoUserPoints userPoints = todoUserPointsService.getUserPoints(userId);
-        return ResultUtil.success(CustomBeanUtils.copyProperties(userPoints, TodoUserPointsVo.class));
     }
 
 }

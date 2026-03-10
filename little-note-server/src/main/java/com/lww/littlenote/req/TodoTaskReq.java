@@ -1,13 +1,11 @@
 package com.lww.littlenote.req;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
 
 @Data
@@ -21,9 +19,6 @@ public class TodoTaskReq implements Serializable {
 
     @Schema(description = "")
     private String taskType;
-
-    @Schema(description = "")
-    private String category;
 
     @Schema(description = "积分")
     private Integer points;
