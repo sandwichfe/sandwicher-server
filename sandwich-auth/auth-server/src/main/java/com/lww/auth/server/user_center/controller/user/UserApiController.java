@@ -48,6 +48,7 @@ public class UserApiController {
     public ResponseResult<UserVo> getCurrentUser() {
         Long userId = AuthUserUtils.getCurrentUserId();
         User user = userService.getById(userId);
+        user.setPassword(null);
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(user, userVo);
         return ResultUtil.success(userVo);
