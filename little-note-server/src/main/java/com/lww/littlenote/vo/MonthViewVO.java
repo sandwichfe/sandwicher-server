@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 月视图VO
+ * 月视图 VO
  *
  * @author lww
  */
@@ -38,7 +38,7 @@ public class MonthViewVO implements Serializable {
         @Schema(description = "日期")
         private String date;
 
-        @Schema(description = "日期")
+        @Schema(description = "日")
         private Integer day;
 
         @Schema(description = "星期")
@@ -49,5 +49,8 @@ public class MonthViewVO implements Serializable {
 
         @Schema(description = "已完成任务数")
         private Integer completedCount;
+
+        @Schema(description = "任务列表")
+        private List<TodoTaskVo> tasks;
     }
 }

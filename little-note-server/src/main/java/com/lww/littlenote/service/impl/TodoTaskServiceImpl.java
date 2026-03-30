@@ -269,6 +269,9 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
             dateItem.setWeekDay(getChineseShortWeekDay(currentDate));
             dateItem.setTaskCount(tasksForDay.size());
             dateItem.setCompletedCount(completedCount);
+            dateItem.setTasks(tasksForDay.stream()
+                    .map(t -> CustomBeanUtils.copyProperties(t, TodoTaskVo.class))
+                    .collect(Collectors.toList()));
             dates.add(dateItem);
 
             totalTasks += tasksForDay.size();
