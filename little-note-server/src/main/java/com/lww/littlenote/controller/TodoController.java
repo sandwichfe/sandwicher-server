@@ -19,6 +19,7 @@ import com.lww.littlenote.service.TodoTaskService;
 import com.lww.littlenote.vo.DayViewVO;
 import com.lww.littlenote.vo.MonthViewVO;
 import com.lww.littlenote.vo.TaskStatsVO;
+import com.lww.littlenote.vo.TodoTaskCountVO;
 import com.lww.littlenote.vo.TodoTaskVo;
 import com.lww.littlenote.vo.WeekViewVO;
 import lombok.RequiredArgsConstructor;
@@ -157,6 +158,13 @@ public class TodoController {
     public ResponseResult<TaskStatsVO> getTaskStats(@RequestParam(required = false) String category) {
         Long userId = SecurityUserUtils.getUserId();
         return ResultUtil.success(todoTaskService.getTaskStats(userId, category));
+    }
+
+
+    @GetMapping("/tasks/counts")
+    public ResponseResult<TodoTaskCountVO> getTaskCounts() {
+        Long userId = SecurityUserUtils.getUserId();
+        return ResultUtil.success(todoTaskService.getTaskCounts(userId));
     }
 
     /**

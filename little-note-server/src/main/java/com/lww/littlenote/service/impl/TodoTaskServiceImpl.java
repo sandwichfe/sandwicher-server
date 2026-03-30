@@ -23,6 +23,7 @@ import com.lww.littlenote.service.TodoTaskService;
 import com.lww.littlenote.vo.DayViewVO;
 import com.lww.littlenote.vo.MonthViewVO;
 import com.lww.littlenote.vo.TaskStatsVO;
+import com.lww.littlenote.vo.TodoTaskCountVO;
 import com.lww.littlenote.vo.TodoTaskVo;
 import com.lww.littlenote.vo.WeekViewVO;
 import lombok.RequiredArgsConstructor;
@@ -119,6 +120,17 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
         taskStatsVO.setCompletionRate(totalTasks > 0 ? (double) completedTasks / totalTasks : 0.0);
 
         return taskStatsVO;
+    }
+
+    @Override
+    public TodoTaskCountVO getTaskCounts(Long userId) {
+        long pendingCount = this.count(new LambdaQueryWrapper<TodoTask>()
+                .eq(TodoTask::getUserId, userId)
+                .eq(TodoTask::getStatus, 0));
+        long completedCount = this.count(new LambdaQueryWrapper<TodoTask>()
+                .eq(TodoTask::getUserId, userId)
+                .eq(TodoTask::getStatus, 1));
+        return new TodoTaskCountVO(pendingCount, completedCount);
     }
 
     @Override

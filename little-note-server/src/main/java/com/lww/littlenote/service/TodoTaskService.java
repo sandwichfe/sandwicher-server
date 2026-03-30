@@ -7,6 +7,7 @@ import com.lww.littlenote.req.TodoTaskQueryReq;
 import com.lww.littlenote.vo.DayViewVO;
 import com.lww.littlenote.vo.MonthViewVO;
 import com.lww.littlenote.vo.TaskStatsVO;
+import com.lww.littlenote.vo.TodoTaskCountVO;
 import com.lww.littlenote.vo.WeekViewVO;
 
 /**
@@ -44,6 +45,8 @@ public interface TodoTaskService extends IService<TodoTask> {
      * @return 统计信息
      */
     TaskStatsVO getTaskStats(Long userId, String category);
+
+    TodoTaskCountVO getTaskCounts(Long userId);
 
     /**
      * 日视图
