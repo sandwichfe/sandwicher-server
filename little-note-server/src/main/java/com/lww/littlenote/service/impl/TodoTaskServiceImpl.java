@@ -1,5 +1,28 @@
 package com.lww.littlenote.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lww.common.utils.CustomBeanUtils;
+import com.lww.common.web.exception.AppException;
+import com.lww.littlenote.entity.TodoTask;
+import com.lww.littlenote.entity.TodoTaskCompletionRecord;
+import com.lww.littlenote.mapper.TodoTaskMapper;
+import com.lww.littlenote.req.TodoTaskQueryReq;
+import com.lww.littlenote.service.TodoTaskCompletionRecordService;
+import com.lww.littlenote.service.TodoTaskService;
+import com.lww.littlenote.vo.DayViewVO;
+import com.lww.littlenote.vo.MonthViewVO;
+import com.lww.littlenote.vo.TaskStatsVO;
+import com.lww.littlenote.vo.TodoTaskCompletionRecordVO;
+import com.lww.littlenote.vo.TodoTaskCountVO;
+import com.lww.littlenote.vo.TodoTaskVo;
+import com.lww.littlenote.vo.WeekViewVO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,54 +34,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lww.common.utils.CustomBeanUtils;
-import com.lww.common.web.exception.AppException;
-import com.lww.littlenote.entity.TodoTask;
-import com.lww.littlenote.mapper.TodoTaskMapper;
-import com.lww.littlenote.req.TodoTaskQueryReq;
-import com.lww.littlenote.service.TodoTaskService;
-import com.lww.littlenote.vo.DayViewVO;
-import com.lww.littlenote.vo.MonthViewVO;
-import com.lww.littlenote.vo.TaskStatsVO;
-import com.lww.littlenote.vo.TodoTaskCountVO;
-import com.lww.littlenote.vo.TodoTaskVo;
-import com.lww.littlenote.vo.WeekViewVO;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
-/**
- * <p>
- * 统一任务表 服务实现类
- * </p>
- *
- * @author lww
- * @since 2025-01-06
- */
 @Service
 @RequiredArgsConstructor
 public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> implements TodoTaskService {
+
+    private final TodoTaskCompletionRecordService todoTaskCompletionRecordService;
 
     @Override
     public Page<TodoTask> listTasks(TodoTaskQueryReq todoTaskQueryReq) {
         Page<TodoTask> page = new Page<>(todoTaskQueryReq.getPageNum(), todoTaskQueryReq.getPageSize());
         LambdaQueryWrapper<TodoTask> queryWrapper = new LambdaQueryWrapper<>();
-        
+
         queryWrapper.eq(TodoTask::getUserId, todoTaskQueryReq.getUserId())
                 .eq(StringUtils.hasText(todoTaskQueryReq.getTaskType()), TodoTask::getTaskType, todoTaskQueryReq.getTaskType())
                 .eq(TodoTask::getStatus, todoTaskQueryReq.getStatus());
 
-        if ("1".equals(todoTaskQueryReq.getStatus())){
-            // 已完成任务，先根据完成时间排序
+        if ("1".equals(todoTaskQueryReq.getStatus())) {
             queryWrapper.orderByDesc(TodoTask::getLastCompleteTime);
-        }else{
-            queryWrapper
-                    // 先根据deadline
-                    .orderByDesc(TodoTask::getDeadline)
+        } else {
+            queryWrapper.orderByDesc(TodoTask::getDeadline)
                     .orderByDesc(TodoTask::getLastCompleteTime)
                     .orderByDesc(TodoTask::getCreateTime);
         }
@@ -72,53 +66,77 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
         if (task == null || !task.getUserId().equals(userId)) {
             throw new AppException("任务不存在或不属于该用户");
         }
-        
-        // 检查是否已完成
+
         if (Integer.valueOf(1).equals(task.getStatus())) {
             throw new AppException("任务已完成，不能重复完成");
         }
 
-        // 检查每日限制
-        if ( Integer.valueOf(1).equals(task.getIsDailyLimit())) {
-            if (task.getLastCompleteTime() != null && 
-                task.getLastCompleteTime().toLocalDate().isEqual(LocalDate.now())) {
-                throw new AppException("今日已完成，不能重复完成");
-            }
+        if (Integer.valueOf(1).equals(task.getIsDailyLimit())
+                && task.getLastCompleteTime() != null
+                && task.getLastCompleteTime().toLocalDate().isEqual(LocalDate.now())) {
+            throw new AppException("今日已完成，不能重复完成");
         }
-        
-        // 增加完成次数
-        task.setCompletedCount(task.getCompletedCount() + 1);
-        task.setLastCompleteTime(LocalDateTime.now());
-        task.setUpdateTime(LocalDateTime.now());
-        task.setUpdateBy(userId);
 
-        // 判断是否全部完成，更新status
+        LocalDateTime completedAt = LocalDateTime.now();
+        int nextCompletedCount = (task.getCompletedCount() == null ? 0 : task.getCompletedCount()) + 1;
+
+        task.setCompletedCount(nextCompletedCount);
+        task.setLastCompleteTime(completedAt);
+        task.setUpdateTime(completedAt);
+        task.setUpdateBy(userId);
         if (task.getCompletedCount() >= task.getTargetCount()) {
             task.setStatus(1);
         }
 
         this.updateById(task);
+
+        TodoTaskCompletionRecord completionRecord = new TodoTaskCompletionRecord();
+        completionRecord.setTaskId(task.getId());
+        completionRecord.setUserId(userId);
+        completionRecord.setCompletedSequence(nextCompletedCount);
+        completionRecord.setCompletedAt(completedAt);
+        completionRecord.setCreateTime(completedAt);
+        completionRecord.setCreateBy(userId);
+        completionRecord.setUpdateTime(completedAt);
+        completionRecord.setUpdateBy(userId);
+        todoTaskCompletionRecordService.save(completionRecord);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteTask(Long taskId, Long userId) {
+        TodoTask task = this.getById(taskId);
+        if (task == null || !task.getUserId().equals(userId)) {
+            throw new AppException("任务不存在或不属于该用户");
+        }
+
+        todoTaskCompletionRecordService.removeByTaskId(taskId);
+        this.removeById(taskId);
+    }
+
+    @Override
+    public List<TodoTaskCompletionRecordVO> listTaskCompletionRecords(Long taskId, Long userId) {
+        TodoTask task = this.getById(taskId);
+        if (task == null || !task.getUserId().equals(userId)) {
+            throw new AppException("任务不存在或不属于该用户");
+        }
+        return todoTaskCompletionRecordService.listTaskRecords(taskId, userId);
+    }
 
     @Override
     public TaskStatsVO getTaskStats(Long userId, String category) {
         LambdaQueryWrapper<TodoTask> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(TodoTask::getUserId, userId);
-        
-        long totalTasks = this.count(queryWrapper);
 
-        // 统计已完成的任务（status = 1）
+        long totalTasks = this.count(queryWrapper);
         queryWrapper.eq(TodoTask::getStatus, 1);
         long completedTasks = this.count(queryWrapper);
-
 
         TaskStatsVO taskStatsVO = new TaskStatsVO(totalTasks, completedTasks);
         taskStatsVO.setTotalTasks(totalTasks);
         taskStatsVO.setCompletedTasks(completedTasks);
         taskStatsVO.setPendingTasks(totalTasks - completedTasks);
         taskStatsVO.setCompletionRate(totalTasks > 0 ? (double) completedTasks / totalTasks : 0.0);
-
         return taskStatsVO;
     }
 
@@ -137,16 +155,12 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     public DayViewVO getDayView(String dateStr, Long userId) {
         LocalDate date = LocalDate.parse(dateStr);
 
-        // 查询任务（按deadline日期匹配）
         LambdaQueryWrapper<TodoTask> globalWrapper = new LambdaQueryWrapper<>();
         globalWrapper.eq(TodoTask::getUserId, userId)
                 .apply("DATE(deadline) = {0}", dateStr);
         List<TodoTask> globalTasks = this.list(globalWrapper);
 
-        // 所有任务
         List<TodoTask> allTasks = new ArrayList<>(globalTasks);
-
-        // 按deadline小时分组
         Map<String, List<TodoTaskVo>> timeMap = new LinkedHashMap<>();
         List<TodoTaskVo> unscheduled = new ArrayList<>();
 
@@ -154,13 +168,12 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
             TodoTaskVo vo = CustomBeanUtils.copyProperties(task, TodoTaskVo.class);
             if (task.getDeadline() != null) {
                 String hour = String.format("%02d:00", task.getDeadline().getHour());
-                timeMap.computeIfAbsent(hour, k -> new ArrayList<>()).add(vo);
+                timeMap.computeIfAbsent(hour, key -> new ArrayList<>()).add(vo);
             } else {
                 unscheduled.add(vo);
             }
         }
 
-        // 构建schedule（按时间排序）
         List<DayViewVO.TimeSlot> schedule = new ArrayList<>();
         timeMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
@@ -171,7 +184,6 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
                     schedule.add(slot);
                 });
 
-        // 未排期任务放在末尾
         if (!unscheduled.isEmpty()) {
             DayViewVO.TimeSlot slot = new DayViewVO.TimeSlot();
             slot.setTime("未排期");
@@ -179,31 +191,24 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
             schedule.add(slot);
         }
 
-        // 构建响应
         DayViewVO result = new DayViewVO();
         result.setDate(dateStr);
         result.setWeekDay(getChineseWeekDay(date));
         result.setTaskTotal(allTasks.size());
         result.setCompletedTotal((int) allTasks.stream().filter(this::isTaskCompleted).count());
         result.setSchedule(schedule);
-
         return result;
     }
 
     @Override
     public WeekViewVO getWeekView(Integer year, Integer week, Long userId) {
-        // 计算ISO周的起止日期
         String weekDateStr = String.format("%04d-W%02d-1", year, week);
         LocalDate startOfWeek = LocalDate.parse(weekDateStr, DateTimeFormatter.ISO_WEEK_DATE);
         LocalDate endOfWeek = startOfWeek.plusDays(6);
 
-        // 查询该周所有任务
         List<TodoTask> allTasks = queryTasksInDateRange(userId, startOfWeek, endOfWeek);
-
-        // 按日期分组
         Map<LocalDate, List<TodoTask>> tasksByDate = groupTasksByDate(allTasks);
 
-        // 构建每天数据
         String[] weekLabels = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
         List<WeekViewVO.DayItem> days = new ArrayList<>();
         int totalTasks = 0;
@@ -220,7 +225,7 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
             dayItem.setTaskCount(tasksForDay.size());
             dayItem.setCompletedCount(completedCount);
             dayItem.setTasks(tasksForDay.stream()
-                    .map(t -> CustomBeanUtils.copyProperties(t, TodoTaskVo.class))
+                    .map(task -> CustomBeanUtils.copyProperties(task, TodoTaskVo.class))
                     .collect(Collectors.toList()));
             days.add(dayItem);
 
@@ -228,17 +233,15 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
             completedTotal += completedCount;
         }
 
-        // 构建响应
         WeekViewVO result = new WeekViewVO();
         result.setYear(year);
         result.setWeek(week);
-        result.setWeekLabel(year + "年第" + week + "周");
+        result.setWeekLabel(year + "年 第" + week + "周");
         result.setDateRange(startOfWeek.format(DateTimeFormatter.ofPattern("MM-dd"))
                 + " ~ " + endOfWeek.format(DateTimeFormatter.ofPattern("MM-dd")));
         result.setTaskTotal(totalTasks);
         result.setCompletedTotal(completedTotal);
         result.setDays(days);
-
         return result;
     }
 
@@ -247,13 +250,9 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
         LocalDate startOfMonth = LocalDate.of(year, month, 1);
         LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
 
-        // 查询该月所有任务
         List<TodoTask> allTasks = queryTasksInDateRange(userId, startOfMonth, endOfMonth);
-
-        // 按日期分组
         Map<LocalDate, List<TodoTask>> tasksByDate = groupTasksByDate(allTasks);
 
-        // 构建每天数据
         List<MonthViewVO.DateItem> dates = new ArrayList<>();
         int totalTasks = 0;
         int completedTotal = 0;
@@ -270,7 +269,7 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
             dateItem.setTaskCount(tasksForDay.size());
             dateItem.setCompletedCount(completedCount);
             dateItem.setTasks(tasksForDay.stream()
-                    .map(t -> CustomBeanUtils.copyProperties(t, TodoTaskVo.class))
+                    .map(task -> CustomBeanUtils.copyProperties(task, TodoTaskVo.class))
                     .collect(Collectors.toList()));
             dates.add(dateItem);
 
@@ -278,22 +277,17 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
             completedTotal += completedCount;
         }
 
-        // 构建响应
         MonthViewVO result = new MonthViewVO();
         result.setYear(year);
         result.setMonth(month);
-        result.setMonthLabel(year + "年" + month + "月");
+        result.setMonthLabel(year + "年 " + month + "月");
         result.setTaskTotal(totalTasks);
         result.setCompletedTotal(completedTotal);
         result.setDates(dates);
-
         return result;
     }
 
-    // ===== 视图辅助方法 =====
-
     private List<TodoTask> queryTasksInDateRange(Long userId, LocalDate startDate, LocalDate endDate) {
-
         LambdaQueryWrapper<TodoTask> globalWrapper = new LambdaQueryWrapper<>();
         globalWrapper.eq(TodoTask::getUserId, userId)
                 .apply("DATE(deadline) BETWEEN {0} AND {1}", startDate.toString(), endDate.toString());
@@ -305,7 +299,7 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
         for (TodoTask task : tasks) {
             LocalDate date = getTaskDate(task);
             if (date != null) {
-                result.computeIfAbsent(date, k -> new ArrayList<>()).add(task);
+                result.computeIfAbsent(date, key -> new ArrayList<>()).add(task);
             }
         }
         return result;

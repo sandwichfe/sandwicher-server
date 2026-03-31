@@ -7,8 +7,11 @@ import com.lww.littlenote.req.TodoTaskQueryReq;
 import com.lww.littlenote.vo.DayViewVO;
 import com.lww.littlenote.vo.MonthViewVO;
 import com.lww.littlenote.vo.TaskStatsVO;
+import com.lww.littlenote.vo.TodoTaskCompletionRecordVO;
 import com.lww.littlenote.vo.TodoTaskCountVO;
 import com.lww.littlenote.vo.WeekViewVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -36,6 +39,10 @@ public interface TodoTaskService extends IService<TodoTask> {
      * @return 是否成功
      */
     void completeTaskOnce(Long taskId, Long userId);
+
+    void deleteTask(Long taskId, Long userId);
+
+    List<TodoTaskCompletionRecordVO> listTaskCompletionRecords(Long taskId, Long userId);
 
     /**
      * 获取用户任务统计

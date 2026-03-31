@@ -1,7 +1,5 @@
 package com.lww.littlenote.controller;
 
-import java.time.LocalDateTime;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lww.auth.resources_server.utils.SecurityUserUtils;
@@ -19,6 +17,7 @@ import com.lww.littlenote.service.TodoTaskService;
 import com.lww.littlenote.vo.DayViewVO;
 import com.lww.littlenote.vo.MonthViewVO;
 import com.lww.littlenote.vo.TaskStatsVO;
+import com.lww.littlenote.vo.TodoTaskCompletionRecordVO;
 import com.lww.littlenote.vo.TodoTaskCountVO;
 import com.lww.littlenote.vo.TodoTaskVo;
 import com.lww.littlenote.vo.WeekViewVO;
@@ -33,24 +32,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/**
- * <p>
- * Todo任务管理 前端控制器
- * </p>
- *
- * @author lww
- * @since 2025-01-06
- */
+import java.time.LocalDateTime;
+import java.util.List;
+
 @ApiLittleNoteRestController
 @RequestMapping("/todo")
 @RequiredArgsConstructor
 public class TodoController {
 
     private final TodoTaskService todoTaskService;
-    
-    /**
-     * 分页查询任务列表
-     */
+
     @PostMapping("/tasks/list")
     public ResponseResult<IPage<TodoTaskVo>> listTasks(@RequestBody TodoTaskQueryReq todoTaskQueryReq) {
         Long userId = SecurityUserUtils.getUserId();
@@ -60,9 +51,6 @@ public class TodoController {
         return ResultUtil.success(pageVo);
     }
 
-    /**
-     * 获取任务详情
-     */
     @GetMapping("/tasks/{id}")
     public ResponseResult<TodoTaskVo> getTask(@PathVariable Long id) {
         Long userId = SecurityUserUtils.getUserId();
@@ -73,9 +61,6 @@ public class TodoController {
         return ResultUtil.success(CustomBeanUtils.copyProperties(task, TodoTaskVo.class));
     }
 
-    /**
-     * 添加任务
-     */
     @PostMapping("/tasks")
     public ResponseResult<TodoTaskVo> addTask(@RequestBody TodoTaskReq taskReq) {
         Long userId = SecurityUserUtils.getUserId();
@@ -86,11 +71,11 @@ public class TodoController {
         task.setStatus(0);
         task.setCreateTime(LocalDateTime.now());
         task.setCreateBy(userId);
-        
+
         if (task.getTargetCount() == null || task.getTargetCount() <= 0) {
             task.setTargetCount(1);
         }
-        
+
         boolean saved = todoTaskService.save(task);
         if (saved) {
             return ResultUtil.success(CustomBeanUtils.copyProperties(task, TodoTaskVo.class));
@@ -98,9 +83,6 @@ public class TodoController {
         return ResultUtil.error("添加失败");
     }
 
-    /**
-     * 编辑任务
-     */
     @PutMapping("/tasks/{id}")
     public ResponseResult<TodoTaskVo> editTask(@PathVariable Long id, @RequestBody TodoTaskReq taskReq) {
         Long userId = SecurityUserUtils.getUserId();
@@ -108,18 +90,18 @@ public class TodoController {
         if (existingTask == null || !existingTask.getUserId().equals(userId)) {
             return ResultUtil.error("任务不存在");
         }
-        
+
         TodoTask task = new TodoTask();
         BeanUtils.copyProperties(taskReq, task);
         task.setId(id);
         task.setUserId(userId);
         task.setUpdateTime(LocalDateTime.now());
         task.setUpdateBy(userId);
-        
+
         if (task.getTargetCount() != null && task.getTargetCount() <= 0) {
             task.setTargetCount(1);
         }
-        
+
         boolean updated = todoTaskService.updateById(task);
         if (updated) {
             return ResultUtil.success(CustomBeanUtils.copyProperties(task, TodoTaskVo.class));
@@ -127,23 +109,13 @@ public class TodoController {
         return ResultUtil.error("更新失败");
     }
 
-    /**
-     * 删除任务
-     */
     @DeleteMapping("/tasks/{id}")
     public ResponseResult<Void> deleteTask(@PathVariable Long id) {
         Long userId = SecurityUserUtils.getUserId();
-        TodoTask task = todoTaskService.getById(id);
-        if (task == null || !task.getUserId().equals(userId)) {
-            return ResultUtil.error("任务不存在");
-        }
-        todoTaskService.removeById(id);
+        todoTaskService.deleteTask(id, userId);
         return ResultUtil.success();
     }
 
-    /**
-     * 完成任务一次
-     */
     @PostMapping("/tasks/{id}/complete")
     public ResponseResult<Void> completeTask(@PathVariable Long id) {
         Long userId = SecurityUserUtils.getUserId();
@@ -151,15 +123,17 @@ public class TodoController {
         return ResultUtil.success();
     }
 
-    /**
-     * 获取任务统计
-     */
+    @GetMapping("/tasks/{id}/completion-records")
+    public ResponseResult<List<TodoTaskCompletionRecordVO>> listTaskCompletionRecords(@PathVariable Long id) {
+        Long userId = SecurityUserUtils.getUserId();
+        return ResultUtil.success(todoTaskService.listTaskCompletionRecords(id, userId));
+    }
+
     @GetMapping("/tasks/stats")
     public ResponseResult<TaskStatsVO> getTaskStats(@RequestParam(required = false) String category) {
         Long userId = SecurityUserUtils.getUserId();
         return ResultUtil.success(todoTaskService.getTaskStats(userId, category));
     }
-
 
     @GetMapping("/tasks/counts")
     public ResponseResult<TodoTaskCountVO> getTaskCounts() {
@@ -167,31 +141,21 @@ public class TodoController {
         return ResultUtil.success(todoTaskService.getTaskCounts(userId));
     }
 
-    /**
-     * 日视图
-     */
     @PostMapping("/tasks/day-view")
     public ResponseResult<DayViewVO> getDayView(@RequestBody DayViewReq req) {
         Long userId = SecurityUserUtils.getUserId();
         return ResultUtil.success(todoTaskService.getDayView(req.getDate(), userId));
     }
 
-    /**
-     * 周视图
-     */
     @PostMapping("/tasks/week-view")
     public ResponseResult<WeekViewVO> getWeekView(@RequestBody WeekViewReq req) {
         Long userId = SecurityUserUtils.getUserId();
         return ResultUtil.success(todoTaskService.getWeekView(req.getYear(), req.getWeek(), userId));
     }
 
-    /**
-     * 月视图
-     */
     @PostMapping("/tasks/month-view")
     public ResponseResult<MonthViewVO> getMonthView(@RequestBody MonthViewReq req) {
         Long userId = SecurityUserUtils.getUserId();
         return ResultUtil.success(todoTaskService.getMonthView(req.getYear(), req.getMonth(), userId));
     }
-
 }
