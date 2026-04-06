@@ -52,7 +52,7 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
         if ("1".equals(todoTaskQueryReq.getStatus())) {
             queryWrapper.orderByDesc(TodoTask::getLastCompleteTime);
         } else {
-            queryWrapper.orderByDesc(TodoTask::getDeadline)
+            queryWrapper.orderByAsc(TodoTask::getDeadline)
                     .orderByDesc(TodoTask::getLastCompleteTime)
                     .orderByDesc(TodoTask::getCreateTime);
         }
