@@ -10,6 +10,7 @@ import com.lww.littlenote.config.api.ApiLittleNoteRestController;
 import com.lww.littlenote.entity.TodoTask;
 import com.lww.littlenote.req.DayViewReq;
 import com.lww.littlenote.req.MonthViewReq;
+import com.lww.littlenote.req.TodoTaskCompletionRecordUpdateReq;
 import com.lww.littlenote.req.TodoTaskQueryReq;
 import com.lww.littlenote.req.TodoTaskReq;
 import com.lww.littlenote.req.WeekViewReq;
@@ -127,6 +128,13 @@ public class TodoController {
     public ResponseResult<List<TodoTaskCompletionRecordVO>> listTaskCompletionRecords(@PathVariable Long id) {
         Long userId = SecurityUserUtils.getUserId();
         return ResultUtil.success(todoTaskService.listTaskCompletionRecords(id, userId));
+    }
+    
+    @PostMapping("/tasks/completion-record/update")
+    public ResponseResult<Void> updateTaskCompletionRecord(@RequestBody TodoTaskCompletionRecordUpdateReq req) {
+        Long userId = SecurityUserUtils.getUserId();
+        todoTaskService.updateTaskCompletionRecord(userId, req);
+        return ResultUtil.success();
     }
 
     @GetMapping("/tasks/stats")

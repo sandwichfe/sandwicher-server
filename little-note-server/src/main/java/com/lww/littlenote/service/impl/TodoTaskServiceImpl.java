@@ -8,6 +8,7 @@ import com.lww.common.web.exception.AppException;
 import com.lww.littlenote.entity.TodoTask;
 import com.lww.littlenote.entity.TodoTaskCompletionRecord;
 import com.lww.littlenote.mapper.TodoTaskMapper;
+import com.lww.littlenote.req.TodoTaskCompletionRecordUpdateReq;
 import com.lww.littlenote.req.TodoTaskQueryReq;
 import com.lww.littlenote.service.TodoTaskCompletionRecordService;
 import com.lww.littlenote.service.TodoTaskService;
@@ -121,6 +122,52 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
             throw new AppException("任务不存在或不属于该用户");
         }
         return todoTaskCompletionRecordService.listTaskRecords(taskId, userId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateTaskCompletionRecord(Long userId, TodoTaskCompletionRecordUpdateReq req) {
+        if (req.getId() == null || req.getTaskId() == null) {
+            throw new AppException("参数错误");
+        }
+        Long taskId = req.getTaskId();
+        Long recordId = req.getId();
+        TodoTask task = this.getById(taskId);
+        if (task == null || !task.getUserId().equals(userId)) {
+            throw new AppException("任务不存在或不属于该用户");
+        }
+        if (req.getCompletedAt() == null) {
+            throw new AppException("完成时间不能为空");
+        }
+
+        TodoTaskCompletionRecord record = todoTaskCompletionRecordService.getOne(new LambdaQueryWrapper<TodoTaskCompletionRecord>()
+                .eq(TodoTaskCompletionRecord::getId, recordId)
+                .eq(TodoTaskCompletionRecord::getTaskId, taskId)
+                .eq(TodoTaskCompletionRecord::getUserId, userId));
+        if (record == null) {
+            throw new AppException("完成记录不存在或不属于该用户");
+        }
+
+        // 更新CompletionRecord表
+        LocalDateTime now = LocalDateTime.now();
+        record.setCompletedAt(req.getCompletedAt());
+        record.setUpdateTime(now);
+        record.setUpdateBy(userId);
+        todoTaskCompletionRecordService.updateById(record);
+
+
+        // 更新lastCompleteTime
+        TodoTaskCompletionRecord latestRecord = todoTaskCompletionRecordService.getOne(new LambdaQueryWrapper<TodoTaskCompletionRecord>()
+                .eq(TodoTaskCompletionRecord::getTaskId, taskId)
+                .eq(TodoTaskCompletionRecord::getUserId, userId)
+                .orderByDesc(TodoTaskCompletionRecord::getCompletedAt)
+                .orderByDesc(TodoTaskCompletionRecord::getId)
+                .last("limit 1"));
+
+        task.setLastCompleteTime(latestRecord == null ? null : latestRecord.getCompletedAt());
+        task.setUpdateTime(now);
+        task.setUpdateBy(userId);
+        this.updateById(task);
     }
 
     @Override

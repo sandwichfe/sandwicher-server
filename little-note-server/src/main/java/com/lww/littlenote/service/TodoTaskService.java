@@ -3,6 +3,7 @@ package com.lww.littlenote.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.littlenote.entity.TodoTask;
+import com.lww.littlenote.req.TodoTaskCompletionRecordUpdateReq;
 import com.lww.littlenote.req.TodoTaskQueryReq;
 import com.lww.littlenote.vo.DayViewVO;
 import com.lww.littlenote.vo.MonthViewVO;
@@ -43,6 +44,8 @@ public interface TodoTaskService extends IService<TodoTask> {
     void deleteTask(Long taskId, Long userId);
 
     List<TodoTaskCompletionRecordVO> listTaskCompletionRecords(Long taskId, Long userId);
+
+    void updateTaskCompletionRecord(Long userId, TodoTaskCompletionRecordUpdateReq req);
 
     /**
      * 获取用户任务统计
