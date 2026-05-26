@@ -1,0 +1,8 @@
+package com.lww.auth.server.user_center.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lww.auth.server.user_center.entity.DictItem;
+
+public interface DictItemMapper extends BaseMapper<DictItem> {
+}
+

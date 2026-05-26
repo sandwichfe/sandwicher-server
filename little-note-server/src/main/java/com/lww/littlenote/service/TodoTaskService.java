@@ -86,4 +86,6 @@ public interface TodoTaskService extends IService<TodoTask> {
      * @return 月视图数据
      */
     MonthViewVO getMonthView(Integer year, Integer month, Long userId);
+
+    MonthViewVO getMonthViewWithSync(Integer year, Integer month, Long userId);
 }

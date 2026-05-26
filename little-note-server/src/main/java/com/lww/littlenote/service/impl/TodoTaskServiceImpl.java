@@ -334,6 +334,15 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
         return result;
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public MonthViewVO getMonthViewWithSync(Integer year, Integer month, Long userId) {
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+        this.baseMapper.syncTaskCompletionStats(userId, startOfMonth.toString(), endOfMonth.toString());
+        return this.getMonthView(year, month, userId);
+    }
+
     private List<TodoTask> queryTasksInDateRange(Long userId, LocalDate startDate, LocalDate endDate) {
         LambdaQueryWrapper<TodoTask> globalWrapper = new LambdaQueryWrapper<>();
         globalWrapper.eq(TodoTask::getUserId, userId)
