@@ -26,7 +26,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.lang.reflect.Method;
 import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**
@@ -39,6 +38,7 @@ import java.time.LocalDateTime;
 public class OperationLogAspect {
 
     private static final SpelExpressionParser SPEL_PARSER = new SpelExpressionParser();
+    private static final String JWT_CLASS_NAME = "org.springframework.security.oauth2.jwt.Jwt";
 
     private final Ip2regionSearcher regionSearcher;
 
@@ -49,14 +49,12 @@ public class OperationLogAspect {
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         String methodName = method.getName();
 
-
-        RequestAttributes ra = RequestContextHolder.getRequestAttributes();
-        ServletRequestAttributes sra = (ServletRequestAttributes) ra;
-        assert sra != null;
-        HttpServletRequest request = sra.getRequest();
-
-        String ipAddress = JakartaServletUtil.getClientIP(request);
-        String region = regionSearcher.getAddress(ipAddress);
+        HttpServletRequest request = resolveRequest();
+        String ipAddress = request != null ? JakartaServletUtil.getClientIP(request) : null;
+        String region = ipAddress != null ? regionSearcher.getAddress(ipAddress) : null;
+        String requestUri = request != null ? request.getRequestURI() : null;
+        OperatorInfo operatorInfo = resolveOperatorInfo();
+        LocalDateTime startTime = LocalDateTime.now();
 
         OperationLog logContext = OperationLog.builder()
                 .module(loggable.module())
@@ -64,9 +62,13 @@ public class OperationLogAspect {
                 .description(resolveSpel(loggable.description(), method, joinPoint.getArgs()))
                 .method(methodName)
                 .params(loggable.logParams() ? JSON.toJSONString(joinPoint.getArgs()) : null)
-                .startTime(LocalDateTime.now())
+                .operatorId(operatorInfo != null ? operatorInfo.userId() : null)
+                .operatorName(operatorInfo != null ? operatorInfo.userName() : null)
+                .requestUri(requestUri)
+                .startTime(startTime)
                 .requestIp(ipAddress)
                 .requestRegion(region)
+                .createTime(startTime)
                 .build();
 
         try {
@@ -83,6 +85,7 @@ public class OperationLogAspect {
 
             return result;
         } catch (Exception e) {
+            logContext.setDuration(Duration.between(logContext.getStartTime(), LocalDateTime.now()).toMillis());
             saveLog(logContext);
             throw e;
         }
@@ -124,7 +127,48 @@ public class OperationLogAspect {
                 logContext.getDuration(),
                 logContext.getParams(),
                 logContext.getResult());
-        // 这里可以添加数据库存储逻辑
         operationLogService.save(logContext);
+    }
+
+    private HttpServletRequest resolveRequest() {
+        RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+        if (!(ra instanceof ServletRequestAttributes sra)) {
+            return null;
+        }
+        return sra.getRequest();
+    }
+
+    private OperatorInfo resolveOperatorInfo() {
+        try {
+            Class<?> securityContextHolder = Class.forName("org.springframework.security.core.context.SecurityContextHolder");
+            Object context = securityContextHolder.getMethod("getContext").invoke(null);
+            if (context == null) {
+                return null;
+            }
+            Object authentication = context.getClass().getMethod("getAuthentication").invoke(context);
+            if (authentication == null) {
+                return null;
+            }
+            Object principal = authentication.getClass().getMethod("getPrincipal").invoke(authentication);
+            if (principal == null) {
+                return null;
+            }
+            if (!JWT_CLASS_NAME.equals(principal.getClass().getName())) {
+                return null;
+            }
+            Object userIdValue = principal.getClass().getMethod("getClaim", String.class).invoke(principal, "userId");
+            Object userNameValue = principal.getClass().getMethod("getClaim", String.class).invoke(principal, "userName");
+            Long userId = userIdValue instanceof Number ? ((Number) userIdValue).longValue() : null;
+            String userName = userNameValue != null ? String.valueOf(userNameValue) : null;
+            if (userId == null && (userName == null || userName.isBlank())) {
+                return null;
+            }
+            return new OperatorInfo(userId, userName);
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    private record OperatorInfo(Long userId, String userName) {
     }
 }

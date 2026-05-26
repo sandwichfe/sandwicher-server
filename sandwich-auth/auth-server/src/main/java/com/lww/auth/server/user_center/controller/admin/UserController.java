@@ -9,6 +9,7 @@ import com.lww.auth.server.user_center.service.UserService;
 import com.lww.auth.server.user_center.vo.UserPageQuery;
 import com.lww.auth.server.user_center.vo.UserVo;
 import com.lww.common.utils.CustomBeanUtils;
+import com.lww.common.web.log.Loggable;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,6 +44,7 @@ public class UserController {
      * 新增用户
      */
     @Operation(summary = "新增用户")
+    @Loggable(module = "user", type = "create", description = "新增用户", logResult = false)
     @PostMapping("/create")
     public ResponseResult<UserVo> createUser(@RequestBody UserReq userReq) {
         User user = new User();
@@ -86,6 +88,7 @@ public class UserController {
      * 更新用户
      */
     @Operation(summary = "更新用户")
+    @Loggable(module = "user", type = "update", description = "更新用户", logResult = false)
     @PostMapping("/update")
     public ResponseResult<UserVo> updateUser(@RequestBody UserReq userReq) {
         User user = new User();
@@ -101,6 +104,7 @@ public class UserController {
      * 删除用户
      */
     @Operation(summary = "删除用户")
+    @Loggable(module = "user", type = "delete", description = "删除用户ID: #id", logParams = false)
     @DeleteMapping("/delete/{id}")
     public ResponseResult<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);

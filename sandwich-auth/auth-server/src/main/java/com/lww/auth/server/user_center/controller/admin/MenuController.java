@@ -8,6 +8,7 @@ import com.lww.auth.server.user_center.service.MenuService;
 import com.lww.auth.server.user_center.vo.MenuTreeVO;
 import com.lww.auth.server.user_center.vo.MenuVo;
 import com.lww.common.utils.CustomBeanUtils;
+import com.lww.common.web.log.Loggable;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.common.web.vo.PageVo;
@@ -32,6 +33,7 @@ public class MenuController {
     private MenuService menuService;
 
     @Operation(summary = "新增菜单")
+    @Loggable(module = "menu", type = "create", description = "新增菜单", logResult = false)
     @PostMapping("/create")
     public ResponseResult<MenuVo> createMenu(@RequestBody MenuReq menuReq) {
         Menu menu = new Menu();
@@ -62,6 +64,7 @@ public class MenuController {
     }
 
     @Operation(summary = "更新菜单")
+    @Loggable(module = "menu", type = "update", description = "更新菜单", logResult = false)
     @PostMapping("/update")
     public ResponseResult<MenuVo> updateMenu(@RequestBody MenuReq menuReq) {
         Menu menu = new Menu();
@@ -73,6 +76,7 @@ public class MenuController {
     }
 
     @Operation(summary = "删除菜单")
+    @Loggable(module = "menu", type = "delete", description = "删除菜单ID: #id", logParams = false)
     @DeleteMapping("/delete/{id}")
     public ResponseResult<Void> deleteMenu(@PathVariable Long id) {
         menuService.removeById(id);

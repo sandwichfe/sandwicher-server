@@ -1,6 +1,7 @@
 package com.lww.auth.server.user_center.controller.admin;
 
 import com.lww.auth.server.user_center.service.RoleMenuService;
+import com.lww.common.web.log.Loggable;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class RoleMenuController {
     }
 
     @PostMapping("/assignMenusToRole")
+    @Loggable(module = "roleMenu", type = "assign", description = "为角色分配菜单 roleId: #request.roleId", logResult = false)
     public ResponseResult<Void> assignMenusToRole(@RequestBody AssignMenusToRoleRequest request) {
         roleMenuService.assignMenusToRole(request.getRoleId(), request.getMenuIds());
         return ResultUtil.success();

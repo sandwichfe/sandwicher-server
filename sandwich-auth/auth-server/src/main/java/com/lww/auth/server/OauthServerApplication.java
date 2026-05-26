@@ -9,8 +9,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  * @author lww
  */
-@MapperScan("com.lww.auth.server.user_center.mapper")
-@SpringBootApplication
+@MapperScan({
+        "com.lww.auth.server.user_center.mapper",
+        "com.lww.common.web.log.mapper"
+})
+@SpringBootApplication(scanBasePackages = "com.lww")
 public class OauthServerApplication {
 
     public static void main(String[] args) {

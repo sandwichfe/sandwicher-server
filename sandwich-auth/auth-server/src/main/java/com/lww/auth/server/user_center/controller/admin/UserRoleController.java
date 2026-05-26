@@ -1,6 +1,7 @@
 package com.lww.auth.server.user_center.controller.admin;
 
 import com.lww.auth.server.user_center.service.UserRoleService;
+import com.lww.common.web.log.Loggable;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class UserRoleController {
     }
 
     @PostMapping("/assignRolesToUser")
+    @Loggable(module = "userRole", type = "assign", description = "为用户分配角色 userId: #request.userId", logResult = false)
     public ResponseResult<Void> assignRolesToUser(@RequestBody AssignRolesToUserRequest request) {
         userRoleService.assignRolesToUser(request.getUserId(), request.getRoleIds());
         return ResultUtil.success();

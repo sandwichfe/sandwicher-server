@@ -10,6 +10,7 @@ import com.lww.auth.server.user_center.vo.DictTypePageQuery;
 import com.lww.auth.server.user_center.vo.DictTypeVo;
 import com.lww.common.utils.AssertUtils;
 import com.lww.common.utils.CustomBeanUtils;
+import com.lww.common.web.log.Loggable;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,6 +37,7 @@ public class DictTypeController {
     private DictTypeService dictTypeService;
 
     @Operation(summary = "新增字典类型")
+    @Loggable(module = "dictType", type = "create", description = "新增字典类型", logResult = false)
     @PostMapping("/create")
     public ResponseResult<DictTypeVo> create(@RequestBody DictTypeReq req) {
         AssertUtils.assertTrue(!StringUtils.hasText(req.getTypeCode()), "类型编码不能为空");
@@ -88,6 +90,7 @@ public class DictTypeController {
     }
 
     @Operation(summary = "更新字典类型")
+    @Loggable(module = "dictType", type = "update", description = "更新字典类型", logResult = false)
     @PostMapping("/update")
     public ResponseResult<DictTypeVo> update(@RequestBody DictTypeReq req) {
         AssertUtils.assertTrue(req.getId() == null, "ID不能为空");
@@ -107,10 +110,10 @@ public class DictTypeController {
     }
 
     @Operation(summary = "删除字典类型（同时删除其字典项）")
+    @Loggable(module = "dictType", type = "delete", description = "删除字典类型ID: #id", logParams = false)
     @DeleteMapping("/delete/{id}")
     public ResponseResult<Void> delete(@PathVariable Long id) {
         dictTypeService.deleteType(id);
         return ResultUtil.success();
     }
 }
-

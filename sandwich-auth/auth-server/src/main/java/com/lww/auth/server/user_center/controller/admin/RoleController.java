@@ -7,6 +7,7 @@ import com.lww.auth.server.user_center.req.RoleReq;
 import com.lww.auth.server.user_center.service.RoleService;
 import com.lww.auth.server.user_center.vo.RoleVo;
 import com.lww.common.utils.CustomBeanUtils;
+import com.lww.common.web.log.Loggable;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.common.web.vo.PageVo;
@@ -34,6 +35,7 @@ public class RoleController {
     private RoleService roleService;
 
     @Operation(summary = "新增角色")
+    @Loggable(module = "role", type = "create", description = "新增角色", logResult = false)
     @PostMapping("/create")
     public ResponseResult<RoleVo> createRole(@RequestBody RoleReq roleReq) {
         Role role = new Role();
@@ -61,6 +63,7 @@ public class RoleController {
     }
 
     @Operation(summary = "更新角色")
+    @Loggable(module = "role", type = "update", description = "更新角色", logResult = false)
     @PostMapping("/update")
     public ResponseResult<RoleVo> updateRole(@RequestBody RoleReq roleReq) {
         Role role = new Role();
@@ -72,6 +75,7 @@ public class RoleController {
     }
 
     @Operation(summary = "删除角色")
+    @Loggable(module = "role", type = "delete", description = "删除角色ID: #id", logParams = false)
     @DeleteMapping("/delete/{id}")
     public ResponseResult<Void> deleteRole(@PathVariable Long id) {
         roleService.removeById(id);
