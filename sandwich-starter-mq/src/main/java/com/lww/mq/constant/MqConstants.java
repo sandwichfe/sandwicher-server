@@ -1,4 +1,4 @@
-package com.lww.common.constant;
+package com.lww.mq.constant;
 
 public class MqConstants {
 

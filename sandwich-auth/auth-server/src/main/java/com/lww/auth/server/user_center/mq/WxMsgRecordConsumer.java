@@ -1,7 +1,7 @@
 package com.lww.auth.server.user_center.mq;
 
-import com.lww.common.constant.MqConstants;
-import com.lww.common.dto.WxMsgRecordDTO;
+import com.lww.mq.constant.MqConstants;
+import com.lww.mq.dto.WxMsgRecordDTO;
 import com.lww.auth.server.user_center.entity.WxMsgRecord;
 import com.lww.auth.server.user_center.service.WxMsgRecordService;
 import lombok.RequiredArgsConstructor;

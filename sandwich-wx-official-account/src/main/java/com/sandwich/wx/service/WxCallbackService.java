@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
-import com.lww.common.constant.MqConstants;
-import com.lww.common.dto.WxMsgRecordDTO;
+import com.lww.mq.constant.MqConstants;
+import com.lww.mq.dto.WxMsgRecordDTO;
 import com.sandwich.wx.config.WxConfigProperties;
 import com.sandwich.wx.handler.WxChatMsgFactory;
 import com.sandwich.wx.handler.WxChatMsgHandler;

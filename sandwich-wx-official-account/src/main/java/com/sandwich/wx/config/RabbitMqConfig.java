@@ -1,6 +1,6 @@
 package com.sandwich.wx.config;
 
-import com.lww.common.constant.MqConstants;
+import com.lww.mq.constant.MqConstants;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -10,6 +10,9 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author lww
+ */
 @Configuration
 public class RabbitMqConfig {
 

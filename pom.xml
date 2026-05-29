@@ -20,6 +20,7 @@
         <module>sandwich-common</module>
         <module>sandwich-starter-redis</module>
         <module>sandwich-starter-db</module>
+        <module>sandwich-starter-mq</module>
         <module>little-note-server</module>
         <module>sandwich-server</module>
         <module>sandwich-auth</module>

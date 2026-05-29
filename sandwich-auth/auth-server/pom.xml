@@ -58,8 +58,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
+            <groupId>com.lww</groupId>
+            <artifactId>sandwich-starter-mq</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
     </dependencies>

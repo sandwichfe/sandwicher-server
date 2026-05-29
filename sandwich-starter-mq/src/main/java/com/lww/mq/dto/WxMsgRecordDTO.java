@@ -1,4 +1,4 @@
-package com.lww.common.dto;
+package com.lww.mq.dto;
 
 import lombok.Data;
 

@@ -1,6 +1,6 @@
 package com.lww.auth.server.user_center.config;
 
-import com.lww.common.constant.MqConstants;
+import com.lww.mq.constant.MqConstants;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
