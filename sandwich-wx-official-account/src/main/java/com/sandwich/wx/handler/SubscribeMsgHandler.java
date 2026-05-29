@@ -1,10 +1,12 @@
 package com.sandwich.wx.handler;
 
+import java.util.Map;
+
+import com.sandwich.wx.config.WxConfigProperties;
 import com.sandwich.wx.utils.MessageUtil;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 /**
  * 关注事件处理
@@ -15,6 +17,9 @@ import java.util.Map;
 @Slf4j
 public class SubscribeMsgHandler implements WxChatMsgHandler {
 
+    @Resource
+    private WxConfigProperties wxConfigProperties;
+
     @Override
     public WxChatMsgTypeEnum getMsgType() {
         return WxChatMsgTypeEnum.SUBSCRIBE;
@@ -23,8 +28,7 @@ public class SubscribeMsgHandler implements WxChatMsgHandler {
     @Override
     public String dealMsg(Map<String, String> messageMap) {
         log.info("触发用户关注事件！");
-        String subscribeContent = "你好，这里是一如往眉梢！";
-        return MessageUtil.buildTextMessage(messageMap, subscribeContent);
+        return MessageUtil.buildTextMessage(messageMap, wxConfigProperties.getSubscribeReply());
     }
 
 }
