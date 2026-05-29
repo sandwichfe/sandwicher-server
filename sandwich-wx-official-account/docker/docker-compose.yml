@@ -1,0 +1,13 @@
+services:
+  myapp:
+    build:
+      context: .  # 当前目录下构建镜像
+    image: wx-message:1.0.0  # 镜像名称和版本
+    container_name: wx-message  # 容器名称
+    ports:
+      - "3012:3012"  # 映射主机端口3012到容器的3012端口
+    volumes:
+      - ./application.yml:/app/application.yml  # 挂载配置文件
+    environment:
+      - JASYPT_PASSWORD=xxx  # 可选：通过环境变量传递加密密码
+    restart: always  # 容器退出时自动重启

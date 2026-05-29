@@ -1,0 +1,32 @@
+server:
+  port: 3012
+spring:
+  data:
+    redis:
+      host: 49.235.149.110
+      port: 6379
+      password: ENC(uJjGYgAuROdH+xJKEyeznHV8RL2zz1I/58iwtDQ8KlPHMuW4qNRkNHFaw0m2EnRE)
+      jedis:
+        pool:
+          max-idle: 500
+          min-idle: 50
+          max-active: 2000
+          max-wait: 1000
+      timeout: 5000
+
+jasypt:
+  encryptor:
+    algorithm: PBEWITHHMACSHA512ANDAES_256
+    key-obtention-iterations: 1000
+    pool-size: 1
+    salt-generator-classname: org.jasypt.salt.RandomSaltGenerator
+    iv-generator-classname: org.jasypt.iv.RandomIvGenerator
+    string-output-type: base64
+    # password就是盐值
+    #password: start input
+
+# 微信配置
+wx:
+  config:
+    # 微信公众平台配置的Token
+    token: ""

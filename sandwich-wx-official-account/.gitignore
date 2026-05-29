@@ -1,0 +1,19 @@
+HELP.md
+**/target/
+
+
+**/logs
+
+### IntelliJ IDEA ###
+../.idea
+.idea
+*.iws
+*.iml
+*.ipr
+.idea/inspectionProfiles/**
+!.mvn/wrapper/maven-wrapper.jar
+
+
+
+
+#重要文件
