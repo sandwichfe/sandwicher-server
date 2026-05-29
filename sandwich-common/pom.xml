@@ -32,5 +32,12 @@
             <version>3.3.2</version>
         </dependency>
 
+        <!-- db -->
+        <dependency>
+            <groupId>com.lww</groupId>
+            <artifactId>sandwich-starter-db</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 </project>
