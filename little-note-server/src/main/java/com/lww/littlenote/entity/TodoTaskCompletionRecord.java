@@ -6,10 +6,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lww.common.web.entity.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
+@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("todo_task_completion_record")
 public class TodoTaskCompletionRecord extends BaseEntity implements Serializable {

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lww.common.web.entity.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
  * @author lww
  * @since 2025-01-06
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("todo_task")
 public class TodoTask extends BaseEntity implements Serializable {
@@ -64,28 +66,6 @@ public class TodoTask extends BaseEntity implements Serializable {
      * 用户ID
      */
     private Long userId;
-
-    /**
-     * 创建时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime updateTime;
-
-    /**
-     * 创建人
-     */
-    private Long createBy;
-
-    /**
-     * 更新人
-     */
-    private Long updateBy;
 
     /**
      * 任务状态: 0-未完成, 1-已完成

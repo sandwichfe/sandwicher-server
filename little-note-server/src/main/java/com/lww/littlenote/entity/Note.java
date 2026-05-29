@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lww.common.web.entity.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
  * @author lww
  * @since 2024-06-13
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class Note extends BaseEntity implements Serializable {
 
