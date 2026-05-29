@@ -1,8 +1,11 @@
 package com.sandwich.wx.service;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
+import com.lww.common.constant.MqConstants;
+import com.lww.common.dto.WxMsgRecordDTO;
 import com.sandwich.wx.config.WxConfigProperties;
 import com.sandwich.wx.handler.WxChatMsgFactory;
 import com.sandwich.wx.handler.WxChatMsgHandler;
@@ -10,6 +13,7 @@ import com.sandwich.wx.utils.MessageUtil;
 import com.sandwich.wx.utils.SecuritySha1Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -24,6 +28,7 @@ public class WxCallbackService {
 
     private final WxConfigProperties wxConfigProperties;
     private final WxChatMsgFactory wxChatMsgFactory;
+    private final RabbitTemplate rabbitTemplate;
 
     /**
      * 验证微信回调签名
@@ -77,7 +82,26 @@ public class WxCallbackService {
         // 处理消息并返回响应
         String replyContent = wxChatMsgHandler.dealMsg(messageMap);
         log.info("replyContent:{}", replyContent);
+
+        // 发送消息记录到MQ
+        sendMsgRecord(messageMap, msgTypeKey, replyContent);
+
         return replyContent;
+    }
+
+    private void sendMsgRecord(Map<String, String> messageMap, String msgType, String replyContent) {
+        try {
+            WxMsgRecordDTO dto = new WxMsgRecordDTO();
+            dto.setMsgType(msgType);
+            dto.setFromUser(messageMap.get("FromUserName"));
+            dto.setContent(messageMap.get("Content"));
+            dto.setReplyContent(replyContent);
+            dto.setReceiveUser(messageMap.get("ToUserName"));
+            dto.setReceiveTime(LocalDateTime.now());
+            rabbitTemplate.convertAndSend(MqConstants.WX_MSG_EXCHANGE, MqConstants.WX_MSG_ROUTING_KEY, dto);
+        } catch (Exception e) {
+            log.error("发送微信消息记录到MQ失败", e);
+        }
     }
 
     /**

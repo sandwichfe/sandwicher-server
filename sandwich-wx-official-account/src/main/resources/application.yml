@@ -1,6 +1,12 @@
 server:
   port: 3012
 spring:
+  rabbitmq:
+    host: 49.235.149.110
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
   data:
     redis:
       host: 49.235.149.110
