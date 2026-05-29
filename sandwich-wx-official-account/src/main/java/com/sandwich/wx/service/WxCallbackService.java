@@ -119,4 +119,8 @@ public class WxCallbackService {
         }
         return sb.toString();
     }
+
+    public void testSend() {
+        sendMsgRecord(Map.of("FromUserName", "123456", "ToUserName", "789012", "Content", "你好"), "text", "hello world");
+    }
 }

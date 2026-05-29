@@ -22,10 +22,10 @@ mybatis-plus:
 
 spring:
   rabbitmq:
-    host: 49.235.149.110
+    host: 8.162.8.64
     port: 5672
-    username: guest
-    password: guest
+    username: admin
+    password: ENC(RYlQTkddNsHDe3PB85Vb8+bUc8ABjVAOpWsC1E3ev+MGNpBwwfVPtZ5NmrZzCSan)
     virtual-host: /
   datasource:
     url: jdbc:mysql://49.235.149.110:3306/sandwich?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai

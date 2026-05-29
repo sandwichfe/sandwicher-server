@@ -17,6 +17,7 @@ public class CallBackController {
 
     @RequestMapping("/test")
     public String test() {
+        wxCallbackService.testSend();
         return "hello world sandwich";
     }
 
