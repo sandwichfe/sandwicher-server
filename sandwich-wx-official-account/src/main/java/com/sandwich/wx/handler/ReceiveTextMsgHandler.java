@@ -2,9 +2,8 @@ package com.sandwich.wx.handler;
 
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
-import com.sandwich.wx.redis.RedisUtil;
+import com.lww.redis.util.RedisUtil;
 import com.sandwich.wx.utils.MessageUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -55,8 +54,8 @@ public class ReceiveTextMsgHandler implements WxChatMsgHandler {
 
         Random random = new Random();
         int num = random.nextInt(1000);
-        String numKey = redisUtil.buildKey(LOGIN_PREFIX, String.valueOf(num));
-        redisUtil.setNx(numKey, fromUserName, 5L, TimeUnit.MINUTES);
+        String numKey = LOGIN_PREFIX + "." + num;
+        redisUtil.set(numKey, fromUserName, 300L);
 
         String numContent = "您当前的验证码是：" + num + "！ 5分钟内有效";
         return MessageUtil.buildTextMessage(messageMap, numContent);
