@@ -3,6 +3,11 @@ package com.sandwich.wx.service;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import com.lww.mq.constant.MqConstants;
 import com.lww.mq.dto.WxMsgRecordDTO;
@@ -29,6 +34,13 @@ public class WxCallbackService {
     private final WxConfigProperties wxConfigProperties;
     private final WxChatMsgFactory wxChatMsgFactory;
     private final RabbitTemplate rabbitTemplate;
+
+    private static final ExecutorService executor = new ThreadPoolExecutor(
+            2, 4, 60, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<>(1024),
+            new ThreadPoolExecutor.CallerRunsPolicy()
+    );
+
 
     /**
      * 验证微信回调签名
@@ -90,18 +102,20 @@ public class WxCallbackService {
     }
 
     private void sendMsgRecord(Map<String, String> messageMap, String msgType, String replyContent) {
-        try {
-            WxMsgRecordDTO dto = new WxMsgRecordDTO();
-            dto.setMsgType(msgType);
-            dto.setFromUser(messageMap.get("FromUserName"));
-            dto.setContent(messageMap.get("Content"));
-            dto.setReplyContent(replyContent);
-            dto.setReceiveUser(messageMap.get("ToUserName"));
-            dto.setReceiveTime(LocalDateTime.now());
-            rabbitTemplate.convertAndSend(MqConstants.WX_MSG_EXCHANGE, MqConstants.WX_MSG_ROUTING_KEY, dto);
-        } catch (Exception e) {
-            log.error("发送微信消息记录到MQ失败", e);
-        }
+        CompletableFuture.runAsync(() -> {
+            try {
+                WxMsgRecordDTO dto = new WxMsgRecordDTO();
+                dto.setMsgType(msgType);
+                dto.setFromUser(messageMap.get("FromUserName"));
+                dto.setContent(messageMap.get("Content"));
+                dto.setReplyContent(replyContent);
+                dto.setReceiveUser(messageMap.get("ToUserName"));
+                dto.setReceiveTime(LocalDateTime.now());
+                rabbitTemplate.convertAndSend(MqConstants.WX_MSG_EXCHANGE, MqConstants.WX_MSG_ROUTING_KEY, dto);
+            } catch (Exception e) {
+                log.error("发送微信消息记录到MQ失败", e);
+            }
+        }, executor);
     }
 
     /**
