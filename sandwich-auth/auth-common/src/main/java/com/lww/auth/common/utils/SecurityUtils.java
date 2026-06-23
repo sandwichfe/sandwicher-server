@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * OAuth2 authentication and authorization utilities.
+ * 认证鉴权工具
  *
  * @author vains
  */
@@ -37,11 +37,11 @@ public class SecurityUtils {
     }
 
     /**
-     * Handles authentication and authorization exceptions.
+     * 认证与鉴权失败回调
      *
-     * @param request   current request
-     * @param response  current response
-     * @param e         exception
+     * @param request  当前请求
+     * @param response 当前响应
+     * @param e        具体的异常信息
      */
     public static void exceptionHandler(HttpServletRequest request,
                                         HttpServletResponse response,
@@ -60,12 +60,21 @@ public class SecurityUtils {
         }
     }
 
+    /**
+     * 获取异常信息map
+     *
+     * @param request  当前请求
+     * @param response 当前响应
+     * @param e        本次异常具体的异常实例
+     * @return 异常信息map
+     */
     private static Map<String, String> getErrorParameter(HttpServletRequest request,
                                                          HttpServletResponse response,
                                                          Throwable e) {
         log.error("认证鉴权失败异常信息{}", e.getMessage(), e);
         Map<String, String> parameters = new LinkedHashMap<>();
         if (request.getUserPrincipal() instanceof AbstractOAuth2TokenAuthenticationToken) {
+            // 权限不足
             parameters.put("error", BearerTokenErrorCodes.INSUFFICIENT_SCOPE);
             parameters.put("error_description",
                     "The request requires higher privileges than provided by the access token.");
@@ -73,6 +82,7 @@ public class SecurityUtils {
             response.setStatus(HttpStatus.FORBIDDEN.value());
         }
         if (e instanceof OAuth2AuthenticationException authenticationException) {
+            // jwt异常，e.g. jwt超过有效期、jwt无效等
             OAuth2Error error = authenticationException.getError();
             parameters.put("error", error.getErrorCode());
             if (StringUtils.hasText(error.getUri())) {
@@ -89,6 +99,7 @@ public class SecurityUtils {
             }
         }
         if (e instanceof InsufficientAuthenticationException) {
+            // 没有携带jwt访问接口，没有客户端认证信息
             parameters.put("error", BearerTokenErrorCodes.INVALID_TOKEN);
             parameters.put("error_description", "Not authorized.");
             parameters.put("error_uri", "https://tools.ietf.org/html/rfc6750#section-3.1");
@@ -99,10 +110,10 @@ public class SecurityUtils {
     }
 
     /**
-     * Builds the WWW-Authenticate response header value.
+     * 生成放入请求头的错误信息
      *
-     * @param parameters error parameters
-     * @return header value
+     * @param parameters 参数
+     * @return 字符串
      */
     public static String computeWwwAuthenticateHeaderValue(Map<String, String> parameters) {
         StringBuilder wwwAuthenticate = new StringBuilder();
