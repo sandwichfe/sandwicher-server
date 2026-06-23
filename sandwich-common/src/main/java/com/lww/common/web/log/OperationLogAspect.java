@@ -1,7 +1,7 @@
 package com.lww.common.web.log;
 
-import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.alibaba.fastjson.JSON;
+import com.lww.common.utils.ServletRequestUtil;
 import com.lww.common.web.log.entity.OperationLog;
 import com.lww.common.web.log.service.OperationLogService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,12 +50,11 @@ public class OperationLogAspect {
         String methodName = method.getName();
 
         HttpServletRequest request = resolveRequest();
-        String ipAddress = request != null ? JakartaServletUtil.getClientIP(request) : null;
+        String ipAddress = ServletRequestUtil.getClientIp(request);
         String region = ipAddress != null ? regionSearcher.getAddress(ipAddress) : null;
         String requestUri = request != null ? request.getRequestURI() : null;
         OperatorInfo operatorInfo = resolveOperatorInfo();
         LocalDateTime startTime = LocalDateTime.now();
-
         OperationLog logContext = OperationLog.builder()
                 .module(loggable.module())
                 .type(loggable.type())

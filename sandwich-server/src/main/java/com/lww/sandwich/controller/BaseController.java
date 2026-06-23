@@ -1,6 +1,6 @@
 package com.lww.sandwich.controller;
 
-import cn.hutool.extra.servlet.JakartaServletUtil;
+import com.lww.common.utils.ServletRequestUtil;
 import com.lww.common.web.vo.PageDataVo;
 import com.lww.common.web.vo.PageVo;
 import com.lww.common.web.response.ResponseResult;
@@ -46,7 +46,7 @@ public class BaseController {
 
     @GetMapping("/getRequestIp")
     public ResponseResult<String> getRequestIp(HttpServletRequest request) {
-        String ipAddress = JakartaServletUtil.getClientIP(request);
+        String ipAddress = ServletRequestUtil.getClientIp(request);
         viewService.addViewRecord(ipAddress,request);
         return ResultUtil.success(ipAddress);
     }

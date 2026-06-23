@@ -1,10 +1,15 @@
 package com.lww.common.web.handle;
 
-import cn.hutool.core.collection.CollUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import com.lww.common.web.exception.AppException;
 import com.lww.common.web.response.ResponseCode;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -17,11 +22,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-import java.util.List;
-import java.util.Set;
 
 /**
  * 全局异常处理类
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseResult<Void> jsonParamsException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
-        List<String> errorList = CollUtil.newArrayList();
+        List<String> errorList = new ArrayList<>();
 
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
             String msg = String.format("%s%s；", fieldError.getField(), fieldError.getDefaultMessage());
@@ -70,7 +70,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseResult<Void> paramsException(ConstraintViolationException e) {
 
-        List<String> errorList = CollUtil.newArrayList();
+        List<String> errorList = new ArrayList<>();
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         for (ConstraintViolation<?> violation : violations) {
             errorList.add(violation.getMessageTemplate());
