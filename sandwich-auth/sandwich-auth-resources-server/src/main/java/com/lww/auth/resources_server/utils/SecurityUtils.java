@@ -61,7 +61,7 @@ public class SecurityUtils {
      * @return 异常信息map
      */
     private static Map<String, String> getErrorParameter(HttpServletRequest request, HttpServletResponse response, Throwable e) {
-        log.error("认证鉴权失败异常信息{}", e.getMessage(), e);
+        log.error("资源服务-认证鉴权失败异常信息{}", e.getMessage(), e);
         Map<String, String> parameters = new LinkedHashMap<>();
         if (request.getUserPrincipal() instanceof AbstractOAuth2TokenAuthenticationToken) {
             // 权限不足
