@@ -48,7 +48,7 @@ public class SecurityUtils {
         try {
             log.error("认证鉴权失败信息:{}", JSON.toJSONString(parameters));
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(JsonUtils.objectCovertToJson(ResultUtil.error(HttpStatus.UNAUTHORIZED.value(),"Not authorized")));
+            response.getWriter().write(JsonUtils.objectCovertToJson(ResultUtil.error(HttpStatus.UNAUTHORIZED.value(),"请先登录！")));
             response.getWriter().flush();
         } catch (IOException ex) {
             log.error("写回错误信息失败", e);

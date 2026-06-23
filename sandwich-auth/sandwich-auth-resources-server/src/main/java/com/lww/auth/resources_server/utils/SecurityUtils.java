@@ -1,6 +1,7 @@
 package com.lww.auth.resources_server.utils;
 
 
+import com.lww.common.web.response.ResultUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +46,7 @@ public class SecurityUtils {
         response.addHeader(HttpHeaders.WWW_AUTHENTICATE, wwwAuthenticate);
         try {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(JsonUtils.objectCovertToJson(parameters));
+            response.getWriter().write(JsonUtils.objectCovertToJson(ResultUtil.error(HttpStatus.UNAUTHORIZED.value(),"请先登录！")));
             response.getWriter().flush();
         } catch (IOException ex) {
             log.error("写回错误信息失败", e);
