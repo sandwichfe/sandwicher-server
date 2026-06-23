@@ -1,6 +1,5 @@
 package com.lww.oss.adapter;
 
-
 import com.lww.oss.entity.FileInfo;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 阿里云oss适配器
+ * Aliyun OSS adapter.
  *
  * @author lww
  * @since 2023/10/14
@@ -18,7 +17,6 @@ public class AliStorageAdapter implements StorageAdapter {
 
     @Override
     public void createBucket(String bucket) {
-
     }
 
     @Override
@@ -39,23 +37,20 @@ public class AliStorageAdapter implements StorageAdapter {
     }
 
     @Override
-    public InputStream downLoad(String bucket, String objectName) {
+    public InputStream download(String bucket, String objectName) {
         return null;
     }
 
     @Override
     public void deleteBucket(String bucket) {
-
     }
 
     @Override
     public void deleteObject(String bucket, String objectName) {
-
     }
 
     @Override
     public String getUrl(String bucket, String objectName) {
         return null;
     }
-
 }

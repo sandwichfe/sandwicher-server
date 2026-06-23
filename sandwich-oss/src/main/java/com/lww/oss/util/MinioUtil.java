@@ -1,24 +1,36 @@
 package com.lww.oss.util;
 
-
+import com.lww.common.web.exception.AppException;
 import com.lww.oss.entity.FileInfo;
-import io.minio.*;
-import io.minio.http.Method;
-import io.minio.messages.Bucket;
+import io.minio.BucketExistsArgs;
+import io.minio.GetObjectArgs;
+import io.minio.GetPresignedObjectUrlArgs;
+import io.minio.Http;
+import io.minio.ListObjectsArgs;
+import io.minio.MakeBucketArgs;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
+import io.minio.RemoveBucketArgs;
+import io.minio.RemoveObjectArgs;
+import io.minio.Result;
+import io.minio.errors.ErrorResponseException;
 import io.minio.messages.Item;
+import io.minio.messages.ListAllMyBucketsResult.Bucket;
 import jakarta.annotation.Resource;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * minio文件操作工具
+ * MinIO file utility.
  *
  * @author lww
  * @since 2024
@@ -26,38 +38,39 @@ import java.util.stream.Collectors;
 @Component
 public class MinioUtil {
 
-    /** Map to hold file extensions and their corresponding content types*/
-    private static final Map<String, String> CONTENT_TYPE_MAP = new HashMap<>();
+    private static final long DEFAULT_PART_SIZE = 5L * 1024 * 1024;
+    private static final Map<String, String> CONTENT_TYPE_MAP;
 
     static {
-        CONTENT_TYPE_MAP.put("txt", "text/plain");
-        CONTENT_TYPE_MAP.put("jpg", "image/jpeg");
-        CONTENT_TYPE_MAP.put("jpeg", "image/jpeg");
-        CONTENT_TYPE_MAP.put("png", "image/png");
-        CONTENT_TYPE_MAP.put("gif", "image/gif");
-        CONTENT_TYPE_MAP.put("pdf", "application/pdf");
-        CONTENT_TYPE_MAP.put("xml", "application/xml");
-        CONTENT_TYPE_MAP.put("html", "text/html");
-        CONTENT_TYPE_MAP.put("css", "text/css");
-        CONTENT_TYPE_MAP.put("js", "application/javascript");
-        CONTENT_TYPE_MAP.put("csv", "text/csv");
-        CONTENT_TYPE_MAP.put("mp4", "video/mp4");
-        CONTENT_TYPE_MAP.put("mp3", "audio/mpeg");
-        CONTENT_TYPE_MAP.put("wav", "audio/wav");
-        CONTENT_TYPE_MAP.put("zip", "application/zip");
-        CONTENT_TYPE_MAP.put("tar", "application/x-tar");
-        CONTENT_TYPE_MAP.put("rar", "application/vnd.rar");
-        CONTENT_TYPE_MAP.put("bmp", "image/bmp");
-        CONTENT_TYPE_MAP.put("tiff", "image/tiff");
-        CONTENT_TYPE_MAP.put("svg", "image/svg+xml");
-        CONTENT_TYPE_MAP.put("woff", "font/woff");
-        CONTENT_TYPE_MAP.put("woff2", "font/woff2");
-        CONTENT_TYPE_MAP.put("otf", "font/otf");
-        CONTENT_TYPE_MAP.put("eot", "application/vnd.ms-fontobject");
-        CONTENT_TYPE_MAP.put("ico", "image/x-icon");
-        CONTENT_TYPE_MAP.put("apk", "application/vnd.android.package-archive");
-        CONTENT_TYPE_MAP.put("dmg", "application/x-apple-diskimage");
-        // 其他类型可以根据需要添加
+        Map<String, String> contentTypeMap = new HashMap<>();
+        contentTypeMap.put("txt", "text/plain");
+        contentTypeMap.put("jpg", "image/jpeg");
+        contentTypeMap.put("jpeg", "image/jpeg");
+        contentTypeMap.put("png", "image/png");
+        contentTypeMap.put("gif", "image/gif");
+        contentTypeMap.put("pdf", "application/pdf");
+        contentTypeMap.put("xml", "application/xml");
+        contentTypeMap.put("html", "text/html");
+        contentTypeMap.put("css", "text/css");
+        contentTypeMap.put("js", "application/javascript");
+        contentTypeMap.put("csv", "text/csv");
+        contentTypeMap.put("mp4", "video/mp4");
+        contentTypeMap.put("mp3", "audio/mpeg");
+        contentTypeMap.put("wav", "audio/wav");
+        contentTypeMap.put("zip", "application/zip");
+        contentTypeMap.put("tar", "application/x-tar");
+        contentTypeMap.put("rar", "application/vnd.rar");
+        contentTypeMap.put("bmp", "image/bmp");
+        contentTypeMap.put("tiff", "image/tiff");
+        contentTypeMap.put("svg", "image/svg+xml");
+        contentTypeMap.put("woff", "font/woff");
+        contentTypeMap.put("woff2", "font/woff2");
+        contentTypeMap.put("otf", "font/otf");
+        contentTypeMap.put("eot", "application/vnd.ms-fontobject");
+        contentTypeMap.put("ico", "image/x-icon");
+        contentTypeMap.put("apk", "application/vnd.android.package-archive");
+        contentTypeMap.put("dmg", "application/x-apple-diskimage");
+        CONTENT_TYPE_MAP = Collections.unmodifiableMap(contentTypeMap);
     }
 
     @Resource
@@ -66,92 +79,116 @@ public class MinioUtil {
     /**
      * 创建bucket桶
      */
-    @SneakyThrows
-    public void createBucket(String bucket)  {
-        boolean exists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
-        if (!exists) {
-            minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
+    public void createBucket(String bucket) {
+        try {
+            boolean exists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
+            if (!exists) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
+            }
+        } catch (ErrorResponseException exception) {
+            String errorCode = exception.errorResponse().code();
+            if (!"BucketAlreadyOwnedByYou".equals(errorCode) && !"BucketAlreadyExists".equals(errorCode)) {
+                throw buildOperationException("create bucket", bucket, null, exception);
+            }
+        } catch (Exception exception) {
+            throw buildOperationException("create bucket", bucket, null, exception);
         }
     }
 
     /**
      * 上传文件
      */
-    @SneakyThrows
-    public void uploadFile(InputStream inputStream, String bucket, String objectName)  {
-        minioClient.putObject(PutObjectArgs.builder().bucket(bucket).object(objectName)
-                .stream(inputStream, -1, 5242889L).contentType(getContentType(objectName)).build());
+    public void uploadFile(InputStream inputStream, String bucket, String objectName, long objectSize, String contentType) {
+        try {
+            minioClient.putObject(PutObjectArgs.builder()
+                    .bucket(bucket)
+                    .object(objectName)
+                    .stream(inputStream, objectSize, DEFAULT_PART_SIZE)
+                    .contentType(resolveContentType(objectName, contentType))
+                    .build());
+        } catch (Exception exception) {
+            throw buildOperationException("upload object", bucket, objectName, exception);
+        }
     }
 
-    /**
-     * 列出所有桶
-     */
-    @SneakyThrows
-    public List<String> getAllBucket()  {
-        List<Bucket> buckets = minioClient.listBuckets();
-        return buckets.stream().map(Bucket::name).collect(Collectors.toList());
+    public List<String> getAllBucket() {
+        try {
+            List<Bucket> buckets = minioClient.listBuckets();
+            return buckets.stream().map(Bucket::name).collect(Collectors.toList());
+        } catch (Exception exception) {
+            throw buildOperationException("list buckets", null, null, exception);
+        }
     }
 
     /**
      * 列出当前桶及文件
      */
-    @SneakyThrows
-    public List<FileInfo> getAllFile(String bucket)  {
-        Iterable<Result<Item>> results = minioClient.listObjects(
-                ListObjectsArgs.builder().bucket(bucket).build());
-        List<FileInfo> fileInfoList = new LinkedList<>();
-        for (Result<Item> result : results) {
-            FileInfo fileInfo = new FileInfo();
-            Item item = result.get();
-            fileInfo.setFileName(item.objectName());
-            fileInfo.setDirectoryFlag(item.isDir());
-            fileInfo.setEtag(item.etag());
-            fileInfoList.add(fileInfo);
+    public List<FileInfo> getAllFile(String bucket) {
+        try {
+            Iterable<Result<Item>> results = minioClient.listObjects(ListObjectsArgs.builder().bucket(bucket).build());
+            List<FileInfo> fileInfoList = new ArrayList<>();
+            for (Result<Item> result : results) {
+                Item item = result.get();
+                FileInfo fileInfo = new FileInfo();
+                fileInfo.setFileName(item.objectName());
+                fileInfo.setDirectoryFlag(item.isDir());
+                fileInfo.setEtag(item.etag());
+                fileInfoList.add(fileInfo);
+            }
+            return fileInfoList;
+        } catch (Exception exception) {
+            throw buildOperationException("list objects", bucket, null, exception);
         }
-        return fileInfoList;
     }
 
     /**
      * 下载文件
      */
-    @SneakyThrows
-    public InputStream downLoad(String bucket, String objectName)  {
-        return minioClient.getObject(
-                GetObjectArgs.builder().bucket(bucket).object(objectName).build()
-        );
+    public InputStream download(String bucket, String objectName) {
+        try {
+            return minioClient.getObject(GetObjectArgs.builder().bucket(bucket).object(objectName).build());
+        } catch (Exception exception) {
+            throw buildOperationException("download object", bucket, objectName, exception);
+        }
     }
 
     /**
      * 删除桶
      */
-    @SneakyThrows
-    public void deleteBucket(String bucket)  {
-        minioClient.removeBucket(
-                RemoveBucketArgs.builder().bucket(bucket).build()
-        );
+    public void deleteBucket(String bucket) {
+        try {
+            minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucket).build());
+        } catch (Exception exception) {
+            throw buildOperationException("delete bucket", bucket, null, exception);
+        }
     }
 
     /**
      * 删除文件
      */
-    @SneakyThrows
-    public void deleteObject(String bucket, String objectName)  {
-        minioClient.removeObject(
-                RemoveObjectArgs.builder().bucket(bucket).object(objectName).build()
-        );
+    public void deleteObject(String bucket, String objectName) {
+        try {
+            minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucket).object(objectName).build());
+        } catch (Exception exception) {
+            throw buildOperationException("delete object", bucket, objectName, exception);
+        }
     }
 
     /**
      * 获取文件url
      */
-    @SneakyThrows
     public String getPreviewFileUrl(String bucketName, String objectName) {
-        GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
-                .method(Method.GET)
-                .bucket(bucketName).object(objectName).build();
-        return minioClient.getPresignedObjectUrl(args);
+        try {
+            GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
+                    .method(Http.Method.GET)
+                    .bucket(bucketName)
+                    .object(objectName)
+                    .build();
+            return minioClient.getPresignedObjectUrl(args);
+        } catch (Exception exception) {
+            throw buildOperationException("get preview url", bucketName, objectName, exception);
+        }
     }
-
 
     /**
      * 根据文件扩展名获取 contentType
@@ -159,9 +196,12 @@ public class MinioUtil {
      * @author lww
      * @since 2024-10-21
      */
-    private static String getContentType(String filePath) {
+    private static String resolveContentType(String filePath, String contentType) {
+        if (StringUtils.hasText(contentType)) {
+            return contentType;
+        }
         String extension = getFileExtension(filePath);
-        return CONTENT_TYPE_MAP.getOrDefault(extension.toLowerCase(), "application/octet-stream");
+        return CONTENT_TYPE_MAP.getOrDefault(extension.toLowerCase(Locale.ROOT), "application/octet-stream");
     }
 
     /**
@@ -178,6 +218,17 @@ public class MinioUtil {
         return "";
     }
 
-
+    private AppException buildOperationException(String operation, String bucket, String objectName, Exception exception) {
+        StringBuilder messageBuilder = new StringBuilder("MinIO ");
+        messageBuilder.append(operation).append(" failed");
+        if (StringUtils.hasText(bucket)) {
+            messageBuilder.append(", bucket=").append(bucket);
+        }
+        if (StringUtils.hasText(objectName)) {
+            messageBuilder.append(", objectName=").append(objectName);
+        }
+        messageBuilder.append(", reason=").append(exception.getMessage());
+        return new AppException(messageBuilder.toString());
+    }
 }
 

@@ -1,18 +1,19 @@
 package com.lww.oss.adapter;
 
+import com.lww.common.web.exception.AppException;
 import com.lww.oss.entity.FileInfo;
 import com.lww.oss.util.MinioUtil;
 import jakarta.annotation.Resource;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 /**
- * minioIO存储适配器
+ * MinIO storage adapter.
  *
  * @author lww
  * @since 2023/10/14
@@ -22,9 +23,6 @@ public class MinioStorageAdapter implements StorageAdapter {
     @Resource
     private MinioUtil minioUtil;
 
-    /**
-     * minioUrl
-     */
     @Value("${minio.url}")
     private String url;
 
@@ -32,62 +30,69 @@ public class MinioStorageAdapter implements StorageAdapter {
     private String bucket;
 
     @Override
-    @SneakyThrows
     public void createBucket(String bucket) {
         minioUtil.createBucket(bucket);
     }
 
     @Override
-    @SneakyThrows
     public String uploadFile(MultipartFile uploadFile, String bucket, String dir) {
-        if (!StringUtils.hasText(bucket)){
+        if (!StringUtils.hasText(bucket)) {
             bucket = this.bucket;
         }
         minioUtil.createBucket(bucket);
-        if (dir != null) {
-            minioUtil.uploadFile(uploadFile.getInputStream(), bucket, dir + "/" + uploadFile.getOriginalFilename());
-        } else {
-            minioUtil.uploadFile(uploadFile.getInputStream(), bucket, uploadFile.getOriginalFilename());
+
+        String fileName = resolveFileName(uploadFile);
+        String objectName = StringUtils.hasText(dir) ? dir + "/" + fileName : fileName;
+
+        try (InputStream inputStream = uploadFile.getInputStream()) {
+            minioUtil.uploadFile(
+                    inputStream,
+                    bucket,
+                    objectName,
+                    uploadFile.getSize(),
+                    uploadFile.getContentType()
+            );
+        } catch (IOException exception) {
+            throw new AppException("Upload file stream failed, fileName=" + fileName + ", reason=" + exception.getMessage());
         }
-        // 返回标准化路径（bucket/key格式）
-        return bucket+"/"+dir + "/" + uploadFile.getOriginalFilename();
+        return bucket + "/" + objectName;
     }
 
     @Override
-    @SneakyThrows
     public List<String> getAllBucket() {
         return minioUtil.getAllBucket();
     }
 
     @Override
-    @SneakyThrows
     public List<FileInfo> getAllFile(String bucket) {
         return minioUtil.getAllFile(bucket);
     }
 
     @Override
-    @SneakyThrows
-    public InputStream downLoad(String bucket, String objectName) {
-        return minioUtil.downLoad(bucket, objectName);
+    public InputStream download(String bucket, String objectName) {
+        return minioUtil.download(bucket, objectName);
     }
 
     @Override
-    @SneakyThrows
     public void deleteBucket(String bucket) {
         minioUtil.deleteBucket(bucket);
     }
 
     @Override
-    @SneakyThrows
     public void deleteObject(String bucket, String objectName) {
         minioUtil.deleteObject(bucket, objectName);
     }
 
     @Override
-    @SneakyThrows
     public String getUrl(String bucket, String objectName) {
         return url + "/" + bucket + "/" + objectName;
     }
 
-
+    private String resolveFileName(MultipartFile uploadFile) {
+        String originalFilename = uploadFile.getOriginalFilename();
+        if (StringUtils.hasText(originalFilename)) {
+            return originalFilename;
+        }
+        return uploadFile.getName();
+    }
 }
