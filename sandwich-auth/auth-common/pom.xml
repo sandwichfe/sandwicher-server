@@ -3,19 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.lww</groupId>
-        <artifactId>sandwich-parent</artifactId>
+        <artifactId>sandwich-auth</artifactId>
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>sandwich-auth</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>auth-common</artifactId>
+    <packaging>jar</packaging>
 
-
-    <modules>
-        <module>auth-common</module>
-        <module>auth-server</module>
-    </modules>
-
+    <name>auth-common</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,19 +18,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.lww</groupId>
-            <artifactId>sandwich-common</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
-
     </dependencies>
-
 </project>

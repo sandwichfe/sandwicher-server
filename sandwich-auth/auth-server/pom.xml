@@ -18,6 +18,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.lww</groupId>
+            <artifactId>auth-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- 引入spring-boot-starter-security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

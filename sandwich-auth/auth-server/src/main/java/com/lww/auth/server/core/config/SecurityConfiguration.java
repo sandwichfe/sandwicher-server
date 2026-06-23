@@ -4,7 +4,7 @@ import com.lww.auth.server.core.oauth2.handler.MyAuthenticationFailureHandler;
 import com.lww.auth.server.core.oauth2.handler.MyAuthenticationSuccessHandler;
 import com.lww.auth.server.core.oauth2.extension.password.PasswordAuthenticationConverter;
 import com.lww.auth.server.core.oauth2.extension.password.PasswordAuthenticationProvider;
-import com.lww.auth.server.core.utils.SecurityUtils;
+import com.lww.auth.common.utils.SecurityUtils;
 import com.lww.redis.util.RedisUtil;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;

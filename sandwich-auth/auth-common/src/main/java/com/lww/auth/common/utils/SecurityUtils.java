@@ -1,6 +1,7 @@
-package com.lww.auth.resources_server.utils;
+package com.lww.auth.common.utils;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lww.common.web.response.ResultUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,26 +23,29 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 认证鉴权工具
+ * OAuth2 authentication and authorization utilities.
  *
  * @author vains
  */
 @Slf4j
 public class SecurityUtils {
 
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     private SecurityUtils() {
-        // 禁止实例化工具类
         throw new UnsupportedOperationException("Utility classes cannot be instantiated.");
     }
 
     /**
-     * 认证与鉴权失败回调
+     * Handles authentication and authorization exceptions.
      *
-     * @param request  当前请求
-     * @param response 当前响应
-     * @param e        具体的异常信息
+     * @param request   current request
+     * @param response  current response
+     * @param e         exception
      */
-    public static void exceptionHandler(HttpServletRequest request, HttpServletResponse response, Throwable e) {
+    public static void exceptionHandler(HttpServletRequest request,
+                                        HttpServletResponse response,
+                                        Throwable e) {
         Map<String, String> parameters = getErrorParameter(request, response, e);
         String wwwAuthenticate = computeWwwAuthenticateHeaderValue(parameters);
         response.addHeader(HttpHeaders.WWW_AUTHENTICATE, wwwAuthenticate);
@@ -49,26 +53,19 @@ public class SecurityUtils {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=" + StandardCharsets.UTF_8.name());
             var writer = response.getWriter();
-            writer.write(JsonUtils.objectCovertToJson(ResultUtil.error(HttpStatus.UNAUTHORIZED.value(), "请先登录！")));
+            writer.write(toJson(ResultUtil.error(HttpStatus.UNAUTHORIZED.value(), "请先登录！")));
             writer.flush();
         } catch (IOException ex) {
-            log.error("写回错误信息失败", e);
+            log.error("写回错误信息失败", ex);
         }
     }
 
-    /**
-     * 获取异常信息map
-     *
-     * @param request  当前请求
-     * @param response 当前响应
-     * @param e        本次异常具体的异常实例
-     * @return 异常信息map
-     */
-    private static Map<String, String> getErrorParameter(HttpServletRequest request, HttpServletResponse response, Throwable e) {
-        log.error("资源服务-认证鉴权失败异常信息{}", e.getMessage(), e);
+    private static Map<String, String> getErrorParameter(HttpServletRequest request,
+                                                         HttpServletResponse response,
+                                                         Throwable e) {
+        log.error("认证鉴权失败异常信息{}", e.getMessage(), e);
         Map<String, String> parameters = new LinkedHashMap<>();
         if (request.getUserPrincipal() instanceof AbstractOAuth2TokenAuthenticationToken) {
-            // 权限不足
             parameters.put("error", BearerTokenErrorCodes.INSUFFICIENT_SCOPE);
             parameters.put("error_description",
                     "The request requires higher privileges than provided by the access token.");
@@ -76,7 +73,6 @@ public class SecurityUtils {
             response.setStatus(HttpStatus.FORBIDDEN.value());
         }
         if (e instanceof OAuth2AuthenticationException authenticationException) {
-            // jwt异常，e.g. jwt超过有效期、jwt无效等
             OAuth2Error error = authenticationException.getError();
             parameters.put("error", error.getErrorCode());
             if (StringUtils.hasText(error.getUri())) {
@@ -93,7 +89,6 @@ public class SecurityUtils {
             }
         }
         if (e instanceof InsufficientAuthenticationException) {
-            // 没有携带jwt访问接口，没有客户端认证信息
             parameters.put("error", BearerTokenErrorCodes.INVALID_TOKEN);
             parameters.put("error_description", "Not authorized.");
             parameters.put("error_uri", "https://tools.ietf.org/html/rfc6750#section-3.1");
@@ -104,10 +99,10 @@ public class SecurityUtils {
     }
 
     /**
-     * 生成放入请求头的错误信息
+     * Builds the WWW-Authenticate response header value.
      *
-     * @param parameters 参数
-     * @return 字符串
+     * @param parameters error parameters
+     * @return header value
      */
     public static String computeWwwAuthenticateHeaderValue(Map<String, String> parameters) {
         StringBuilder wwwAuthenticate = new StringBuilder();
@@ -125,5 +120,8 @@ public class SecurityUtils {
         }
         return wwwAuthenticate.toString();
     }
-}
 
+    private static String toJson(Object value) throws JsonProcessingException {
+        return value instanceof String ? (String) value : OBJECT_MAPPER.writeValueAsString(value);
+    }
+}

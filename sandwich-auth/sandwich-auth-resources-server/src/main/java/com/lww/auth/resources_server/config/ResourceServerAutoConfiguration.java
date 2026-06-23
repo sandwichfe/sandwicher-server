@@ -7,17 +7,16 @@ package com.lww.auth.resources_server.config;
  * @since 2024/11/13
  */
 
-import com.lww.auth.resources_server.utils.SecurityUtils;
+import java.util.List;
+
+import com.lww.auth.common.utils.SecurityUtils;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
-
-import java.util.List;
 
 @Configuration
 public class ResourceServerAutoConfiguration {
