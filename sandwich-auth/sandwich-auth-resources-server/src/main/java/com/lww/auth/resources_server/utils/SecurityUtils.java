@@ -94,7 +94,7 @@ public class SecurityUtils {
             parameters.put("error_uri", "https://tools.ietf.org/html/rfc6750#section-3.1");
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
         }
-        parameters.put("message", e.getMessage());
+        parameters.put("msg", "请先登录");
         return parameters;
     }
 
