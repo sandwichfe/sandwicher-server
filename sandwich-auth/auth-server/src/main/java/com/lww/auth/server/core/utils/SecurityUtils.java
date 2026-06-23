@@ -1,7 +1,11 @@
 package com.lww.auth.server.core.utils;
 
 
-import com.alibaba.fastjson.JSON;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.lww.common.web.response.ResultUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,10 +20,6 @@ import org.springframework.security.oauth2.server.resource.BearerTokenError;
 import org.springframework.security.oauth2.server.resource.BearerTokenErrorCodes;
 import org.springframework.security.oauth2.server.resource.authentication.AbstractOAuth2TokenAuthenticationToken;
 import org.springframework.util.StringUtils;
-
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * 认证鉴权工具
@@ -46,10 +46,11 @@ public class SecurityUtils {
         String wwwAuthenticate = computeWwwAuthenticateHeaderValue(parameters);
         response.addHeader(HttpHeaders.WWW_AUTHENTICATE, wwwAuthenticate);
         try {
-            log.error("认证鉴权失败信息:{}", JSON.toJSONString(parameters));
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(JsonUtils.objectCovertToJson(ResultUtil.error(HttpStatus.UNAUTHORIZED.value(),"请先登录！")));
-            response.getWriter().flush();
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=" + StandardCharsets.UTF_8.name());
+            var writer = response.getWriter();
+            writer.write(JsonUtils.objectCovertToJson(ResultUtil.error(HttpStatus.UNAUTHORIZED.value(), "请先登录！")));
+            writer.flush();
         } catch (IOException ex) {
             log.error("写回错误信息失败", e);
         }
@@ -98,7 +99,7 @@ public class SecurityUtils {
             parameters.put("error_uri", "https://tools.ietf.org/html/rfc6750#section-3.1");
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
         }
-        parameters.put("msg", "请先登录");
+        parameters.put("message", e.getMessage());
         return parameters;
     }
 
