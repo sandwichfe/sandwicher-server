@@ -7,6 +7,8 @@ import com.lww.auth.server.user_center.req.UserReq;
 import com.lww.auth.server.user_center.vo.UserPageQuery;
 import com.lww.auth.server.user_center.vo.UserVo;
 
+import java.util.Map;
+
 /**
  * <p>
  * 基础用户信息表 服务类
@@ -24,6 +26,28 @@ public interface UserService extends IService<User> {
     IPage<UserVo> listUser(UserPageQuery pageVo);
 
     UserVo updateUser(UserReq userReq);
+
+    /**
+     * 用户登录
+     * @param username 用户名
+     * @param password 前端加密后的密码
+     * @return 带Bearer前缀的token字符串
+     */
+    String userLogin(String username, String password);
+
+    /**
+     * 生成滑块验证码
+     * @return 滑块验证码信息
+     */
+    Map<String, Object> generateSlider();
+
+    /**
+     * 验证滑块位置
+     * @param sliderId 滑块ID
+     * @param userX 用户拖动位置
+     * @return 是否验证通过
+     */
+    Boolean verifySlider(String sliderId, int userX);
 
     /**
      * 根据用户名查询用户信息
