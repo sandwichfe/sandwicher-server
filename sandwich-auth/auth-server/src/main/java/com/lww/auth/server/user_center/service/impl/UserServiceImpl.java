@@ -79,6 +79,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (pageVo.getDeptId() != null) {
             wrapper.inSql(User::getId, "select user_id from t_user_dept where dept_id = " + pageVo.getDeptId());
         }
+        wrapper.orderByDesc(User::getId);
         return this.page(page, wrapper).convert(user -> CustomBeanUtils.copyProperties(user, UserVo.class));
     }
 

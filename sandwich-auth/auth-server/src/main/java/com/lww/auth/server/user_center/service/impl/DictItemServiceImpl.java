@@ -44,7 +44,7 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
         LambdaQueryWrapper<DictItem> wrapper = new LambdaQueryWrapper<DictItem>()
                 .eq(DictItem::getDictTypeId, query.getDictTypeId())
                 .orderByAsc(DictItem::getSort)
-                .orderByDesc(DictItem::getId);
+                .orderByDesc(DictItem::getUpdateTime);
         if (StringUtils.hasText(query.getKeyword())) {
             wrapper.and(w -> w.like(DictItem::getLabel, query.getKeyword())
                     .or()

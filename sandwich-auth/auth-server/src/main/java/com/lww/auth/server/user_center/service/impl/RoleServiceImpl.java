@@ -1,5 +1,6 @@
 package com.lww.auth.server.user_center.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -40,7 +41,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public IPage<RoleVo> listRole(PageVo pageVo) {
         Page<Role> page = new Page<>(pageVo.getPageNum(), pageVo.getPageSize());
-        return this.page(page).convert(this::convertToRoleVo);
+        LambdaQueryWrapper<Role> wrapper = new  LambdaQueryWrapper<>();
+        wrapper.orderByDesc(Role::getId);
+        return this.page(page, wrapper).convert(this::convertToRoleVo);
     }
 
     @Override
