@@ -14,6 +14,7 @@
     <modules>
         <module>auth-common</module>
         <module>auth-server</module>
+        <module>sandwich-auth-resources-server</module>
     </modules>
 
 

@@ -25,7 +25,6 @@
         <module>sandwich-server</module>
         <module>sandwich-auth</module>
         <module>sandwich-oss</module>
-        <module>sandwich-auth-resources-server</module>
         <module>sandwich-generator</module>
         <module>sandwich-wx-official-account</module>
     </modules>
