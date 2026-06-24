@@ -1,6 +1,6 @@
 package com.lww.auth.server.core.config;
 
-import com.lww.auth.server.user_center.entity.User;
+import com.lww.auth.server.portal.entity.User;
 import lombok.Data;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
