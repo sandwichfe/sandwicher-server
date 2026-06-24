@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lww.auth.server.user_center.entity.RoleMenu;
 import com.lww.auth.server.user_center.mapper.RoleMenuMapper;
 import com.lww.auth.server.user_center.service.RoleMenuService;
+import com.lww.auth.server.user_center.vo.req.AssignMenusToRoleRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,5 +48,11 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMe
                     .collect(Collectors.toList());
             this.saveBatch(roleMenus);
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void assignMenusToRole(AssignMenusToRoleRequest request) {
+        this.assignMenusToRole(request.getRoleId(), request.getMenuIds());
     }
 }

@@ -2,15 +2,22 @@ package com.lww.auth.server.user_center.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lww.auth.server.core.utils.AesUtil;
 import com.lww.auth.server.user_center.entity.User;
 import com.lww.auth.server.user_center.entity.UserDept;
 import com.lww.auth.server.user_center.mapper.UserDeptMapper;
 import com.lww.auth.server.user_center.mapper.UserMapper;
+import com.lww.auth.server.user_center.req.UserReq;
 import com.lww.auth.server.user_center.service.UserService;
+import com.lww.auth.server.user_center.vo.UserPageQuery;
+import com.lww.auth.server.user_center.vo.UserVo;
 import com.lww.common.utils.AssertUtils;
+import com.lww.common.utils.CustomBeanUtils;
 import jakarta.annotation.Resource;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +39,40 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private UserDeptMapper userDeptMapper;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public UserVo createUser(UserReq userReq) {
+        User user = new User();
+        BeanUtils.copyProperties(userReq, user);
+        this.createUser(user);
+        return convertToUserVo(user);
+    }
+
+    @Override
+    public UserVo getUserVoById(Long id) {
+        return convertToUserVo(this.getUserWithDepts(id));
+    }
+
+    @Override
+    public IPage<UserVo> listUser(UserPageQuery pageVo) {
+        Page<User> page = new Page<>(pageVo.getPageNum(), pageVo.getPageSize());
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        if (pageVo.getDeptId() != null) {
+            // 鍏宠仈鏌ヨ锛岀瓫閫夊嚭灞炰簬璇ラ儴闂ㄧ殑鐢ㄦ埛
+            wrapper.inSql(User::getId, "select user_id from t_user_dept where dept_id = " + pageVo.getDeptId());
+        }
+        return this.page(page, wrapper).convert(user -> CustomBeanUtils.copyProperties(user, UserVo.class));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public UserVo updateUser(UserReq userReq) {
+        User user = new User();
+        BeanUtils.copyProperties(userReq, user);
+        this.updateUser(user);
+        return convertToUserVo(user);
+    }
 
     @Override
     public User getUserByUserName(String username) {
@@ -131,5 +172,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void deleteUser(Long id) {
         this.removeById(id);
         userDeptMapper.delete(new LambdaQueryWrapper<UserDept>().eq(UserDept::getUserId, id));
+    }
+
+    private UserVo convertToUserVo(User user) {
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(user, userVo);
+        return userVo;
     }
 }

@@ -1,17 +1,23 @@
 package com.lww.auth.server.user_center.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lww.auth.server.user_center.entity.Dept;
 import com.lww.auth.server.user_center.mapper.DeptMapper;
+import com.lww.auth.server.user_center.req.DeptReq;
 import com.lww.auth.server.user_center.service.DeptService;
 import com.lww.auth.server.user_center.vo.DeptTreeVO;
+import com.lww.auth.server.user_center.vo.DeptVo;
+import com.lww.common.web.vo.PageVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +32,39 @@ import java.util.stream.Collectors;
 public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements DeptService {
 
     @Override
+    public DeptVo createDept(DeptReq deptReq) {
+        Dept dept = new Dept();
+        BeanUtils.copyProperties(deptReq, dept);
+        dept.setParentId(Optional.ofNullable(dept.getParentId()).orElse(0L));
+        this.save(dept);
+        return convertToDeptVo(dept);
+    }
+
+    @Override
+    public DeptVo getDeptById(Long id) {
+        return convertToDeptVo(this.getById(id));
+    }
+
+    @Override
+    public IPage<DeptVo> listDept(PageVo pageVo) {
+        Page<Dept> page = new Page<>(pageVo.getPageNum(), pageVo.getPageSize());
+        return this.page(page).convert(this::convertToDeptVo);
+    }
+
+    @Override
+    public DeptVo updateDept(DeptReq deptReq) {
+        Dept dept = new Dept();
+        BeanUtils.copyProperties(deptReq, dept);
+        this.updateById(dept);
+        return convertToDeptVo(dept);
+    }
+
+    @Override
+    public void deleteDept(Long id) {
+        this.removeById(id);
+    }
+
+    @Override
     public List<DeptTreeVO> getDeptTree() {
         // Get all depts
         List<Dept> depts = this.list(new LambdaQueryWrapper<Dept>()
@@ -37,6 +76,12 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
 
         // Build tree
         return buildTree(allVos);
+    }
+
+    private DeptVo convertToDeptVo(Dept dept) {
+        DeptVo deptVo = new DeptVo();
+        BeanUtils.copyProperties(dept, deptVo);
+        return deptVo;
     }
 
     private DeptTreeVO convertToVo(Dept dept) {

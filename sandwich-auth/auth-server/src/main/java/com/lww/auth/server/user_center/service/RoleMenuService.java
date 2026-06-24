@@ -2,6 +2,7 @@ package com.lww.auth.server.user_center.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.auth.server.user_center.entity.RoleMenu;
+import com.lww.auth.server.user_center.vo.req.AssignMenusToRoleRequest;
 
 import java.util.List;
 
@@ -30,4 +31,6 @@ public interface RoleMenuService extends IService<RoleMenu> {
      * @param menuIds 菜单ID列表
      */
     void assignMenusToRole(Long roleId, List<Long> menuIds);
+
+    void assignMenusToRole(AssignMenusToRoleRequest request);
 }

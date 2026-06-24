@@ -1,8 +1,12 @@
 package com.lww.auth.server.user_center.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.auth.server.user_center.entity.Menu;
+import com.lww.auth.server.user_center.req.MenuReq;
 import com.lww.auth.server.user_center.vo.MenuTreeVO;
+import com.lww.auth.server.user_center.vo.MenuVo;
+import com.lww.common.web.vo.PageVo;
 
 import java.util.List;
 
@@ -15,6 +19,16 @@ import java.util.List;
  * @since 2024-12-16 11:53:37
  */
 public interface MenuService extends IService<Menu> {
+
+    MenuVo createMenu(MenuReq menuReq);
+
+    MenuVo getMenuById(Long id);
+
+    IPage<MenuVo> listMenu(PageVo pageVo);
+
+    MenuVo updateMenu(MenuReq menuReq);
+
+    void deleteMenu(Long id);
 
     /**
      * 获取菜单树

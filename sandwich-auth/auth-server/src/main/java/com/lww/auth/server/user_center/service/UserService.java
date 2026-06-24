@@ -1,7 +1,11 @@
 package com.lww.auth.server.user_center.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.auth.server.user_center.entity.User;
+import com.lww.auth.server.user_center.req.UserReq;
+import com.lww.auth.server.user_center.vo.UserPageQuery;
+import com.lww.auth.server.user_center.vo.UserVo;
 
 /**
  * <p>
@@ -12,6 +16,14 @@ import com.lww.auth.server.user_center.entity.User;
  * @since 2024-12-16 11:53:38
  */
 public interface UserService extends IService<User> {
+
+    UserVo createUser(UserReq userReq);
+
+    UserVo getUserVoById(Long id);
+
+    IPage<UserVo> listUser(UserPageQuery pageVo);
+
+    UserVo updateUser(UserReq userReq);
 
     /**
      * 根据用户名查询用户信息

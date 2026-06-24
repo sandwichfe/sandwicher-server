@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lww.auth.server.user_center.entity.UserRole;
 import com.lww.auth.server.user_center.mapper.UserRoleMapper;
 import com.lww.auth.server.user_center.service.UserRoleService;
+import com.lww.auth.server.user_center.vo.req.AssignRolesToUserRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,5 +48,11 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
                     .collect(Collectors.toList());
             this.saveBatch(userRoles);
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void assignRolesToUser(AssignRolesToUserRequest request) {
+        this.assignRolesToUser(request.getUserId(), request.getRoleIds());
     }
 }

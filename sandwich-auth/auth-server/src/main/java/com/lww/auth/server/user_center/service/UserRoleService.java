@@ -2,6 +2,7 @@ package com.lww.auth.server.user_center.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.auth.server.user_center.entity.UserRole;
+import com.lww.auth.server.user_center.vo.req.AssignRolesToUserRequest;
 
 import java.util.List;
 
@@ -30,4 +31,6 @@ public interface UserRoleService extends IService<UserRole> {
      * @param roleIds 角色ID列表
      */
     void assignRolesToUser(Long userId, List<Long> roleIds);
+
+    void assignRolesToUser(AssignRolesToUserRequest request);
 }

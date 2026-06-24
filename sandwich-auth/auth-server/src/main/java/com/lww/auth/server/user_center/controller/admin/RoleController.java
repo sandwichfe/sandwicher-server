@@ -1,12 +1,9 @@
 package com.lww.auth.server.user_center.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lww.auth.server.user_center.entity.Role;
 import com.lww.auth.server.user_center.req.RoleReq;
 import com.lww.auth.server.user_center.service.RoleService;
 import com.lww.auth.server.user_center.vo.RoleVo;
-import com.lww.common.utils.CustomBeanUtils;
 import com.lww.common.web.log.Loggable;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
@@ -14,7 +11,6 @@ import com.lww.common.web.vo.PageVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,47 +34,33 @@ public class RoleController {
     @Loggable(module = "role", type = "create", description = "新增角色", logResult = false)
     @PostMapping("/create")
     public ResponseResult<RoleVo> createRole(@RequestBody RoleReq roleReq) {
-        Role role = new Role();
-        BeanUtils.copyProperties(roleReq, role);
-        roleService.save(role);
-        RoleVo roleVo = new RoleVo();
-        BeanUtils.copyProperties(role, roleVo);
-        return ResultUtil.success(roleVo);
+        return ResultUtil.success(roleService.createRole(roleReq));
     }
 
     @Operation(summary = "根据ID获取角色")
     @GetMapping("/get/{id}")
     public ResponseResult<RoleVo> getRoleById(@PathVariable Long id) {
-        Role role = roleService.getById(id);
-        RoleVo roleVo = CustomBeanUtils.copyProperties(role, RoleVo.class);
-        return ResultUtil.success(roleVo);
+        return ResultUtil.success(roleService.getRoleById(id));
     }
 
     @Operation(summary = "获取所有角色")
     @PostMapping("/list")
     public ResponseResult<IPage<RoleVo>> getAllRoles(@RequestBody PageVo pageVo) {
-        Page<Role> page = new Page<>(pageVo.getPageNum(), pageVo.getPageSize());
-        IPage<RoleVo> roles = roleService.page(page).convert(e -> CustomBeanUtils.copyProperties(e, RoleVo.class));
-        return ResultUtil.success(roles);
+        return ResultUtil.success(roleService.listRole(pageVo));
     }
 
     @Operation(summary = "更新角色")
     @Loggable(module = "role", type = "update", description = "更新角色", logResult = false)
     @PostMapping("/update")
     public ResponseResult<RoleVo> updateRole(@RequestBody RoleReq roleReq) {
-        Role role = new Role();
-        BeanUtils.copyProperties(roleReq, role);
-        roleService.updateById(role);
-        RoleVo roleVo = new RoleVo();
-        BeanUtils.copyProperties(role, roleVo);
-        return ResultUtil.success(roleVo);
+        return ResultUtil.success(roleService.updateRole(roleReq));
     }
 
     @Operation(summary = "删除角色")
     @Loggable(module = "role", type = "delete", description = "删除角色ID: #id", logParams = false)
     @DeleteMapping("/delete/{id}")
     public ResponseResult<Void> deleteRole(@PathVariable Long id) {
-        roleService.removeById(id);
+        roleService.deleteRole(id);
         return ResultUtil.success();
     }
 }

@@ -33,7 +33,7 @@ public class RoleMenuController {
     @PostMapping("/assignMenusToRole")
     @Loggable(module = "roleMenu", type = "assign", description = "为角色分配菜单 roleId: #request.roleId", logResult = false)
     public ResponseResult<Void> assignMenusToRole(@RequestBody AssignMenusToRoleRequest request) {
-        roleMenuService.assignMenusToRole(request.getRoleId(), request.getMenuIds());
+        roleMenuService.assignMenusToRole(request);
         return ResultUtil.success();
     }
 }

@@ -33,7 +33,7 @@ public class UserRoleController {
     @PostMapping("/assignRolesToUser")
     @Loggable(module = "userRole", type = "assign", description = "为用户分配角色 userId: #request.userId", logResult = false)
     public ResponseResult<Void> assignRolesToUser(@RequestBody AssignRolesToUserRequest request) {
-        userRoleService.assignRolesToUser(request.getUserId(), request.getRoleIds());
+        userRoleService.assignRolesToUser(request);
         return ResultUtil.success();
     }
 }

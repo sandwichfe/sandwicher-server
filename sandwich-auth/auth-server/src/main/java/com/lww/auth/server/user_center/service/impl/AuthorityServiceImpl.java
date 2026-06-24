@@ -1,15 +1,22 @@
 package com.lww.auth.server.user_center.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lww.auth.server.user_center.entity.Menu;
 import com.lww.auth.server.user_center.mapper.MenuMapper;
+import com.lww.auth.server.user_center.req.MenuReq;
 import com.lww.auth.server.user_center.service.MenuService;
 import com.lww.auth.server.user_center.vo.MenuTreeVO;
+import com.lww.auth.server.user_center.vo.MenuVo;
+import com.lww.common.web.vo.PageVo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -20,6 +27,39 @@ import java.util.stream.Collectors;
 public class AuthorityServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
 
     private final MenuMapper menuMapper;
+
+    @Override
+    public MenuVo createMenu(MenuReq menuReq) {
+        Menu menu = new Menu();
+        BeanUtils.copyProperties(menuReq, menu);
+        menu.setMenuPid(Optional.ofNullable(menu.getMenuPid()).orElse(0L));
+        this.save(menu);
+        return convertToMenuVo(menu);
+    }
+
+    @Override
+    public MenuVo getMenuById(Long id) {
+        return convertToMenuVo(this.getById(id));
+    }
+
+    @Override
+    public IPage<MenuVo> listMenu(PageVo pageVo) {
+        Page<Menu> page = new Page<>(pageVo.getPageNum(), pageVo.getPageSize());
+        return this.page(page).convert(this::convertToMenuVo);
+    }
+
+    @Override
+    public MenuVo updateMenu(MenuReq menuReq) {
+        Menu menu = new Menu();
+        BeanUtils.copyProperties(menuReq, menu);
+        this.updateById(menu);
+        return convertToMenuVo(menu);
+    }
+
+    @Override
+    public void deleteMenu(Long id) {
+        this.removeById(id);
+    }
 
     @Override
     public List<MenuTreeVO> getMenuTree() {
@@ -35,6 +75,11 @@ public class AuthorityServiceImpl extends ServiceImpl<MenuMapper, Menu> implemen
         return buildMenuTree(userMenus, 0L);
     }
 
+    private MenuVo convertToMenuVo(Menu menu) {
+        MenuVo menuVo = new MenuVo();
+        BeanUtils.copyProperties(menu, menuVo);
+        return menuVo;
+    }
 
     private List<MenuTreeVO> buildMenuTree(List<Menu> menus, Long parentId) {
         // 对菜单列表按 sort 字段进行升序排序，确保同一层级菜单有序处理
