@@ -1,0 +1,75 @@
+package com.lww.auth.server.user_center.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lww.auth.server.user_center.service.AdminOperationLogService;
+import com.lww.auth.server.user_center.vo.OperationLogPageQuery;
+import com.lww.auth.server.user_center.vo.OperationLogVo;
+import com.lww.common.utils.CustomBeanUtils;
+import com.lww.common.web.log.entity.OperationLog;
+import com.lww.common.web.log.service.OperationLogService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+@Service
+@RequiredArgsConstructor
+public class AdminOperationLogServiceImpl implements AdminOperationLogService {
+
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    private final OperationLogService operationLogService;
+
+    @Override
+    public IPage<OperationLogVo> listOperationLog(OperationLogPageQuery query) {
+        Page<OperationLog> page = new Page<>(query.getPageNum(), query.getPageSize());
+        LambdaQueryWrapper<OperationLog> wrapper = new LambdaQueryWrapper<OperationLog>()
+                .orderByDesc(OperationLog::getId);
+
+        if (StringUtils.hasText(query.getModule())) {
+            wrapper.eq(OperationLog::getModule, query.getModule());
+        }
+        if (StringUtils.hasText(query.getType())) {
+            wrapper.eq(OperationLog::getType, query.getType());
+        }
+        if (StringUtils.hasText(query.getOperatorName())) {
+            wrapper.like(OperationLog::getOperatorName, query.getOperatorName());
+        }
+        if (StringUtils.hasText(query.getKeyword())) {
+            String keyword = query.getKeyword();
+            wrapper.and(w -> w.like(OperationLog::getDescription, keyword)
+                    .or()
+                    .like(OperationLog::getRequestUri, keyword)
+                    .or()
+                    .like(OperationLog::getOperatorName, keyword)
+                    .or()
+                    .like(OperationLog::getParams, keyword));
+        }
+
+        LocalDateTime from = parseDateTime(query.getStartTimeFrom());
+        if (from != null) {
+            wrapper.ge(OperationLog::getStartTime, from);
+        }
+        LocalDateTime to = parseDateTime(query.getStartTimeTo());
+        if (to != null) {
+            wrapper.le(OperationLog::getStartTime, to);
+        }
+
+        return operationLogService.page(page, wrapper)
+                .convert(e -> CustomBeanUtils.copyProperties(e, OperationLogVo.class));
+    }
+
+    /**
+     * 前端按 yyyy-MM-dd HH:mm:ss 传入时间，空值不参与筛选。
+     */
+    private LocalDateTime parseDateTime(String value) {
+        if (!StringUtils.hasText(value)) {
+            return null;
+        }
+        return LocalDateTime.parse(value, DATE_TIME_FORMATTER);
+    }
+}

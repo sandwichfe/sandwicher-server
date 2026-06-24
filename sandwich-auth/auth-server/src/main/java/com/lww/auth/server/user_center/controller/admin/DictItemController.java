@@ -1,23 +1,16 @@
 package com.lww.auth.server.user_center.controller.admin;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lww.auth.server.user_center.entity.DictItem;
 import com.lww.auth.server.user_center.req.DictItemReq;
 import com.lww.auth.server.user_center.service.DictItemService;
 import com.lww.auth.server.user_center.vo.DictItemPageQuery;
 import com.lww.auth.server.user_center.vo.DictItemVo;
-import com.lww.common.utils.AssertUtils;
-import com.lww.common.utils.CustomBeanUtils;
 import com.lww.common.web.log.Loggable;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import org.springframework.beans.BeanUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,87 +33,39 @@ public class DictItemController {
     @Loggable(module = "dictItem", type = "create", description = "新增字典项", logResult = false)
     @PostMapping("/create")
     public ResponseResult<DictItemVo> create(@RequestBody DictItemReq req) {
-        AssertUtils.assertTrue(req.getDictTypeId() == null, "字典类型ID不能为空");
-        AssertUtils.assertTrue(!StringUtils.hasText(req.getLabel()), "标签不能为空");
-        AssertUtils.assertTrue(!StringUtils.hasText(req.getValue()), "值不能为空");
-
-        boolean exists = dictItemService.count(new LambdaQueryWrapper<DictItem>()
-                .eq(DictItem::getDictTypeId, req.getDictTypeId())
-                .eq(DictItem::getValue, req.getValue())) > 0;
-        AssertUtils.assertTrue(exists, "同一类型下字典值已存在");
-
-        DictItem dictItem = new DictItem();
-        BeanUtils.copyProperties(req, dictItem);
-        dictItemService.save(dictItem);
-        return ResultUtil.success(CustomBeanUtils.copyProperties(dictItem, DictItemVo.class));
+        return ResultUtil.success(dictItemService.createDictItem(req));
     }
 
     @Operation(summary = "根据ID获取字典项")
     @GetMapping("/get/{id}")
     public ResponseResult<DictItemVo> get(@PathVariable Long id) {
-        DictItem dictItem = dictItemService.getById(id);
-        return ResultUtil.success(CustomBeanUtils.copyProperties(dictItem, DictItemVo.class));
+        return ResultUtil.success(dictItemService.getDictItemById(id));
     }
 
     @Operation(summary = "字典项分页列表")
     @PostMapping("/list")
     public ResponseResult<IPage<DictItemVo>> list(@RequestBody DictItemPageQuery query) {
-        AssertUtils.assertTrue(query.getDictTypeId() == null, "字典类型ID不能为空");
-        Page<DictItem> page = new Page<>(query.getPageNum(), query.getPageSize());
-        LambdaQueryWrapper<DictItem> wrapper = new LambdaQueryWrapper<DictItem>()
-                .eq(DictItem::getDictTypeId, query.getDictTypeId())
-                .orderByAsc(DictItem::getSort)
-                .orderByDesc(DictItem::getId);
-        if (StringUtils.hasText(query.getKeyword())) {
-            wrapper.and(w -> w.like(DictItem::getLabel, query.getKeyword())
-                    .or()
-                    .like(DictItem::getValue, query.getKeyword()));
-        }
-        IPage<DictItemVo> result = dictItemService.page(page, wrapper)
-                .convert(e -> CustomBeanUtils.copyProperties(e, DictItemVo.class));
-        return ResultUtil.success(result);
+        return ResultUtil.success(dictItemService.listDictItem(query));
     }
 
     @Operation(summary = "获取指定类型下全部字典项")
     @GetMapping("/all/{dictTypeId}")
     public ResponseResult<List<DictItemVo>> all(@PathVariable Long dictTypeId) {
-        List<DictItemVo> list = dictItemService.list(new LambdaQueryWrapper<DictItem>()
-                        .eq(DictItem::getDictTypeId, dictTypeId)
-                        .orderByAsc(DictItem::getSort)
-                        .orderByDesc(DictItem::getId))
-                .stream()
-                .map(e -> CustomBeanUtils.copyProperties(e, DictItemVo.class))
-                .toList();
-        return ResultUtil.success(list);
+        return ResultUtil.success(dictItemService.listAllByDictTypeId(dictTypeId));
     }
 
     @Operation(summary = "更新字典项")
     @Loggable(module = "dictItem", type = "update", description = "更新字典项", logResult = false)
     @PostMapping("/update")
     public ResponseResult<DictItemVo> update(@RequestBody DictItemReq req) {
-        AssertUtils.assertTrue(req.getId() == null, "ID不能为空");
-        AssertUtils.assertTrue(req.getDictTypeId() == null, "字典类型ID不能为空");
-        AssertUtils.assertTrue(!StringUtils.hasText(req.getLabel()), "标签不能为空");
-        AssertUtils.assertTrue(!StringUtils.hasText(req.getValue()), "值不能为空");
-
-        boolean exists = dictItemService.count(new LambdaQueryWrapper<DictItem>()
-                .eq(DictItem::getDictTypeId, req.getDictTypeId())
-                .eq(DictItem::getValue, req.getValue())
-                .ne(DictItem::getId, req.getId())) > 0;
-        AssertUtils.assertTrue(exists, "同一类型下字典值已存在");
-
-        DictItem dictItem = new DictItem();
-        BeanUtils.copyProperties(req, dictItem);
-        dictItemService.updateById(dictItem);
-        DictItem updated = dictItemService.getById(req.getId());
-        return ResultUtil.success(CustomBeanUtils.copyProperties(updated, DictItemVo.class));
+        return ResultUtil.success(dictItemService.updateDictItem(req));
     }
 
     @Operation(summary = "删除字典项")
     @Loggable(module = "dictItem", type = "delete", description = "删除字典项ID: #id", logParams = false)
     @DeleteMapping("/delete/{id}")
     public ResponseResult<Void> delete(@PathVariable Long id) {
-        dictItemService.removeById(id);
+        dictItemService.deleteDictItem(id);
         return ResultUtil.success();
     }
 }
