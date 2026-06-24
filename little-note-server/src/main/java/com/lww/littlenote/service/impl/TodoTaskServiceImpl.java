@@ -1,8 +1,10 @@
 package com.lww.littlenote.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lww.auth.resources_server.utils.SecurityUserUtils;
 import com.lww.common.utils.CustomBeanUtils;
 import com.lww.common.web.exception.AppException;
 import com.lww.littlenote.entity.TodoTask;
@@ -10,6 +12,7 @@ import com.lww.littlenote.entity.TodoTaskCompletionRecord;
 import com.lww.littlenote.mapper.TodoTaskMapper;
 import com.lww.littlenote.req.TodoTaskCompletionRecordUpdateReq;
 import com.lww.littlenote.req.TodoTaskQueryReq;
+import com.lww.littlenote.req.TodoTaskReq;
 import com.lww.littlenote.service.TodoTaskCompletionRecordService;
 import com.lww.littlenote.service.TodoTaskService;
 import com.lww.littlenote.vo.DayViewVO;
@@ -20,6 +23,7 @@ import com.lww.littlenote.vo.TodoTaskCountVO;
 import com.lww.littlenote.vo.TodoTaskVo;
 import com.lww.littlenote.vo.WeekViewVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -42,7 +46,8 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     private final TodoTaskCompletionRecordService todoTaskCompletionRecordService;
 
     @Override
-    public Page<TodoTask> listTasks(TodoTaskQueryReq todoTaskQueryReq) {
+    public IPage<TodoTaskVo> listTasks(TodoTaskQueryReq todoTaskQueryReq) {
+        todoTaskQueryReq.setUserId(getCurrentUserId());
         Page<TodoTask> page = new Page<>(todoTaskQueryReq.getPageNum(), todoTaskQueryReq.getPageSize());
         LambdaQueryWrapper<TodoTask> queryWrapper = new LambdaQueryWrapper<>();
 
@@ -57,12 +62,71 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
                     .orderByDesc(TodoTask::getLastCompleteTime)
                     .orderByDesc(TodoTask::getCreateTime);
         }
-        return this.page(page, queryWrapper);
+        return this.page(page, queryWrapper).convert(item -> CustomBeanUtils.copyProperties(item, TodoTaskVo.class));
+    }
+
+    @Override
+    public TodoTaskVo getTask(Long taskId) {
+        Long userId = getCurrentUserId();
+        TodoTask task = this.getById(taskId);
+        if (task == null || !task.getUserId().equals(userId)) {
+            throw new AppException("任务不存在");
+        }
+        return CustomBeanUtils.copyProperties(task, TodoTaskVo.class);
+    }
+
+    @Override
+    public TodoTaskVo addTask(TodoTaskReq taskReq) {
+        Long userId = getCurrentUserId();
+        TodoTask task = new TodoTask();
+        BeanUtils.copyProperties(taskReq, task);
+        task.setUserId(userId);
+        task.setCompletedCount(0);
+        task.setStatus(0);
+        task.setCreateTime(LocalDateTime.now());
+        task.setCreateBy(userId);
+
+        if (task.getTargetCount() == null || task.getTargetCount() <= 0) {
+            task.setTargetCount(1);
+        }
+
+        boolean saved = this.save(task);
+        if (!saved) {
+            throw new AppException("添加失败");
+        }
+        return CustomBeanUtils.copyProperties(task, TodoTaskVo.class);
+    }
+
+    @Override
+    public TodoTaskVo editTask(Long taskId, TodoTaskReq taskReq) {
+        Long userId = getCurrentUserId();
+        TodoTask existingTask = this.getById(taskId);
+        if (existingTask == null || !existingTask.getUserId().equals(userId)) {
+            throw new AppException("任务不存在");
+        }
+
+        TodoTask task = new TodoTask();
+        BeanUtils.copyProperties(taskReq, task);
+        task.setId(taskId);
+        task.setUserId(userId);
+        task.setUpdateTime(LocalDateTime.now());
+        task.setUpdateBy(userId);
+
+        if (task.getTargetCount() != null && task.getTargetCount() <= 0) {
+            task.setTargetCount(1);
+        }
+
+        boolean updated = this.updateById(task);
+        if (!updated) {
+            throw new AppException("更新失败");
+        }
+        return CustomBeanUtils.copyProperties(task, TodoTaskVo.class);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void completeTaskOnce(Long taskId, Long userId) {
+    public void completeTaskOnce(Long taskId) {
+        Long userId = getCurrentUserId();
         TodoTask task = this.getById(taskId);
         if (task == null || !task.getUserId().equals(userId)) {
             throw new AppException("任务不存在或不属于该用户");
@@ -105,7 +169,8 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteTask(Long taskId, Long userId) {
+    public void deleteTask(Long taskId) {
+        Long userId = getCurrentUserId();
         TodoTask task = this.getById(taskId);
         if (task == null || !task.getUserId().equals(userId)) {
             throw new AppException("任务不存在或不属于该用户");
@@ -116,7 +181,8 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     }
 
     @Override
-    public List<TodoTaskCompletionRecordVO> listTaskCompletionRecords(Long taskId, Long userId) {
+    public List<TodoTaskCompletionRecordVO> listTaskCompletionRecords(Long taskId) {
+        Long userId = getCurrentUserId();
         TodoTask task = this.getById(taskId);
         if (task == null || !task.getUserId().equals(userId)) {
             throw new AppException("任务不存在或不属于该用户");
@@ -126,7 +192,8 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateTaskCompletionRecord(Long userId, TodoTaskCompletionRecordUpdateReq req) {
+    public void updateTaskCompletionRecord(TodoTaskCompletionRecordUpdateReq req) {
+        Long userId = getCurrentUserId();
         if (req.getId() == null || req.getTaskId() == null) {
             throw new AppException("参数错误");
         }
@@ -171,7 +238,8 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     }
 
     @Override
-    public TaskStatsVO getTaskStats(Long userId, String category) {
+    public TaskStatsVO getTaskStats(String category) {
+        Long userId = getCurrentUserId();
         LambdaQueryWrapper<TodoTask> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(TodoTask::getUserId, userId);
 
@@ -188,7 +256,8 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     }
 
     @Override
-    public TodoTaskCountVO getTaskCounts(Long userId) {
+    public TodoTaskCountVO getTaskCounts() {
+        Long userId = getCurrentUserId();
         long pendingCount = this.count(new LambdaQueryWrapper<TodoTask>()
                 .eq(TodoTask::getUserId, userId)
                 .eq(TodoTask::getStatus, 0));
@@ -199,7 +268,8 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     }
 
     @Override
-    public DayViewVO getDayView(String dateStr, Long userId) {
+    public DayViewVO getDayView(String dateStr) {
+        Long userId = getCurrentUserId();
         LocalDate date = LocalDate.parse(dateStr);
 
         LambdaQueryWrapper<TodoTask> globalWrapper = new LambdaQueryWrapper<>();
@@ -248,7 +318,8 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     }
 
     @Override
-    public WeekViewVO getWeekView(Integer year, Integer week, Long userId) {
+    public WeekViewVO getWeekView(Integer year, Integer week) {
+        Long userId = getCurrentUserId();
         String weekDateStr = String.format("%04d-W%02d-1", year, week);
         LocalDate startOfWeek = LocalDate.parse(weekDateStr, DateTimeFormatter.ISO_WEEK_DATE);
         LocalDate endOfWeek = startOfWeek.plusDays(6);
@@ -293,7 +364,12 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
     }
 
     @Override
-    public MonthViewVO getMonthView(Integer year, Integer month, Long userId) {
+    public MonthViewVO getMonthView(Integer year, Integer month) {
+        Long userId = getCurrentUserId();
+        return getMonthView(year, month, userId);
+    }
+
+    private MonthViewVO getMonthView(Integer year, Integer month, Long userId) {
         LocalDate startOfMonth = LocalDate.of(year, month, 1);
         LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
 
@@ -341,6 +417,10 @@ public class TodoTaskServiceImpl extends ServiceImpl<TodoTaskMapper, TodoTask> i
         LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
         this.baseMapper.syncTaskCompletionStats(userId, startOfMonth.toString(), endOfMonth.toString());
         return this.getMonthView(year, month, userId);
+    }
+
+    private Long getCurrentUserId() {
+        return SecurityUserUtils.getUserId();
     }
 
     private List<TodoTask> queryTasksInDateRange(Long userId, LocalDate startDate, LocalDate endDate) {
