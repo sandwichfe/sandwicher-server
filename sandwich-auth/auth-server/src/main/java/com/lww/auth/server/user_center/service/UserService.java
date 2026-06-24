@@ -36,20 +36,6 @@ public interface UserService extends IService<User> {
     String userLogin(String username, String password);
 
     /**
-     * 生成滑块验证码
-     * @return 滑块验证码信息
-     */
-    Map<String, Object> generateSlider();
-
-    /**
-     * 验证滑块位置
-     * @param sliderId 滑块ID
-     * @param userX 用户拖动位置
-     * @return 是否验证通过
-     */
-    Boolean verifySlider(String sliderId, int userX);
-
-    /**
      * 根据用户名查询用户信息
      *
      * @param username 用户名

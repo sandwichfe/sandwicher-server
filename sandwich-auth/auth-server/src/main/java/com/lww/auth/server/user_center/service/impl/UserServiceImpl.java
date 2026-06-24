@@ -58,9 +58,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Value("${oauth2.token-url:http://127.0.0.1:9000/oauth2/token}")
     private String tokenUrl;
 
-    // 用于存储滑块验证码的缓存
-    private final Map<String, Integer> sliderCache = new ConcurrentHashMap<>();
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserVo createUser(UserReq userReq) {
@@ -80,7 +77,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         Page<User> page = new Page<>(pageVo.getPageNum(), pageVo.getPageSize());
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         if (pageVo.getDeptId() != null) {
-            // 鍏宠仈鏌ヨ锛岀瓫閫夊嚭灞炰簬璇ラ儴闂ㄧ殑鐢ㄦ埛
             wrapper.inSql(User::getId, "select user_id from t_user_dept where dept_id = " + pageVo.getDeptId());
         }
         return this.page(page, wrapper).convert(user -> CustomBeanUtils.copyProperties(user, UserVo.class));
@@ -107,40 +103,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .setUsername(username)
                 .setPassword(decryptedPassword);
         return getOauth2TokenByPassWord(oauth2Param);
-    }
-
-    @Override
-    public Map<String, Object> generateSlider() {
-        // 生成滑块的目标位置
-        int targetX = ThreadLocalRandom.current().nextInt(200);
-        // 生成唯一的滑块ID
-        String sliderId = IdWorker.getIdStr();
-
-        // 将滑块ID和目标位置存入缓存
-        sliderCache.put(sliderId, targetX);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("sliderId", sliderId);
-        result.put("targetX", targetX);
-        return result;
-    }
-
-    @Override
-    public Boolean verifySlider(String sliderId, int userX) {
-        Integer targetX = sliderCache.get(sliderId);
-        if (targetX == null) {
-            throw new AppException("滑块验证码已过期或无效");
-        }
-
-        // 允许一定的误差范围
-        boolean isValid = Math.abs(userX - targetX) <= 5;
-
-        // 验证完成后移除缓存
-        sliderCache.remove(sliderId);
-
-        // 保留原Controller行为，避免迁移业务层时改变接口结果。
-        isValid = true;
-        return isValid;
     }
 
     @Override

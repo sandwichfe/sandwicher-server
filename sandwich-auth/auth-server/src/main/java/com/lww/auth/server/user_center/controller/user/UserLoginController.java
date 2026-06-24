@@ -39,19 +39,6 @@ public class UserLoginController {
         return ResultUtil.success(userService.userLogin(username, password));
     }
 
-    @GetMapping(value = "/slider/generate")
-    @Operation(summary = "生成滑块验证码", description = "生成滑块验证码")
-    public ResponseResult<Map<String, Object>> generateSlider() {
-        return ResultUtil.success(userService.generateSlider());
-    }
-
-    @PostMapping(value = "/slider/verify")
-    @Operation(summary = "验证滑块位置", description = "验证滑块位置")
-    public ResponseResult<Boolean> verifySlider(String sliderId, int userX) {
-        return ResultUtil.success(userService.verifySlider(sliderId, userX));
-    }
-
-
     /**
      * 新增用户
      */
