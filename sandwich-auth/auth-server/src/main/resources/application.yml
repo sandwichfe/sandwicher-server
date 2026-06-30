@@ -57,4 +57,17 @@ security:
 oauth2:
   token-url: "http://127.0.0.1:9088/oauth2/token"
 
+# 授权码客户端白名单配置
+auth:
+  client:
+    whitelist:
+      - client-id: littleNote
+        redirect-uris:
+          - http://localhost:3000
+          - https://littlenote.yun.yiruserene.top
+      - client-id: todoApp
+        redirect-uris:
+          - http://localhost:3001
+          - https://todo.example.com
+
 

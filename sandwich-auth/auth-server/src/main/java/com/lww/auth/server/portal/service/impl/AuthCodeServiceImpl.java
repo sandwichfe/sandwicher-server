@@ -1,6 +1,7 @@
 package com.lww.auth.server.portal.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.lww.auth.server.portal.config.AuthClientProperties;
 import com.lww.auth.server.portal.service.AuthCodeService;
 import com.lww.auth.server.portal.service.UserService;
 import com.lww.auth.server.portal.vo.req.ExchangeTokenRequest;
@@ -15,8 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,7 +32,7 @@ import java.util.Objects;
 public class AuthCodeServiceImpl implements AuthCodeService {
 
     private final RedisUtil redisUtil;
-    private final UserService userService;
+    private final AuthClientProperties authClientProperties;
 
     /**
      * 授权码过期时间（秒）- 5分钟
@@ -48,20 +48,6 @@ public class AuthCodeServiceImpl implements AuthCodeService {
      * 授权码Redis前缀
      */
     private static final String AUTH_CODE_PREFIX = "auth:code:";
-
-    /**
-     * 客户端白名单配置（生产环境应从数据库或配置文件读取）
-     */
-    private static final Map<String, String[]> CLIENT_WHITELIST = new HashMap<>() {{
-        put("littleNote", new String[]{
-                "http://localhost:3000",
-                "https://note.example.com"
-        });
-        put("todoApp", new String[]{
-                "http://localhost:3001",
-                "https://todo.example.com"
-        });
-    }};
 
     @Override
     public AuthCodeResponse generateAuthCode(GenerateAuthCodeRequest request) {
@@ -158,22 +144,27 @@ public class AuthCodeServiceImpl implements AuthCodeService {
      * @param redirectUri 回调地址
      */
     private void validateClient(String clientId, String redirectUri) {
+        // 从配置中查找匹配的客户端
+        AuthClientProperties.ClientInfo clientInfo = authClientProperties.getWhitelist().stream()
+                .filter(client -> clientId.equals(client.getClientId()))
+                .findFirst()
+                .orElse(null);
+
         // 检查客户端是否存在
-        String[] allowedUris = CLIENT_WHITELIST.get(clientId);
-        if (allowedUris == null || allowedUris.length == 0) {
+        if (clientInfo == null) {
             log.warn("客户端不在白名单中: {}", clientId);
             throw new AppException("客户端未注册");
         }
 
-        // 检查回调地址是否在白名单中
-        boolean isAllowed = false;
-        for (String allowedUri : allowedUris) {
-            // 支持前缀匹配（例如 http://localhost:3000 可以匹配 http://localhost:3000/note）
-            if (redirectUri.startsWith(allowedUri)) {
-                isAllowed = true;
-                break;
-            }
+        List<String> allowedUris = clientInfo.getRedirectUris();
+        if (allowedUris == null || allowedUris.isEmpty()) {
+            log.warn("客户端没有配置允许的回调地址: {}", clientId);
+            throw new AppException("客户端未注册");
         }
+
+        // 检查回调地址是否在白名单中（支持前缀匹配）
+        boolean isAllowed = allowedUris.stream()
+                .anyMatch(redirectUri::startsWith);
 
         if (!isAllowed) {
             log.warn("回调地址不在白名单中，clientId: {}, redirectUri: {}", clientId, redirectUri);
