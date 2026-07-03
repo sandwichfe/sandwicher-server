@@ -11,22 +11,31 @@ import com.lww.littlenote.entity.Note;
 import com.lww.littlenote.entity.es.NoteEsDocument;
 import com.lww.littlenote.req.NoteQueryReq;
 import com.lww.littlenote.service.NoteEsService;
+import com.lww.littlenote.utils.NoteContentEncryptUtil;
 import com.lww.littlenote.vo.NoteVo;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 笔记 ES 搜索和索引维护实现。
+ * @author lww
+ * @since 2026-07-03
  */
+@Slf4j
 @Service
 public class NoteEsServiceImpl implements NoteEsService {
 
     private static final String NOTE_INDEX = "little_note_note";
     private static final String HIGHLIGHT_PRE_TAG = "<em>";
     private static final String HIGHLIGHT_POST_TAG = "</em>";
+
+    private static final String PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
 
     @Resource
     private ElasticsearchClient elasticsearchClient;
@@ -103,6 +112,7 @@ public class NoteEsServiceImpl implements NoteEsService {
                     .id(String.valueOf(note.getId()))
                     .document(toDocument(note)));
         } catch (Exception e) {
+            log.error("保存笔记索引失败: {}", note, e);
             throw new AppException("笔记索引保存失败");
         }
     }
@@ -133,12 +143,12 @@ public class NoteEsServiceImpl implements NoteEsService {
         NoteEsDocument document = new NoteEsDocument();
         document.setId(note.getId());
         document.setTitle(note.getTitle());
-        // 当前项目暂未提供正文解密入口；后续有解密能力时，应在这里写入解密后的明文。
-        document.setContent(note.getContent());
+        // ES 需要写入明文正文，保证关键词可以命中前端加密后的笔记内容。
+        document.setContent(NoteContentEncryptUtil.decryptContent(note.getContent()));
         document.setGroupId(note.getGroupId());
         document.setUserId(note.getUserId());
-        document.setCreateTime(note.getCreateTime());
-        document.setUpdateTime(note.getUpdateTime());
+        document.setCreateTime(note.getCreateTime().format(DateTimeFormatter.ofPattern(PATTERN_DATE_TIME)));
+        document.setUpdateTime(note.getUpdateTime().format(DateTimeFormatter.ofPattern(PATTERN_DATE_TIME)));
         return document;
     }
 
@@ -149,8 +159,8 @@ public class NoteEsServiceImpl implements NoteEsService {
         noteVo.setContent(document.getContent());
         noteVo.setGroupId(document.getGroupId());
         noteVo.setUserId(document.getUserId());
-        noteVo.setCreateTime(document.getCreateTime());
-        noteVo.setUpdateTime(document.getUpdateTime());
+        noteVo.setCreateTime(LocalDateTime.parse(document.getCreateTime(), DateTimeFormatter.ofPattern(PATTERN_DATE_TIME)));
+        noteVo.setUpdateTime(LocalDateTime.parse(document.getUpdateTime(), DateTimeFormatter.ofPattern(PATTERN_DATE_TIME)));
         return noteVo;
     }
 }

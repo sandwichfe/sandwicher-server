@@ -9,6 +9,7 @@ import com.lww.littlenote.mapper.NoteMapper;
 import com.lww.littlenote.service.NoteEsService;
 import com.lww.littlenote.service.NoteIndexTaskService;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,7 +17,10 @@ import java.util.List;
 
 /**
  * 笔记 ES 索引同步任务服务实现。
+ * @author lww
+ * @since 2026/07/03
  */
+@Slf4j
 @Service
 public class NoteIndexTaskServiceImpl extends ServiceImpl<NoteIndexTaskMapper, NoteIndexTask> implements NoteIndexTaskService {
 
@@ -71,6 +75,7 @@ public class NoteIndexTaskServiceImpl extends ServiceImpl<NoteIndexTaskMapper, N
             }
             markSuccess(task);
         } catch (Exception e) {
+            log.error("处理笔记索引同步任务失败: {}", task, e);
             markFail(task, e);
         }
     }

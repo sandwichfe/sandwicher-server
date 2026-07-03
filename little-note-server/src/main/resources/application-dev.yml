@@ -30,7 +30,11 @@ spring:
           # 资源服务器会进一步的配置，通过该地址获取公钥以解析jwt
           issuer-uri: http://127.0.0.1:9088
 
-
+  elasticsearch:
+    uris:
+      - http://yiruserene.top:9200
+    username: elastic
+    password: ENC(vEa0Hlmrz7mMmlFF8CdIE2fVihwImyW/Xpgf9tih+dxgKq2uw8YrPLpZ3JS7uVgqevdgh3emomH8aJE+2BZsjQ==)
 
 minio:
   bucket: yiru

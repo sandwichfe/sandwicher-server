@@ -20,7 +20,7 @@ public class NoteEsDocument {
 
     private Long userId;
 
-    private LocalDateTime createTime;
+    private String createTime;
 
-    private LocalDateTime updateTime;
+    private String updateTime;
 }
