@@ -36,6 +36,7 @@ public class NoteEsServiceImpl implements NoteEsService {
     private static final String HIGHLIGHT_POST_TAG = "</em>";
 
     private static final String PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
+    private static final int ES_QUERY_ALL_SIZE = 10000;
 
     @Resource
     private ElasticsearchClient elasticsearchClient;
@@ -44,7 +45,10 @@ public class NoteEsServiceImpl implements NoteEsService {
     public IPage<NoteVo> search(NoteQueryReq noteQueryReq, Long userId) {
         long pageNum = noteQueryReq.getPageNum();
         long pageSize = noteQueryReq.getPageSize();
-        int from = Math.toIntExact((pageNum - 1) * pageSize);
+        boolean queryAll = pageSize < 0;
+        // pageSize = -1 means query all; ES size cannot be negative.
+        int from = queryAll ? 0 : Math.toIntExact((Math.max(pageNum, 1) - 1) * pageSize);
+        int size = queryAll ? ES_QUERY_ALL_SIZE : Math.toIntExact(pageSize);
 
         try {
             if (!indexExists()) {
@@ -53,11 +57,17 @@ public class NoteEsServiceImpl implements NoteEsService {
             SearchResponse<NoteEsDocument> response = elasticsearchClient.search(request -> {
                 request.index(NOTE_INDEX)
                         .from(from)
-                        .size(Math.toIntExact(pageSize))
+                        .size(size)
                         .query(query -> query.bool(bool -> {
-                            bool.must(must -> must.multiMatch(multiMatch -> multiMatch
-                                    .fields("title", "content")
-                                    .query(noteQueryReq.getKeyword())));
+                            bool.must(must -> must.bool(keywordBool -> keywordBool
+                                    // 普通字段保留全文分词搜索，ngram 子字段用于补充命中 59 这类子串。
+                                    .should(should -> should.multiMatch(multiMatch -> multiMatch
+                                            .fields("title^3", "content")
+                                            .query(noteQueryReq.getKeyword())))
+                                    .should(should -> should.multiMatch(multiMatch -> multiMatch
+                                            .fields("title.ngram^1.5", "content.ngram^0.5")
+                                            .query(noteQueryReq.getKeyword())))
+                                    .minimumShouldMatch("1")));
                             bool.filter(filter -> filter.term(term -> term
                                     .field("userId")
                                     .value(userId)));
@@ -69,7 +79,8 @@ public class NoteEsServiceImpl implements NoteEsService {
                             return bool;
                         }))
                         .sort(sort -> sort.field(field -> field
-                                .field("updateTime")
+                                // updateTime is auto-mapped as text in ES, sort by keyword sub-field.
+                                .field("updateTime.keyword")
                                 .order(SortOrder.Desc)))
                         .highlight(highlight -> highlight
                                 .preTags(HIGHLIGHT_PRE_TAG)
@@ -100,6 +111,7 @@ public class NoteEsServiceImpl implements NoteEsService {
             page.setRecords(records);
             return page;
         } catch (Exception e) {
+            log.error("笔记搜索失败: {}", noteQueryReq, e);
             throw new AppException("笔记搜索失败");
         }
     }

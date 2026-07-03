@@ -1,0 +1,100 @@
+{
+  "settings": {
+    "index.max_ngram_diff": 18,
+    "analysis": {
+      "filter": {
+        "ngram_2_20": {
+          "type": "ngram",
+          "min_gram": 2,
+          "max_gram": 20
+        }
+      },
+      "analyzer": {
+        "note_ik_index": {
+          "type": "custom",
+          "char_filter": [
+            "html_strip"
+          ],
+          "tokenizer": "ik_max_word",
+          "filter": [
+            "lowercase"
+          ]
+        },
+        "note_ik_search": {
+          "type": "custom",
+          "char_filter": [
+            "html_strip"
+          ],
+          "tokenizer": "ik_smart",
+          "filter": [
+            "lowercase"
+          ]
+        },
+        "note_ik_ngram": {
+          "type": "custom",
+          "char_filter": [
+            "html_strip"
+          ],
+          "tokenizer": "ik_max_word",
+          "filter": [
+            "lowercase",
+            "ngram_2_20"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "long"
+      },
+      "title": {
+        "type": "text",
+        "analyzer": "note_ik_index",
+        "search_analyzer": "note_ik_search",
+        "fields": {
+          "ngram": {
+            "type": "text",
+            "analyzer": "note_ik_ngram",
+            "search_analyzer": "note_ik_search"
+          }
+        }
+      },
+      "content": {
+        "type": "text",
+        "analyzer": "note_ik_index",
+        "search_analyzer": "note_ik_search",
+        "fields": {
+          "ngram": {
+            "type": "text",
+            "analyzer": "note_ik_ngram",
+            "search_analyzer": "note_ik_search"
+          }
+        }
+      },
+      "groupId": {
+        "type": "long"
+      },
+      "userId": {
+        "type": "long"
+      },
+      "createTime": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "updateTime": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
