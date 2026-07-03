@@ -85,8 +85,9 @@ public class NoteEsServiceImpl implements NoteEsService {
                         .highlight(highlight -> highlight
                                 .preTags(HIGHLIGHT_PRE_TAG)
                                 .postTags(HIGHLIGHT_POST_TAG)
-                                .fields("title", field -> field)
-                                .fields("content", field -> field));
+                                // ngram 子字段命中时，也回填到原字段高亮，避免有 hit 但没有 highlight。
+                                .fields("title", field -> field.matchedFields("title", "title.ngram"))
+                                .fields("content", field -> field.matchedFields("content", "content.ngram")));
                 return request;
             }, NoteEsDocument.class);
 
