@@ -43,4 +43,16 @@ public class NoteVo implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime updateTime;
 
+    /**
+     * 标题高亮内容，仅搜索结果中可能有值。
+     */
+    @Schema(description = "标题高亮内容")
+    private String highlightTitle;
+
+    /**
+     * 正文高亮片段，仅搜索结果中可能有值。
+     */
+    @Schema(description = "正文高亮片段")
+    private String highlightContent;
+
 }

@@ -1,0 +1,156 @@
+package com.lww.littlenote.service.impl;
+
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.SortOrder;
+import co.elastic.clients.elasticsearch.core.SearchResponse;
+import co.elastic.clients.elasticsearch.core.search.Hit;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lww.common.web.exception.AppException;
+import com.lww.littlenote.entity.Note;
+import com.lww.littlenote.entity.es.NoteEsDocument;
+import com.lww.littlenote.req.NoteQueryReq;
+import com.lww.littlenote.service.NoteEsService;
+import com.lww.littlenote.vo.NoteVo;
+import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 笔记 ES 搜索和索引维护实现。
+ */
+@Service
+public class NoteEsServiceImpl implements NoteEsService {
+
+    private static final String NOTE_INDEX = "little_note_note";
+    private static final String HIGHLIGHT_PRE_TAG = "<em>";
+    private static final String HIGHLIGHT_POST_TAG = "</em>";
+
+    @Resource
+    private ElasticsearchClient elasticsearchClient;
+
+    @Override
+    public IPage<NoteVo> search(NoteQueryReq noteQueryReq, Long userId) {
+        long pageNum = noteQueryReq.getPageNum();
+        long pageSize = noteQueryReq.getPageSize();
+        int from = Math.toIntExact((pageNum - 1) * pageSize);
+
+        try {
+            if (!indexExists()) {
+                return new Page<>(pageNum, pageSize, 0);
+            }
+            SearchResponse<NoteEsDocument> response = elasticsearchClient.search(request -> {
+                request.index(NOTE_INDEX)
+                        .from(from)
+                        .size(Math.toIntExact(pageSize))
+                        .query(query -> query.bool(bool -> {
+                            bool.must(must -> must.multiMatch(multiMatch -> multiMatch
+                                    .fields("title", "content")
+                                    .query(noteQueryReq.getKeyword())));
+                            bool.filter(filter -> filter.term(term -> term
+                                    .field("userId")
+                                    .value(userId)));
+                            if (noteQueryReq.getGroupId() != null) {
+                                bool.filter(filter -> filter.term(term -> term
+                                        .field("groupId")
+                                        .value(noteQueryReq.getGroupId())));
+                            }
+                            return bool;
+                        }))
+                        .sort(sort -> sort.field(field -> field
+                                .field("updateTime")
+                                .order(SortOrder.Desc)))
+                        .highlight(highlight -> highlight
+                                .preTags(HIGHLIGHT_PRE_TAG)
+                                .postTags(HIGHLIGHT_POST_TAG)
+                                .fields("title", field -> field)
+                                .fields("content", field -> field));
+                return request;
+            }, NoteEsDocument.class);
+
+            Page<NoteVo> page = new Page<>(pageNum, pageSize, response.hits().total() == null ? 0 : response.hits().total().value());
+            List<NoteVo> records = new ArrayList<>();
+            for (Hit<NoteEsDocument> hit : response.hits().hits()) {
+                NoteEsDocument document = hit.source();
+                if (document == null) {
+                    continue;
+                }
+                NoteVo noteVo = toNoteVo(document);
+                List<String> highlightTitle = hit.highlight().get("title");
+                List<String> highlightContent = hit.highlight().get("content");
+                if (highlightTitle != null && !highlightTitle.isEmpty()) {
+                    noteVo.setHighlightTitle(highlightTitle.get(0));
+                }
+                if (highlightContent != null && !highlightContent.isEmpty()) {
+                    noteVo.setHighlightContent(highlightContent.get(0));
+                }
+                records.add(noteVo);
+            }
+            page.setRecords(records);
+            return page;
+        } catch (Exception e) {
+            throw new AppException("笔记搜索失败");
+        }
+    }
+
+    @Override
+    public void saveOrUpdateIndex(Note note) {
+        try {
+            elasticsearchClient.index(index -> index
+                    .index(NOTE_INDEX)
+                    .id(String.valueOf(note.getId()))
+                    .document(toDocument(note)));
+        } catch (Exception e) {
+            throw new AppException("笔记索引保存失败");
+        }
+    }
+
+    @Override
+    public void deleteIndex(Long noteId) {
+        try {
+            boolean exists = elasticsearchClient.exists(existsRequest -> existsRequest
+                    .index(NOTE_INDEX)
+                    .id(String.valueOf(noteId))).value();
+            if (exists) {
+                elasticsearchClient.delete(delete -> delete
+                        .index(NOTE_INDEX)
+                        .id(String.valueOf(noteId)));
+            }
+        } catch (Exception e) {
+            throw new AppException("笔记索引删除失败");
+        }
+    }
+
+    private boolean indexExists() throws Exception {
+        return elasticsearchClient.indices()
+                .exists(existsRequest -> existsRequest.index(NOTE_INDEX))
+                .value();
+    }
+
+    private NoteEsDocument toDocument(Note note) {
+        NoteEsDocument document = new NoteEsDocument();
+        document.setId(note.getId());
+        document.setTitle(note.getTitle());
+        // 当前项目暂未提供正文解密入口；后续有解密能力时，应在这里写入解密后的明文。
+        document.setContent(note.getContent());
+        document.setGroupId(note.getGroupId());
+        document.setUserId(note.getUserId());
+        document.setCreateTime(note.getCreateTime());
+        document.setUpdateTime(note.getUpdateTime());
+        return document;
+    }
+
+    private NoteVo toNoteVo(NoteEsDocument document) {
+        NoteVo noteVo = new NoteVo();
+        noteVo.setId(document.getId());
+        noteVo.setTitle(document.getTitle());
+        noteVo.setContent(document.getContent());
+        noteVo.setGroupId(document.getGroupId());
+        noteVo.setUserId(document.getUserId());
+        noteVo.setCreateTime(document.getCreateTime());
+        noteVo.setUpdateTime(document.getUpdateTime());
+        return noteVo;
+    }
+}

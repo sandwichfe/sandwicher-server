@@ -50,6 +50,12 @@
             <version>1.84</version>
         </dependency>
 
+        <!-- 笔记全文搜索和索引同步使用 Elasticsearch -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

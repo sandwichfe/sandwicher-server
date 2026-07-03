@@ -23,4 +23,10 @@ public class NoteQueryReq extends PageVo implements Serializable {
     @Schema(description = "用户ID")
     private Long userId;
 
+    /**
+     * 搜索关键词，为空时走普通数据库列表查询。
+     */
+    @Schema(description = "搜索关键词")
+    private String keyword;
+
 }
