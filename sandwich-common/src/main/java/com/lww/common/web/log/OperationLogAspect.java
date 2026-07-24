@@ -1,6 +1,6 @@
 package com.lww.common.web.log;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.lww.common.utils.ServletRequestUtil;
 import com.lww.common.web.log.entity.OperationLog;
 import com.lww.common.web.log.service.OperationLogService;

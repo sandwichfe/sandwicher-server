@@ -1,6 +1,6 @@
 package com.lww.sandwich.utils.wx;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.lww.sandwich.constant.AppConstants;
 import com.lww.sandwich.utils.AesUtil;
 import com.lww.redis.util.RedisUtil;

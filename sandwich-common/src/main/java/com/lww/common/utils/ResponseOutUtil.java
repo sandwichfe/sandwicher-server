@@ -1,6 +1,6 @@
 package com.lww.common.utils;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.lww.common.web.response.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 
