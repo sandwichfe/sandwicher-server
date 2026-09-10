@@ -20,9 +20,11 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.lww.redis.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
@@ -34,10 +36,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @since 2023/7/17 10:45
  */
 @Slf4j
-@Configuration
+@AutoConfiguration(before = RedisAutoConfiguration.class)
 @EnableCaching
 public class RedisConfig {
     @Bean(name = "redisTemplate")
+    @ConditionalOnMissingBean(name = "redisTemplate")
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         log.info("redis load success");
         ObjectMapper objectMapper = new ObjectMapper();
@@ -80,6 +83,7 @@ public class RedisConfig {
     }
 
     @Bean
+    @ConditionalOnMissingBean(RedisUtil.class)
     public RedisUtil redisUtil(RedisTemplate<String, Object> redisTemplate) {
         RedisUtil redisUtil = new RedisUtil();
         redisUtil.setRedisTemplate(redisTemplate);
