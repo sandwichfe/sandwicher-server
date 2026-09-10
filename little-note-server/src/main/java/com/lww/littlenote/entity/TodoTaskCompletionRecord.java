@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lww.common.web.entity.BaseEntity;
+import com.lww.db.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

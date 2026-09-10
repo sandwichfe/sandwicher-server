@@ -1,4 +1,4 @@
-package com.lww.common.web.entity;
+package com.lww.db.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;

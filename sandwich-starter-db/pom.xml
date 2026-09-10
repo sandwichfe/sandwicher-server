@@ -35,12 +35,6 @@
             <artifactId>mysql-connector-j</artifactId>
         </dependency>
 
-        <!-- postgresql -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
-
         <!-- HikariCP -->
         <dependency>
             <groupId>com.zaxxer</groupId>
