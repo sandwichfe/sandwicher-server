@@ -6,7 +6,7 @@ import com.lww.auth.server.portal.req.DictItemReq;
 import com.lww.auth.server.portal.service.DictItemService;
 import com.lww.auth.server.portal.vo.DictItemPageQuery;
 import com.lww.auth.server.portal.vo.DictItemVo;
-import com.lww.common.web.log.Loggable;
+import com.lww.operationlog.Loggable;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import io.swagger.v3.oas.annotations.Operation;

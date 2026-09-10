@@ -3,7 +3,7 @@ package com.lww.auth.server.portal.controller.user;
 import com.lww.auth.server.portal.config.api.ApiPortalRestController;
 import com.lww.auth.server.portal.entity.User;
 import com.lww.auth.server.portal.service.UserService;
-import com.lww.common.web.log.Loggable;
+import com.lww.operationlog.Loggable;
 import com.lww.common.web.response.ResponseCode;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;

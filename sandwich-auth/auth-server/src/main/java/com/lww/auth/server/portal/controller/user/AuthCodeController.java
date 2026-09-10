@@ -6,7 +6,7 @@ import com.lww.auth.server.portal.vo.req.ExchangeTokenRequest;
 import com.lww.auth.server.portal.vo.req.GenerateAuthCodeRequest;
 import com.lww.auth.server.portal.vo.resp.AuthCodeResponse;
 import com.lww.auth.server.portal.vo.resp.TokenResponse;
-import com.lww.common.web.log.Loggable;
+import com.lww.operationlog.Loggable;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import io.swagger.v3.oas.annotations.Operation;

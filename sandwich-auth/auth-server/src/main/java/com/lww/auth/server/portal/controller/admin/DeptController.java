@@ -6,7 +6,7 @@ import com.lww.auth.server.portal.req.DeptReq;
 import com.lww.auth.server.portal.service.DeptService;
 import com.lww.auth.server.portal.vo.DeptTreeVO;
 import com.lww.auth.server.portal.vo.DeptVo;
-import com.lww.common.web.log.Loggable;
+import com.lww.operationlog.Loggable;
 import com.lww.common.web.response.ResponseResult;
 import com.lww.common.web.response.ResultUtil;
 import com.lww.common.web.vo.PageVo;

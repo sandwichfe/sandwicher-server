@@ -1,11 +1,10 @@
-package com.lww.common.web.log.entity;
+package com.lww.operationlog.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +22,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("t_operation_log")
-@Schema(name = "OperationLog", description = "")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

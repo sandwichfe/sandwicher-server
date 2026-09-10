@@ -1,4 +1,4 @@
-package com.lww.common.web.log.controller;
+package com.lww.operationlog.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

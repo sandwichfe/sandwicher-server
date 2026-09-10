@@ -1,6 +1,6 @@
-package com.lww.common.web.log.mapper;
+package com.lww.operationlog.mapper;
 
-import com.lww.common.web.log.entity.OperationLog;
+import com.lww.operationlog.entity.OperationLog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

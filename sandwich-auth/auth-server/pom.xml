@@ -24,6 +24,13 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!-- 认证业务的数据持久化能力 -->
+        <dependency>
+            <groupId>com.lww</groupId>
+            <artifactId>sandwich-starter-db</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- 引入spring-boot-starter-security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -66,6 +73,13 @@
         <dependency>
             <groupId>com.lww</groupId>
             <artifactId>sandwich-starter-mq</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- 操作日志采集与持久化 -->
+        <dependency>
+            <groupId>com.lww</groupId>
+            <artifactId>sandwich-starter-operation-log</artifactId>
             <version>1.0.0</version>
         </dependency>
 

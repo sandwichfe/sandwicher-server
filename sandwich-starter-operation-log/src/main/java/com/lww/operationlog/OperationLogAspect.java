@@ -1,9 +1,9 @@
-package com.lww.common.web.log;
+package com.lww.operationlog;
 
 import com.alibaba.fastjson2.JSON;
 import com.lww.common.utils.ServletRequestUtil;
-import com.lww.common.web.log.entity.OperationLog;
-import com.lww.common.web.log.service.OperationLogService;
+import com.lww.operationlog.entity.OperationLog;
+import com.lww.operationlog.service.OperationLogService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,6 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -33,7 +32,6 @@ import java.time.LocalDateTime;
  */
 @Slf4j
 @Aspect
-@Component
 @RequiredArgsConstructor
 public class OperationLogAspect {
 

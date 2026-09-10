@@ -22,6 +22,13 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!-- 服务端业务的数据持久化能力 -->
+        <dependency>
+            <groupId>com.lww</groupId>
+            <artifactId>sandwich-starter-db</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!--auth-->
         <!-- <dependency> -->
         <!--     <groupId>com.lww</groupId> -->
@@ -33,6 +40,13 @@
             <groupId>com.lww</groupId>
             <artifactId>sandwich-starter-redis</artifactId>
             <version>1.0.0</version>
+        </dependency>
+
+        <!-- IP 地址归属地查询 -->
+        <dependency>
+            <groupId>net.dreamlu</groupId>
+            <artifactId>mica-ip2region</artifactId>
+            <version>3.3.2</version>
         </dependency>
 
         <!-- 获取系统信息 -->

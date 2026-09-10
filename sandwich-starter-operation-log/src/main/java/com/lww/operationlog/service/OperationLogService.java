@@ -1,6 +1,6 @@
-package com.lww.common.web.log.service;
+package com.lww.operationlog.service;
 
-import com.lww.common.web.log.entity.OperationLog;
+import com.lww.operationlog.entity.OperationLog;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

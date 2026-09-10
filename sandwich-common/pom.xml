@@ -19,13 +19,6 @@
 
     <dependencies>
 
-        <!-- db -->
-        <dependency>
-            <groupId>com.lww</groupId>
-            <artifactId>sandwich-starter-db</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
         <!-- Guava 依赖及缓存 -->
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -45,13 +38,6 @@
             <groupId>cn.idev.excel</groupId>
             <artifactId>fastexcel</artifactId>
             <version>1.3.0</version>
-        </dependency>
-
-        <!--地区ip2region库-->
-        <dependency>
-            <groupId>net.dreamlu</groupId>
-            <artifactId>mica-ip2region</artifactId>
-            <version>3.3.2</version>
         </dependency>
 
         <dependency>

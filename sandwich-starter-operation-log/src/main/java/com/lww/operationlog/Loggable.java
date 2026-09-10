@@ -1,4 +1,4 @@
-package com.lww.common.web.log;
+package com.lww.operationlog;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
