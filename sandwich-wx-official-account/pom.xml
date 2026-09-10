@@ -23,6 +23,13 @@
 
     <dependencies>
 
+        <!-- Web 业务模块通用运行能力 -->
+        <dependency>
+            <groupId>com.lww</groupId>
+            <artifactId>sandwich-core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>

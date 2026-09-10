@@ -1,7 +1,7 @@
 package com.lww.sandwich.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lww.common.dict.DictConvert;
+import com.lww.core.dict.DictConvert;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

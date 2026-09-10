@@ -23,6 +23,13 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!-- Web 业务模块通用运行能力 -->
+        <dependency>
+            <groupId>com.lww</groupId>
+            <artifactId>sandwich-core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- 笔记业务的数据持久化能力 -->
         <dependency>
             <groupId>com.lww</groupId>

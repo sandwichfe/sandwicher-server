@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lww.auth.server.portal.dict.DictCacheRefreshEvent;
 import com.lww.auth.server.portal.entity.DictItem;
 import com.lww.auth.server.portal.entity.DictType;
 import com.lww.auth.server.portal.mapper.DictItemMapper;
@@ -16,11 +17,13 @@ import com.lww.common.utils.AssertUtils;
 import com.lww.common.utils.CustomBeanUtils;
 import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> implements DictTypeService {
@@ -28,13 +31,18 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> i
     @Resource
     private DictItemMapper dictItemMapper;
 
+    @Resource
+    private ApplicationEventPublisher eventPublisher;
+
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public DictTypeVo createDictType(DictTypeReq req) {
         validateDictType(req, false);
 
         DictType dictType = new DictType();
         BeanUtils.copyProperties(req, dictType);
         this.save(dictType);
+        eventPublisher.publishEvent(new DictCacheRefreshEvent(dictType.getId(), null));
         return convertToVo(dictType);
     }
 
@@ -59,20 +67,31 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType> i
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public DictTypeVo updateDictType(DictTypeReq req) {
         validateDictType(req, true);
 
+        DictType oldDictType = this.getById(req.getId());
         DictType dictType = new DictType();
         BeanUtils.copyProperties(req, dictType);
         this.updateById(dictType);
+        String staleTypeCode = oldDictType != null
+                && !Objects.equals(oldDictType.getTypeCode(), req.getTypeCode())
+                ? oldDictType.getTypeCode()
+                : null;
+        eventPublisher.publishEvent(new DictCacheRefreshEvent(req.getId(), staleTypeCode));
         return convertToVo(this.getById(req.getId()));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteType(Long dictTypeId) {
+        DictType dictType = this.getById(dictTypeId);
         dictItemMapper.delete(new LambdaQueryWrapper<DictItem>().eq(DictItem::getDictTypeId, dictTypeId));
         this.removeById(dictTypeId);
+        if (dictType != null) {
+            eventPublisher.publishEvent(new DictCacheRefreshEvent(null, dictType.getTypeCode()));
+        }
     }
 
     /**

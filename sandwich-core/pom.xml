@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.lww</groupId>
+        <artifactId>sandwich-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>sandwich-core</artifactId>
+    <packaging>jar</packaging>
+
+    <name>sandwich-core</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.lww</groupId>
+            <artifactId>sandwich-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- 所有业务应用共享 Redis 中的字典数据 -->
+        <dependency>
+            <groupId>com.lww</groupId>
+            <artifactId>sandwich-starter-redis</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- 字段字典翻译基于 Jackson 序列化扩展 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
+        </dependency>
+    </dependencies>
+</project>

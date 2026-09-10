@@ -1,4 +1,4 @@
-package com.lww.common.dict;
+package com.lww.core.dict;
 
 /**
  * @author lww
@@ -22,8 +22,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface DictConvert {
+
+    /** 字典类型编码。 */
     String code();
 
+    /** 翻译字段名，未指定时使用原字段名加 Value 后缀。 */
     String fieldName() default "";
 }
 

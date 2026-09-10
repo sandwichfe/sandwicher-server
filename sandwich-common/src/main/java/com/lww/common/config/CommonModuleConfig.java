@@ -1,7 +1,5 @@
 package com.lww.common.config;
 
-import com.lww.common.dict.DictInitComponent;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -15,16 +13,4 @@ import org.springframework.context.annotation.Import;
 @ComponentScan("com.lww.common")
 @Import(CorsConfig.class)
 public class CommonModuleConfig {
-
-    /**
-     * 字典转化 Component
-     *
-     * @return DictInitComponent
-     * @author lww
-     */
-    @Bean
-    public DictInitComponent dicInitComponent() {
-        return new DictInitComponent();
-    }
-
 }

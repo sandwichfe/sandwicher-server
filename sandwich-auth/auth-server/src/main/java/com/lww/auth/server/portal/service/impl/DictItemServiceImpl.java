@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lww.auth.server.portal.dict.DictCacheRefreshEvent;
 import com.lww.auth.server.portal.entity.DictItem;
 import com.lww.auth.server.portal.mapper.DictItemMapper;
 import com.lww.auth.server.portal.req.DictItemReq;
@@ -12,22 +13,31 @@ import com.lww.auth.server.portal.vo.DictItemPageQuery;
 import com.lww.auth.server.portal.vo.DictItemVo;
 import com.lww.common.utils.AssertUtils;
 import com.lww.common.utils.CustomBeanUtils;
+import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> implements DictItemService {
 
+    @Resource
+    private ApplicationEventPublisher eventPublisher;
+
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public DictItemVo createDictItem(DictItemReq req) {
         validateDictItem(req, false);
 
         DictItem dictItem = new DictItem();
         BeanUtils.copyProperties(req, dictItem);
         this.save(dictItem);
+        eventPublisher.publishEvent(new DictCacheRefreshEvent(dictItem.getDictTypeId(), null));
         return convertToVo(dictItem);
     }
 
@@ -65,18 +75,29 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public DictItemVo updateDictItem(DictItemReq req) {
         validateDictItem(req, true);
 
+        DictItem oldDictItem = this.getById(req.getId());
         DictItem dictItem = new DictItem();
         BeanUtils.copyProperties(req, dictItem);
         this.updateById(dictItem);
+        if (oldDictItem != null && !Objects.equals(oldDictItem.getDictTypeId(), req.getDictTypeId())) {
+            eventPublisher.publishEvent(new DictCacheRefreshEvent(oldDictItem.getDictTypeId(), null));
+        }
+        eventPublisher.publishEvent(new DictCacheRefreshEvent(req.getDictTypeId(), null));
         return convertToVo(this.getById(req.getId()));
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteDictItem(Long id) {
+        DictItem dictItem = this.getById(id);
         this.removeById(id);
+        if (dictItem != null) {
+            eventPublisher.publishEvent(new DictCacheRefreshEvent(dictItem.getDictTypeId(), null));
+        }
     }
 
     /**
