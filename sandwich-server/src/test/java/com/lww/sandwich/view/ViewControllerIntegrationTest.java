@@ -4,8 +4,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-import com.lww.common.web.vo.PageDataVo;
-import com.lww.common.web.vo.PageVo;
+import com.lww.web.support.vo.PageDataVo;
+import com.lww.web.support.vo.PageVo;
 import com.lww.sandwich.service.ViewService;
 import com.lww.sandwich.vo.ViewVO;
 import org.junit.jupiter.api.Test;

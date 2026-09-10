@@ -1,6 +1,6 @@
 package com.lww.oss.adapter;
 
-import com.lww.common.web.exception.AppException;
+import com.lww.web.support.exception.AppException;
 import com.lww.oss.entity.FileInfo;
 import com.lww.oss.util.MinioUtil;
 import jakarta.annotation.Resource;

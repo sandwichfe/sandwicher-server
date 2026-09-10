@@ -9,8 +9,8 @@ import com.lww.auth.server.portal.mapper.RoleMapper;
 import com.lww.auth.server.portal.req.RoleReq;
 import com.lww.auth.server.portal.service.RoleService;
 import com.lww.auth.server.portal.vo.RoleVo;
-import com.lww.common.utils.CustomBeanUtils;
-import com.lww.common.web.vo.PageVo;
+import com.lww.web.support.utils.CustomBeanUtils;
+import com.lww.web.support.vo.PageVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 

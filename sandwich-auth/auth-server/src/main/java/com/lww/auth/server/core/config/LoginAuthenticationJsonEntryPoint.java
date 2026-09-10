@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import com.alibaba.fastjson2.JSON;
-import com.lww.common.web.response.ResultUtil;
+import com.lww.web.support.response.ResultUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

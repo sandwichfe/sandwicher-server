@@ -1,6 +1,6 @@
 package com.lww.auth.server.core.oauth2.handler;
 
-import com.lww.common.web.response.ResultUtil;
+import com.lww.web.support.response.ResultUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

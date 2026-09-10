@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>com.lww</groupId>
-            <artifactId>sandwich-common</artifactId>
+            <artifactId>sandwich-web-support</artifactId>
             <version>1.0.0</version>
         </dependency>
 

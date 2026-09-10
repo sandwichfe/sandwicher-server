@@ -1,7 +1,7 @@
 package com.lww.sandwich.controller;
 
-import com.lww.common.web.response.ResponseResult;
-import com.lww.common.web.response.ResultUtil;
+import com.lww.web.support.response.ResponseResult;
+import com.lww.web.support.response.ResultUtil;
 import com.lww.sandwich.entity.server.ServerInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

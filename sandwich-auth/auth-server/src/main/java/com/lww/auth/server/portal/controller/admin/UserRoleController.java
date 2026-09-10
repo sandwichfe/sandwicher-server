@@ -3,8 +3,8 @@ package com.lww.auth.server.portal.controller.admin;
 import com.lww.auth.server.portal.config.api.ApiPortalRestController;
 import com.lww.auth.server.portal.service.UserRoleService;
 import com.lww.operationlog.Loggable;
-import com.lww.common.web.response.ResponseResult;
-import com.lww.common.web.response.ResultUtil;
+import com.lww.web.support.response.ResponseResult;
+import com.lww.web.support.response.ResultUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

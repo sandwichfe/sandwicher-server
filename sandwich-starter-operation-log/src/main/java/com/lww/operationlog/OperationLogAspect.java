@@ -1,7 +1,7 @@
 package com.lww.operationlog;
 
 import com.alibaba.fastjson2.JSON;
-import com.lww.common.utils.ServletRequestUtil;
+import com.lww.web.support.utils.ServletRequestUtil;
 import com.lww.operationlog.entity.OperationLog;
 import com.lww.operationlog.service.OperationLogService;
 import jakarta.servlet.http.HttpServletRequest;

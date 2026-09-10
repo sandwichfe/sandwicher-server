@@ -8,7 +8,7 @@ import com.lww.auth.server.portal.vo.req.ExchangeTokenRequest;
 import com.lww.auth.server.portal.vo.req.GenerateAuthCodeRequest;
 import com.lww.auth.server.portal.vo.resp.AuthCodeResponse;
 import com.lww.auth.server.portal.vo.resp.TokenResponse;
-import com.lww.common.web.exception.AppException;
+import com.lww.web.support.exception.AppException;
 import com.lww.redis.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

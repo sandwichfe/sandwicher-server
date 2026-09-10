@@ -1,6 +1,6 @@
 package com.lww.auth.server.core.utils;
 
-import com.lww.common.web.exception.AppException;
+import com.lww.web.support.exception.AppException;
 import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 

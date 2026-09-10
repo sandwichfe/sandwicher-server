@@ -25,7 +25,7 @@
     <dependencies>
         <dependency>
             <groupId>com.lww</groupId>
-            <artifactId>sandwich-common</artifactId>
+            <artifactId>sandwich-web-support</artifactId>
             <version>1.0.0</version>
         </dependency>
 
@@ -35,6 +35,11 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
 
     </dependencies>

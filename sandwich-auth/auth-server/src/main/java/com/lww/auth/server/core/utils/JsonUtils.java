@@ -32,9 +32,10 @@ public class JsonUtils {
     private final static ObjectMapper MAPPER = new ObjectMapper();
 
     static {
-        // 对象的所有字段全部列入，还是其他的选项，可以忽略null等
-        MAPPER.setSerializationInclusion(JsonInclude.Include.ALWAYS);
-        // 取消默认的时间转换为timeStamp格式
+        // 对象的所有字段全部列入，还是其他的选项，可以忽略null等     取消默认的时间转换为timeStamp格式
+        MAPPER.setDefaultPropertyInclusion(
+                JsonInclude.Value.construct(JsonInclude.Include.ALWAYS, JsonInclude.Include.ALWAYS)
+        );
         MAPPER.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         // 设置Date类型的序列化及反序列化格式
         MAPPER.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));

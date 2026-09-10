@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.lww.common.web.exception.AppException;
+import com.lww.web.support.exception.AppException;
 import com.lww.littlenote.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

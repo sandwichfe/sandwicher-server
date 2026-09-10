@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.lww.db.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -20,6 +21,7 @@ import java.io.Serializable;
 @Data
 @TableName("t_user_dept")
 @Schema(name = "UserDept", description = "用户部门关联表")
+@EqualsAndHashCode(callSuper=false)
 public class UserDept extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

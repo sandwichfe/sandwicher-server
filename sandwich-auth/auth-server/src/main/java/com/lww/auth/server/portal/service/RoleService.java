@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.auth.server.portal.entity.Role;
 import com.lww.auth.server.portal.req.RoleReq;
 import com.lww.auth.server.portal.vo.RoleVo;
-import com.lww.common.web.vo.PageVo;
+import com.lww.web.support.vo.PageVo;
 
 /**
  * <p>

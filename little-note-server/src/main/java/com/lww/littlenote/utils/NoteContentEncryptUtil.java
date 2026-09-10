@@ -1,6 +1,6 @@
 package com.lww.littlenote.utils;
 
-import com.lww.common.web.exception.AppException;
+import com.lww.web.support.exception.AppException;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.Cipher;

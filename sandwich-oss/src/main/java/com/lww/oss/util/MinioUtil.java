@@ -1,6 +1,6 @@
 package com.lww.oss.util;
 
-import com.lww.common.web.exception.AppException;
+import com.lww.web.support.exception.AppException;
 import com.lww.oss.entity.FileInfo;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;

@@ -3,8 +3,8 @@ package com.lww.auth.server.core.oauth2.handler;
 import java.io.IOException;
 
 import cn.hutool.http.HttpStatus;
-import com.lww.common.web.response.ResponseResult;
-import com.lww.common.web.response.ResultUtil;
+import com.lww.web.support.response.ResponseResult;
+import com.lww.web.support.response.ResultUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

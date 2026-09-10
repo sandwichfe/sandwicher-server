@@ -1,8 +1,8 @@
 package com.lww.littlenote.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.lww.common.web.response.ResponseResult;
-import com.lww.common.web.response.ResultUtil;
+import com.lww.web.support.response.ResponseResult;
+import com.lww.web.support.response.ResultUtil;
 import com.lww.littlenote.config.api.ApiLittleNoteRestController;
 import com.lww.littlenote.req.DayViewReq;
 import com.lww.littlenote.req.MonthViewReq;

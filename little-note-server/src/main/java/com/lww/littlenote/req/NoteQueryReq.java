@@ -1,6 +1,6 @@
 package com.lww.littlenote.req;
 
-import com.lww.common.web.vo.PageVo;
+import com.lww.web.support.vo.PageVo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;

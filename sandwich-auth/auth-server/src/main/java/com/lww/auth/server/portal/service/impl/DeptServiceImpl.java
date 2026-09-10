@@ -10,7 +10,7 @@ import com.lww.auth.server.portal.req.DeptReq;
 import com.lww.auth.server.portal.service.DeptService;
 import com.lww.auth.server.portal.vo.DeptTreeVO;
 import com.lww.auth.server.portal.vo.DeptVo;
-import com.lww.common.web.vo.PageVo;
+import com.lww.web.support.vo.PageVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 

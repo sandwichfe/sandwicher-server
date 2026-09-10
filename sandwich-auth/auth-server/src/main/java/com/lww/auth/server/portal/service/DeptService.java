@@ -6,7 +6,7 @@ import com.lww.auth.server.portal.entity.Dept;
 import com.lww.auth.server.portal.req.DeptReq;
 import com.lww.auth.server.portal.vo.DeptTreeVO;
 import com.lww.auth.server.portal.vo.DeptVo;
-import com.lww.common.web.vo.PageVo;
+import com.lww.web.support.vo.PageVo;
 
 import java.util.List;
 

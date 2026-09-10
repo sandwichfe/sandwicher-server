@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lww.auth.server.portal.service.AdminOperationLogService;
 import com.lww.auth.server.portal.vo.OperationLogPageQuery;
 import com.lww.auth.server.portal.vo.OperationLogVo;
-import com.lww.common.utils.CustomBeanUtils;
+import com.lww.web.support.utils.CustomBeanUtils;
 import com.lww.operationlog.entity.OperationLog;
 import com.lww.operationlog.service.OperationLogService;
 import lombok.RequiredArgsConstructor;

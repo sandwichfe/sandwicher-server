@@ -9,7 +9,7 @@ import com.lww.auth.server.portal.req.MenuReq;
 import com.lww.auth.server.portal.service.MenuService;
 import com.lww.auth.server.portal.vo.MenuTreeVO;
 import com.lww.auth.server.portal.vo.MenuVo;
-import com.lww.common.web.vo.PageVo;
+import com.lww.web.support.vo.PageVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

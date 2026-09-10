@@ -6,7 +6,7 @@ import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lww.common.web.exception.AppException;
+import com.lww.web.support.exception.AppException;
 import com.lww.littlenote.entity.Note;
 import com.lww.littlenote.entity.es.NoteEsDocument;
 import com.lww.littlenote.req.NoteQueryReq;

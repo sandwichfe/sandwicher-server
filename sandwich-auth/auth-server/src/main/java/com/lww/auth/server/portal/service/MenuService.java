@@ -6,7 +6,7 @@ import com.lww.auth.server.portal.entity.Menu;
 import com.lww.auth.server.portal.req.MenuReq;
 import com.lww.auth.server.portal.vo.MenuTreeVO;
 import com.lww.auth.server.portal.vo.MenuVo;
-import com.lww.common.web.vo.PageVo;
+import com.lww.web.support.vo.PageVo;
 
 import java.util.List;
 

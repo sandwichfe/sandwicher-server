@@ -2,8 +2,8 @@ package com.lww.oss.controller;
 
 
 import com.lww.operationlog.Loggable;
-import com.lww.common.web.response.ResponseResult;
-import com.lww.common.web.response.ResultUtil;
+import com.lww.web.support.response.ResponseResult;
+import com.lww.web.support.response.ResultUtil;
 import com.lww.oss.service.FileOssService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

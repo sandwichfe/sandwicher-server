@@ -1,6 +1,6 @@
 package com.lww.auth.server.portal.vo;
 
-import com.lww.common.web.vo.PageVo;
+import com.lww.web.support.vo.PageVo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

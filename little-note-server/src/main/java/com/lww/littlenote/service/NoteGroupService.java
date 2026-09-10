@@ -2,7 +2,7 @@ package com.lww.littlenote.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lww.common.web.vo.PageVo;
+import com.lww.web.support.vo.PageVo;
 import com.lww.littlenote.entity.NoteGroup;
 import com.lww.littlenote.req.NoteGroupReq;
 import com.lww.littlenote.vo.NoteGroupVo;

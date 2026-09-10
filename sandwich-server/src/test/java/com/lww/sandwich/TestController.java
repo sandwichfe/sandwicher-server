@@ -2,9 +2,9 @@ package com.lww.sandwich;
 
 import java.util.Map;
 
-import com.lww.common.utils.ServletRequestUtil;
-import com.lww.common.web.response.ResponseResult;
-import com.lww.common.web.response.ResultUtil;
+import com.lww.web.support.utils.ServletRequestUtil;
+import com.lww.web.support.response.ResponseResult;
+import com.lww.web.support.response.ResultUtil;
 import com.lww.redis.util.RedisUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
