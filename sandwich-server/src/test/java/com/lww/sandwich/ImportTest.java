@@ -1,14 +1,14 @@
 package com.lww.sandwich;
 
-import cn.idev.excel.EasyExcel;
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
+import org.apache.fesod.sheet.FesodSheet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -21,7 +21,7 @@ public class ImportTest {
         System.out.println("111");
         String fileName = "C:\\Users\\sandw\\Desktop\\10000.xlsx"; // 输出文件名
         List<UserInfo> dataList = generateData();  // 生成数据
-        EasyExcel.write(fileName, UserInfo.class)
+        FesodSheet.write(fileName, UserInfo.class)
                 .sheet("Sheet1")
                 .doWrite(dataList);  // 将数据写入 Excel 文件
 

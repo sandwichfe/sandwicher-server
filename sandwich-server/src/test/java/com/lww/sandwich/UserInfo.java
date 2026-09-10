@@ -1,6 +1,6 @@
 package com.lww.sandwich;
 
-import cn.idev.excel.annotation.ExcelProperty;
+import org.apache.fesod.sheet.annotation.ExcelProperty;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor

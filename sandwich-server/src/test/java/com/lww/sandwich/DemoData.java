@@ -1,10 +1,10 @@
 package com.lww.sandwich;
 
-import cn.idev.excel.annotation.ExcelIgnore;
-import cn.idev.excel.annotation.ExcelProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.fesod.sheet.annotation.ExcelIgnore;
+import org.apache.fesod.sheet.annotation.ExcelProperty;
 
 import java.sql.Date;
 

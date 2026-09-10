@@ -85,8 +85,8 @@
         </dependency>
 
         <dependency>
-            <groupId>cn.idev.excel</groupId>
-            <artifactId>fastexcel</artifactId>
+            <groupId>org.apache.fesod</groupId>
+            <artifactId>fesod-sheet</artifactId>
         </dependency>
 
         <!-- 运行应用统一使用 Log4j2 日志实现 -->
