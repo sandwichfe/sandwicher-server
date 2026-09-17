@@ -44,7 +44,7 @@
         <commons-io.version>2.20.0</commons-io.version>
         <hutool.version>5.8.47</hutool.version>
         <fesod-sheet.version>2.0.1-incubating</fesod-sheet.version>
-        <knife4j.version>4.6.0</knife4j.version>
+        <knife4j-next.version>5.7.4</knife4j-next.version>
         <jasypt.version>3.0.5</jasypt.version>
         <bouncycastle.version>1.84</bouncycastle.version>
     </properties>
@@ -110,11 +110,11 @@
             </dependency>
 
 
-            <!-- Swagger3  knife4j  临时解决高版本问题 非官方 -->
+            <!-- Swagger3 knife4j-next 非官方 -->
             <dependency>
-                <groupId>com.github.xingfudeshi</groupId>
+                <groupId>com.baizhukui</groupId>
                 <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-                <version>${knife4j.version}</version>
+                <version>${knife4j-next.version}</version>
             </dependency>
 
             <!--Jasypt加密工具-->

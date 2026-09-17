@@ -53,7 +53,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.xingfudeshi</groupId>
+            <groupId>com.baizhukui</groupId>
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
         </dependency>
 
