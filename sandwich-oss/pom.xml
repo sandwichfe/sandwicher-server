@@ -35,7 +35,6 @@
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
-            <version>9.0.3</version>
         </dependency>
 
 
@@ -43,7 +42,6 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.12.0</version>
         </dependency>
 
         <!-- OSS 接口直接使用 StringEncryptor -->
@@ -51,9 +49,6 @@
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
         </dependency>
-
-
-
 
 
     </dependencies>
