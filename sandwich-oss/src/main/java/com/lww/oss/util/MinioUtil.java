@@ -13,6 +13,7 @@ import io.minio.PutObjectArgs;
 import io.minio.RemoveBucketArgs;
 import io.minio.RemoveObjectArgs;
 import io.minio.Result;
+import io.minio.StatObjectArgs;
 import io.minio.errors.ErrorResponseException;
 import io.minio.messages.Item;
 import io.minio.messages.ListAllMyBucketsResult.Bucket;
@@ -117,6 +118,28 @@ public class MinioUtil {
             return buckets.stream().map(Bucket::name).collect(Collectors.toList());
         } catch (Exception exception) {
             throw buildOperationException("list buckets", null, null, exception);
+        }
+    }
+
+    /**
+     * 判断对象是否已存在
+     *
+     * @author lww
+     * @since 2026-10-20
+     */
+    public boolean objectExists(String bucket, String objectName) {
+        try {
+            minioClient.statObject(StatObjectArgs.builder().bucket(bucket).object(objectName).build());
+            return true;
+        } catch (ErrorResponseException exception) {
+            String errorCode = exception.errorResponse().code();
+            // 对象不存在时 MinIO 返回 NoSuchKey
+            if ("NoSuchKey".equals(errorCode) || "NoSuchObject".equals(errorCode) || "NotFound".equals(errorCode)) {
+                return false;
+            }
+            throw buildOperationException("stat object", bucket, objectName, exception);
+        } catch (Exception exception) {
+            throw buildOperationException("stat object", bucket, objectName, exception);
         }
     }
 

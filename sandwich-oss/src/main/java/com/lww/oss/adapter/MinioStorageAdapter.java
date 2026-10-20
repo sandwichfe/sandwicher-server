@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -19,6 +21,11 @@ import java.util.List;
  * @since 2023/10/14
  */
 public class MinioStorageAdapter implements StorageAdapter {
+
+    /**
+     * 重名文件拼接的时间戳格式
+     */
+    private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
 
     @Resource
     private MinioUtil minioUtil;
@@ -42,7 +49,8 @@ public class MinioStorageAdapter implements StorageAdapter {
         minioUtil.createBucket(bucket);
 
         String fileName = resolveFileName(uploadFile);
-        String objectName = StringUtils.hasText(dir) ? dir + "/" + fileName : fileName;
+        // 生成上传路径
+        String objectName = resolveUniqueObjectName(bucket, dir, fileName);
 
         try (InputStream inputStream = uploadFile.getInputStream()) {
             minioUtil.uploadFile(
@@ -53,7 +61,7 @@ public class MinioStorageAdapter implements StorageAdapter {
                     uploadFile.getContentType()
             );
         } catch (IOException exception) {
-            throw new AppException("Upload file stream failed, fileName=" + fileName + ", reason=" + exception.getMessage());
+            throw new AppException("Upload file stream failed, objectName=" + objectName + ", reason=" + exception.getMessage());
         }
         return bucket + "/" + objectName;
     }
@@ -94,5 +102,30 @@ public class MinioStorageAdapter implements StorageAdapter {
             return originalFilename;
         }
         return uploadFile.getName();
+    }
+
+    /**
+     * 生成 objectName：若同名对象已存在，则在文件名后拼接时间戳（保留扩展名）
+     *
+     * @author lww
+     * @since 2026-10-20
+     */
+    private String resolveUniqueObjectName(String bucket, String dir, String fileName) {
+        String objectName = buildObjectName(dir, fileName);
+        // 若对象不存在，则直接返回 objectName
+        if (!minioUtil.objectExists(bucket, objectName)) {
+            return objectName;
+        }
+
+        // 重命名规则：原文件名 + "_" + 时间戳，保留扩展名
+        String timestamp = LocalDateTime.now().format(TIMESTAMP_FORMATTER);
+        int dotIndex = fileName.lastIndexOf('.');
+        String baseName = dotIndex > 0 ? fileName.substring(0, dotIndex) : fileName;
+        String extension = dotIndex > 0 ? fileName.substring(dotIndex) : "";
+        return buildObjectName(dir, baseName + "_" + timestamp + extension);
+    }
+
+    private String buildObjectName(String dir, String fileName) {
+        return StringUtils.hasText(dir) ? dir + "/" + fileName : fileName;
     }
 }
