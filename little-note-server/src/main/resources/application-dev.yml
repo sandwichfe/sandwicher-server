@@ -36,14 +36,16 @@ spring:
     username: elastic
     password: ENC(vEa0Hlmrz7mMmlFF8CdIE2fVihwImyW/Xpgf9tih+dxgKq2uw8YrPLpZ3JS7uVgqevdgh3emomH8aJE+2BZsjQ==)
 
-minio:
+# RustFS 连接信息由环境变量提供，不复用旧存储服务的地址和凭据。
+rustfs:
   bucket: yiru
   url: https://yiruserene.top:9000
-  accessKey: ENC(bmtn+/MSCKtHxddd3sh2qilFl2Fja1nhpESH0JY7TqV1VOtafxrMdWVd8xPgMQiJ5iFVZJPnFnhljZLpr2rtng==)
-  secretKey: ENC(XeBHVUAuc0AX4C5ANSOJ0LmyVb0H/hKDU6j8jbkAFzHIAW7pY2jL29RxXE18aM4huFiUXRV/HxzfNjU1lNmEZvYVRL7V1nhffyjuTyIaKhw=)
+  accessKey: ENC(lPN7pMpO+eUDe2MNBtyQtUrYrStRUOGfNDwWvVtYSXyVFEklOPyUFeEVRmlJZJlSyrRBZnmpx2ckTBVh2f11jw==)
+  secretKey: ENC(inB22nDjFBsJbsohoU7xvJQqc+ETfwPlawbEtCb9OjxPyBunmqxL50X+KLPs/7WqynXdzQMGiuDAdCWrYakkkRhqIsRtGNtG4Jc6K7mi7ag=)
+  region: ${RUSTFS_REGION:us-east-1}
 oss:
   service:
-    type: minio
+    type: rustfs
 #忽略token认证
 security:
   permit:

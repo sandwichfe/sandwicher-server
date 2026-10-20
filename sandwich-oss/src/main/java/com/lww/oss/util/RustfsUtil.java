@@ -2,26 +2,25 @@ package com.lww.oss.util;
 
 import com.lww.web.support.exception.AppException;
 import com.lww.oss.entity.FileInfo;
-import io.minio.BucketExistsArgs;
-import io.minio.GetObjectArgs;
-import io.minio.GetPresignedObjectUrlArgs;
-import io.minio.Http;
-import io.minio.ListObjectsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.RemoveBucketArgs;
-import io.minio.RemoveObjectArgs;
-import io.minio.Result;
-import io.minio.StatObjectArgs;
-import io.minio.errors.ErrorResponseException;
-import io.minio.messages.Item;
-import io.minio.messages.ListAllMyBucketsResult.Bucket;
 import jakarta.annotation.Resource;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.Bucket;
+import software.amazon.awssdk.services.s3.model.CommonPrefix;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.model.S3Object;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 
 import java.io.InputStream;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,15 +30,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * MinIO file utility.
+ * RustFS file utility，保留文件操作接口和 contentType 推断规则。
  *
  * @author lww
  * @since 2024
  */
 @Component
-public class MinioUtil {
+@ConditionalOnProperty(prefix = "oss.service", name = "type", havingValue = "rustfs")
+public class RustfsUtil {
 
-    private static final long DEFAULT_PART_SIZE = 5L * 1024 * 1024;
     private static final Map<String, String> CONTENT_TYPE_MAP;
 
     static {
@@ -75,19 +74,28 @@ public class MinioUtil {
     }
 
     @Resource
-    private MinioClient minioClient;
+    private S3Client rustfsClient;
+
+    @Resource
+    private S3Presigner rustfsPresigner;
 
     /**
      * 创建bucket桶
      */
     public void createBucket(String bucket) {
         try {
-            boolean exists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
-            if (!exists) {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
+            try {
+                rustfsClient.headBucket(request -> request.bucket(bucket));
+                return;
+            } catch (S3Exception exception) {
+                // 仅桶不存在时尝试创建，权限错误和连接异常不能当作不存在。
+                if (exception.statusCode() != 404) {
+                    throw exception;
+                }
             }
-        } catch (ErrorResponseException exception) {
-            String errorCode = exception.errorResponse().code();
+            rustfsClient.createBucket(request -> request.bucket(bucket));
+        } catch (S3Exception exception) {
+            String errorCode = getErrorCode(exception);
             if (!"BucketAlreadyOwnedByYou".equals(errorCode) && !"BucketAlreadyExists".equals(errorCode)) {
                 throw buildOperationException("create bucket", bucket, null, exception);
             }
@@ -101,40 +109,41 @@ public class MinioUtil {
      */
     public void uploadFile(InputStream inputStream, String bucket, String objectName, long objectSize, String contentType) {
         try {
-            minioClient.putObject(PutObjectArgs.builder()
+            rustfsClient.putObject(PutObjectRequest.builder()
                     .bucket(bucket)
-                    .object(objectName)
-                    .stream(inputStream, objectSize, DEFAULT_PART_SIZE)
+                    .key(objectName)
                     .contentType(resolveContentType(objectName, contentType))
-                    .build());
+                    .build(), RequestBody.fromInputStream(inputStream, objectSize));
         } catch (Exception exception) {
             throw buildOperationException("upload object", bucket, objectName, exception);
         }
     }
 
+    /**
+     * 列出当前账户可访问的全部桶。
+     */
     public List<String> getAllBucket() {
         try {
-            List<Bucket> buckets = minioClient.listBuckets();
-            return buckets.stream().map(Bucket::name).collect(Collectors.toList());
+            return rustfsClient.listBucketsPaginator().buckets().stream()
+                    .map(Bucket::name).collect(Collectors.toList());
         } catch (Exception exception) {
             throw buildOperationException("list buckets", null, null, exception);
         }
     }
 
     /**
-     * 判断对象是否已存在
+     * 判断对象是否已存在；调用前应确保桶存在，权限、连接等异常继续抛出。
      *
      * @author lww
      * @since 2026-10-20
      */
     public boolean objectExists(String bucket, String objectName) {
         try {
-            minioClient.statObject(StatObjectArgs.builder().bucket(bucket).object(objectName).build());
+            rustfsClient.headObject(request -> request.bucket(bucket).key(objectName));
             return true;
-        } catch (ErrorResponseException exception) {
-            String errorCode = exception.errorResponse().code();
-            // 对象不存在时 MinIO 返回 NoSuchKey
-            if ("NoSuchKey".equals(errorCode) || "NoSuchObject".equals(errorCode) || "NotFound".equals(errorCode)) {
+        } catch (S3Exception exception) {
+            // HEAD 请求可能仅返回 HTTP 404，对象不存在的判断统一封装。
+            if (isObjectNotFound(exception)) {
                 return false;
             }
             throw buildOperationException("stat object", bucket, objectName, exception);
@@ -144,19 +153,26 @@ public class MinioUtil {
     }
 
     /**
-     * 列出当前桶及文件
+     * 列出当前桶及文件，分页读取并通过分隔符保留原有的一级目录展示方式。
      */
     public List<FileInfo> getAllFile(String bucket) {
         try {
-            Iterable<Result<Item>> results = minioClient.listObjects(ListObjectsArgs.builder().bucket(bucket).build());
+            ListObjectsV2Request request = ListObjectsV2Request.builder().bucket(bucket).delimiter("/").build();
             List<FileInfo> fileInfoList = new ArrayList<>();
-            for (Result<Item> result : results) {
-                Item item = result.get();
-                FileInfo fileInfo = new FileInfo();
-                fileInfo.setFileName(item.objectName());
-                fileInfo.setDirectoryFlag(item.isDir());
-                fileInfo.setEtag(item.etag());
-                fileInfoList.add(fileInfo);
+            for (ListObjectsV2Response response : rustfsClient.listObjectsV2Paginator(request)) {
+                for (S3Object object : response.contents()) {
+                    FileInfo fileInfo = new FileInfo();
+                    fileInfo.setFileName(object.key());
+                    fileInfo.setDirectoryFlag(false);
+                    fileInfo.setEtag(object.eTag() == null ? null : object.eTag().replace("\"", ""));
+                    fileInfoList.add(fileInfo);
+                }
+                for (CommonPrefix prefix : response.commonPrefixes()) {
+                    FileInfo fileInfo = new FileInfo();
+                    fileInfo.setFileName(prefix.prefix());
+                    fileInfo.setDirectoryFlag(true);
+                    fileInfoList.add(fileInfo);
+                }
             }
             return fileInfoList;
         } catch (Exception exception) {
@@ -165,11 +181,11 @@ public class MinioUtil {
     }
 
     /**
-     * 下载文件
+     * 下载文件，返回的响应流由调用方关闭。
      */
     public InputStream download(String bucket, String objectName) {
         try {
-            return minioClient.getObject(GetObjectArgs.builder().bucket(bucket).object(objectName).build());
+            return rustfsClient.getObject(request -> request.bucket(bucket).key(objectName));
         } catch (Exception exception) {
             throw buildOperationException("download object", bucket, objectName, exception);
         }
@@ -180,7 +196,7 @@ public class MinioUtil {
      */
     public void deleteBucket(String bucket) {
         try {
-            minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucket).build());
+            rustfsClient.deleteBucket(request -> request.bucket(bucket));
         } catch (Exception exception) {
             throw buildOperationException("delete bucket", bucket, null, exception);
         }
@@ -191,23 +207,22 @@ public class MinioUtil {
      */
     public void deleteObject(String bucket, String objectName) {
         try {
-            minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucket).object(objectName).build());
+            rustfsClient.deleteObject(request -> request.bucket(bucket).key(objectName));
         } catch (Exception exception) {
             throw buildOperationException("delete object", bucket, objectName, exception);
         }
     }
 
     /**
-     * 获取文件url
+     * 获取文件url，使用有效期为 7 天的 GET 预签名地址访问私有对象。
      */
     public String getPreviewFileUrl(String bucketName, String objectName) {
         try {
-            GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
-                    .method(Http.Method.GET)
-                    .bucket(bucketName)
-                    .object(objectName)
+            GetObjectPresignRequest request = GetObjectPresignRequest.builder()
+                    .signatureDuration(Duration.ofDays(7))
+                    .getObjectRequest(GetObjectRequest.builder().bucket(bucketName).key(objectName).build())
                     .build();
-            return minioClient.getPresignedObjectUrl(args);
+            return rustfsPresigner.presignGetObject(request).url().toString();
         } catch (Exception exception) {
             throw buildOperationException("get preview url", bucketName, objectName, exception);
         }
@@ -241,8 +256,26 @@ public class MinioUtil {
         return "";
     }
 
+    /**
+     * 仅将 HTTP 404 视为对象不存在，明确的桶不存在错误仍保留为异常。
+     * 无错误详情的 HEAD 响应无法区分桶和对象不存在，因此调用方需先确保桶存在。
+     */
+    private static boolean isObjectNotFound(S3Exception exception) {
+        return exception.statusCode() == 404 && !"NoSuchBucket".equals(getErrorCode(exception));
+    }
+
+    /**
+     * HEAD 错误可能没有响应体，读取错误码前先判断错误详情是否存在。
+     */
+    private static String getErrorCode(S3Exception exception) {
+        return exception.awsErrorDetails() == null ? null : exception.awsErrorDetails().errorCode();
+    }
+
+    /**
+     * 将 SDK 异常转换为业务异常，并保留操作、桶及对象信息。
+     */
     private AppException buildOperationException(String operation, String bucket, String objectName, Exception exception) {
-        StringBuilder messageBuilder = new StringBuilder("MinIO ");
+        StringBuilder messageBuilder = new StringBuilder("RustFS ");
         messageBuilder.append(operation).append(" failed");
         if (StringUtils.hasText(bucket)) {
             messageBuilder.append(", bucket=").append(bucket);

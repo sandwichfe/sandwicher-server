@@ -32,14 +32,15 @@ spring:
 
 
 
-minio:
+# RustFS 连接信息由环境变量提供，不复用旧存储服务的地址和凭据。
+rustfs:
   bucket: yiru
   url: https://yiruserene.top:9000
   accessKey: ENC(ISUiHSRpdVvMnoOIpl7WkVNvBzMQx64+c+Iu3rmzP/bc8UkzoLogneZsYLmFjgZlIIO/ewSqlY/MXmij/KTVRA==)
   secretKey: ENC(Zoj228IuIos3APLqLVwx+vpCLpFMp/0KiqDpLkDvzcbfr+SeQTrHg3rwaid8dxZsxLiFJryInHNHoLxmy6Qd/kQc4jwJhR6HOkdaEQwIheg=)
 oss:
   service:
-    type: minio
+    type: rustfs
 #忽略token认证
 security:
   permit:

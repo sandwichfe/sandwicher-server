@@ -31,17 +31,10 @@
             <version>1.0.0</version>
         </dependency>
 
-        <!--minio-->
+        <!-- RustFS 兼容 S3 协议，使用 AWS SDK v2 访问 -->
         <dependency>
-            <groupId>io.minio</groupId>
-            <artifactId>minio</artifactId>
-        </dependency>
-
-
-        <!--  OkHttp 依赖  minio客户端依赖它-->
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
         </dependency>
 
         <!-- OSS 接口直接使用 StringEncryptor -->
