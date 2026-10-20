@@ -39,8 +39,8 @@ spring:
 minio:
   bucket: yiru
   url: https://yiruserene.top:9000
-  accessKey: ENC(ISUiHSRpdVvMnoOIpl7WkVNvBzMQx64+c+Iu3rmzP/bc8UkzoLogneZsYLmFjgZlIIO/ewSqlY/MXmij/KTVRA==)
-  secretKey: ENC(Zoj228IuIos3APLqLVwx+vpCLpFMp/0KiqDpLkDvzcbfr+SeQTrHg3rwaid8dxZsxLiFJryInHNHoLxmy6Qd/kQc4jwJhR6HOkdaEQwIheg=)
+  accessKey: ENC(bmtn+/MSCKtHxddd3sh2qilFl2Fja1nhpESH0JY7TqV1VOtafxrMdWVd8xPgMQiJ5iFVZJPnFnhljZLpr2rtng==)
+  secretKey: ENC(XeBHVUAuc0AX4C5ANSOJ0LmyVb0H/hKDU6j8jbkAFzHIAW7pY2jL29RxXE18aM4huFiUXRV/HxzfNjU1lNmEZvYVRL7V1nhffyjuTyIaKhw=)
 oss:
   service:
     type: minio
@@ -52,6 +52,7 @@ security:
       - /base/test
       - /test/**
       - /user/registerUser
+      - /api/oss/upload
 
 
 
