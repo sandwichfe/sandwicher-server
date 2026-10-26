@@ -10,9 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 /**
  * RustFS storage adapter，保持现有文件存储接口和上传路径规则。
@@ -23,20 +26,17 @@ import java.util.List;
 public class RustfsStorageAdapter implements StorageAdapter {
 
     /**
-     * 重名文件拼接的时间戳格式
+     * 对象 key 中的日期目录格式，按上传日期归档
      */
-    private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
+    private static final DateTimeFormatter DATE_PATH_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
     /**
-     * 原始名称重名后，最多检查 10 个候选名称，避免无限查重。
+     * 扩展名允许的最大长度，超长视为非法扩展名
      */
-    private static final int MAX_RENAME_ATTEMPTS = 10;
+    private static final int MAX_EXTENSION_LENGTH = 10;
 
     @Resource
     private RustfsUtil rustfsUtil;
-
-    @Value("${rustfs.url}")
-    private String url;
 
     /**
      * 上传未指定桶时使用的默认桶
@@ -49,15 +49,17 @@ public class RustfsStorageAdapter implements StorageAdapter {
         rustfsUtil.createBucket(bucket);
     }
 
+    /**
+     * 上传文件，返回桶内对象 key；桶信息不回传，由调用方从请求参数或配置中获取。
+     */
     @Override
     public String uploadFile(MultipartFile uploadFile, String bucket, String dir) {
-        // 先确定目标桶并确保其存在，再判断对象是否重名。
+        // 先确定目标桶并确保其存在
         String targetBucket = StringUtils.hasText(bucket) ? bucket : defaultBucket;
         rustfsUtil.createBucket(targetBucket);
 
-        String fileName = resolveFileName(uploadFile);
-        // 生成上传路径，重名处理统一由路径解析方法负责。
-        String objectName = resolveUniqueObjectName(targetBucket, dir, fileName);
+        // 生成对象 key，唯一标识保证不重名，无需上传前查重
+        String objectName = buildObjectName(dir, resolveFileName(uploadFile));
 
         try (InputStream inputStream = uploadFile.getInputStream()) {
             rustfsUtil.uploadFile(
@@ -70,7 +72,7 @@ public class RustfsStorageAdapter implements StorageAdapter {
         } catch (IOException exception) {
             throw new AppException("Upload file stream failed, objectName=" + objectName + ", reason=" + exception.getMessage());
         }
-        return targetBucket + "/" + objectName;
+        return objectName;
     }
 
     @Override
@@ -99,12 +101,23 @@ public class RustfsStorageAdapter implements StorageAdapter {
     }
 
     @Override
-    public String getUrl(String bucket, String objectName) {
-        return url + "/" + bucket + "/" + objectName;
+    public String getPresignedUrl(String bucket, String objectName, Duration duration) {
+        return rustfsUtil.getPresignedUrl(bucket, objectName, duration);
+    }
+
+    @Override
+    public FileInfo statObject(String bucket, String objectName) {
+        return rustfsUtil.statObject(bucket, objectName);
+    }
+
+    @Override
+    public boolean objectExists(String bucket, String objectName) {
+        return rustfsUtil.objectExists(bucket, objectName);
     }
 
     /**
      * 优先使用原始文件名，缺失时沿用上传字段名。
+     * 原始文件名仅用于提取扩展名，完整名称由业务侧入库保存。
      */
     private String resolveFileName(MultipartFile uploadFile) {
         String originalFilename = uploadFile.getOriginalFilename();
@@ -115,49 +128,35 @@ public class RustfsStorageAdapter implements StorageAdapter {
     }
 
     /**
-     * 生成 objectName：若同名对象已存在，则追加时间戳，候选名称仍冲突时追加序号。
-     * 重命名最多尝试 10 次，仍重名时抛出异常，不返回已存在的对象路径。
-     * 文件扩展名保持不变；本方法用于上传前查重，不保证并发上传的原子性。
+     * 生成对象 key：{业务目录}/{yyyy}/{MM}/{dd}/{唯一标识}.{扩展名}。
+     * 使用唯一标识替代原始文件名，规避中文、空格、路径分隔符等字符的编码与路径穿越问题，
+     * 同时天然避免并发上传同名覆盖，无需上传前 headObject 查重。
      *
+     * @param dir 业务目录，例如 avatar、contract；为空时按日期直接归档
      * @author lww
-     * @since 2026-10-20
-     */
-    private String resolveUniqueObjectName(String bucket, String dir, String fileName) {
-        String objectName = buildObjectName(dir, fileName);
-        // 若对象不存在，则直接返回 objectName
-        if (!rustfsUtil.objectExists(bucket, objectName)) {
-            return objectName;
-        }
-
-        // 重命名规则：原文件名 + "_" + 时间戳，保留扩展名
-        String timestamp = LocalDateTime.now().format(TIMESTAMP_FORMATTER);
-        for (int sequence = 0; sequence < MAX_RENAME_ATTEMPTS; sequence++) {
-            // 时间戳名称再次冲突时追加递增序号，并重新检查候选路径。
-            String suffix = sequence == 0 ? timestamp : timestamp + "_" + sequence;
-            objectName = buildObjectName(dir, appendFileNameSuffix(fileName, suffix));
-            if (!rustfsUtil.objectExists(bucket, objectName)) {
-                return objectName;
-            }
-        }
-        // 达到上限后终止上传，避免无限循环或使用已存在的候选路径。
-        throw new AppException("文件重命名已达到尝试上限（" + MAX_RENAME_ATTEMPTS
-                + " 次），请稍后重试，bucket=" + bucket + ", fileName=" + fileName);
-    }
-
-    /**
-     * 在文件名与扩展名之间插入后缀，无扩展名时直接追加。
-     */
-    private String appendFileNameSuffix(String fileName, String suffix) {
-        int dotIndex = fileName.lastIndexOf('.');
-        String baseName = dotIndex > 0 ? fileName.substring(0, dotIndex) : fileName;
-        String extension = dotIndex > 0 ? fileName.substring(dotIndex) : "";
-        return baseName + "_" + suffix + extension;
-    }
-
-    /**
-     * 根据目录和文件名拼接对象路径，不指定目录时直接使用文件名。
+     * @since 2026-10-26
      */
     private String buildObjectName(String dir, String fileName) {
-        return StringUtils.hasText(dir) ? dir + "/" + fileName : fileName;
+        String datePath = LocalDate.now().format(DATE_PATH_FORMATTER);
+        String uniqueName = UUID.randomUUID().toString().replace("-", "") + resolveExtension(fileName);
+        return StringUtils.hasText(dir) ? dir + "/" + datePath + "/" + uniqueName : datePath + "/" + uniqueName;
+    }
+
+    /**
+     * 提取并校验扩展名，仅保留字母数字且长度合法的扩展名，非法时返回空串。
+     *
+     * @author lww
+     * @since 2026-10-26
+     */
+    private String resolveExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex <= 0 || dotIndex >= fileName.length() - 1) {
+            return "";
+        }
+        String extension = fileName.substring(dotIndex + 1);
+        if (extension.length() > MAX_EXTENSION_LENGTH || !extension.chars().allMatch(Character::isLetterOrDigit)) {
+            return "";
+        }
+        return "." + extension.toLowerCase(Locale.ROOT);
     }
 }

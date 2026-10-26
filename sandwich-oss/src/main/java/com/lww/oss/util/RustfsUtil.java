@@ -11,6 +11,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Bucket;
 import software.amazon.awssdk.services.s3.model.CommonPrefix;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -21,6 +22,9 @@ import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignReques
 
 import java.io.InputStream;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -138,13 +142,31 @@ public class RustfsUtil {
      * @since 2026-10-20
      */
     public boolean objectExists(String bucket, String objectName) {
+        return statObject(bucket, objectName) != null;
+    }
+
+    /**
+     * 获取对象元数据，对象不存在时返回 null，权限、连接等异常继续抛出。
+     * 调用前应确保桶存在。
+     *
+     * @author lww
+     * @since 2026-10-26
+     */
+    public FileInfo statObject(String bucket, String objectName) {
         try {
-            rustfsClient.headObject(request -> request.bucket(bucket).key(objectName));
-            return true;
+            HeadObjectResponse response = rustfsClient.headObject(request -> request.bucket(bucket).key(objectName));
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.setFileName(objectName);
+            fileInfo.setDirectoryFlag(false);
+            fileInfo.setEtag(response.eTag() == null ? null : response.eTag().replace("\"", ""));
+            fileInfo.setSize(response.contentLength());
+            fileInfo.setContentType(response.contentType());
+            fileInfo.setLastModified(toLocalDateTime(response.lastModified()));
+            return fileInfo;
         } catch (S3Exception exception) {
             // HEAD 请求可能仅返回 HTTP 404，对象不存在的判断统一封装。
             if (isObjectNotFound(exception)) {
-                return false;
+                return null;
             }
             throw buildOperationException("stat object", bucket, objectName, exception);
         } catch (Exception exception) {
@@ -165,6 +187,8 @@ public class RustfsUtil {
                     fileInfo.setFileName(object.key());
                     fileInfo.setDirectoryFlag(false);
                     fileInfo.setEtag(object.eTag() == null ? null : object.eTag().replace("\"", ""));
+                    fileInfo.setSize(object.size());
+                    fileInfo.setLastModified(toLocalDateTime(object.lastModified()));
                     fileInfoList.add(fileInfo);
                 }
                 for (CommonPrefix prefix : response.commonPrefixes()) {
@@ -214,12 +238,16 @@ public class RustfsUtil {
     }
 
     /**
-     * 获取文件url，使用有效期为 7 天的 GET 预签名地址访问私有对象。
+     * 获取文件url，使用指定有效期的 GET 预签名地址访问私有对象。
+     *
+     * @param duration 地址有效期，由调用方按业务场景决定
+     * @author lww
+     * @since 2026-10-26
      */
-    public String getPreviewFileUrl(String bucketName, String objectName) {
+    public String getPresignedUrl(String bucketName, String objectName, Duration duration) {
         try {
             GetObjectPresignRequest request = GetObjectPresignRequest.builder()
-                    .signatureDuration(Duration.ofDays(7))
+                    .signatureDuration(duration)
                     .getObjectRequest(GetObjectRequest.builder().bucket(bucketName).key(objectName).build())
                     .build();
             return rustfsPresigner.presignGetObject(request).url().toString();
@@ -254,6 +282,16 @@ public class RustfsUtil {
             return filePath.substring(dotIndex + 1);
         }
         return "";
+    }
+
+    /**
+     * SDK 返回的时间为 UTC 瞬时时间，统一转换为服务器时区的 LocalDateTime。
+     *
+     * @author lww
+     * @since 2026-10-26
+     */
+    private static LocalDateTime toLocalDateTime(Instant instant) {
+        return instant == null ? null : LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
     }
 
     /**

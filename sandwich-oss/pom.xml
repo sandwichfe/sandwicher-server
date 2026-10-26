@@ -24,23 +24,15 @@
             <version>1.0.0</version>
         </dependency>
 
-        <!-- OSS 接口使用操作日志注解，由日志 starter 统一处理 -->
-        <dependency>
-            <groupId>com.lww</groupId>
-            <artifactId>sandwich-starter-operation-log</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
         <!-- RustFS 兼容 S3 协议，使用 AWS SDK v2 访问 -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>s3</artifactId>
         </dependency>
 
-        <!-- OSS 接口直接使用 StringEncryptor -->
         <dependency>
-            <groupId>com.github.ulisesbocchio</groupId>
-            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
 
 

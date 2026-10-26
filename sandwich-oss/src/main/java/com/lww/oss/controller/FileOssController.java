@@ -1,21 +1,15 @@
 package com.lww.oss.controller;
 
 
-import com.lww.operationlog.Loggable;
 import com.lww.web.support.response.ResponseResult;
 import com.lww.web.support.response.ResultUtil;
 import com.lww.oss.service.FileOssService;
 import jakarta.annotation.Resource;
-import lombok.extern.slf4j.Slf4j;
-import org.jasypt.encryption.StringEncryptor;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 /**
  * 文件操作controller
@@ -23,7 +17,6 @@ import java.util.List;
  * @author: lww
  * @since: 2023/10/14
  */
-@Slf4j
 @RestController
 @RequestMapping("/api/oss")
 public class FileOssController {
@@ -31,30 +24,15 @@ public class FileOssController {
     @Resource
     private FileOssService fileService;
 
-    @Resource
-    private StringEncryptor stringEncryptor;
-
-    @Loggable(module = "oss", type = "CREATE", description = "testGetAllBuckets")
-    @GetMapping("/list-oss")
-    public ResponseResult<List<String>> testGetAllBuckets() {
-        List<String> allBucket = fileService.getAllBucket();
-        return ResultUtil.success(allBucket);
-    }
-
-    @Loggable(module = "oss", type = "CREATE", description = "getUrl")
-    @GetMapping("/getUrl")
-    public ResponseResult<String> getUrl(String bucketName, String objectName) {
-        return ResultUtil.success(fileService.getUrl(bucketName, objectName));
-    }
-
     /**
-     * 上传文件
+     * 上传文件，返回桶内对象 key（不含桶名），业务侧需自行入库保存
+     *
+     * @param dir 业务目录，例如 avatar、contract；为空时按日期归档
      */
     @PostMapping("/upload")
-    public ResponseResult<String> upload(@RequestPart("uploadFile") MultipartFile uploadFile, String bucket, String objectName) {
-        String url = fileService.uploadFile(uploadFile, bucket, objectName);
-        return ResultUtil.success(url);
+    public ResponseResult<String> upload(@RequestPart("uploadFile") MultipartFile uploadFile, String bucket, String dir) {
+        String objectKey = fileService.uploadFile(uploadFile, bucket, dir);
+        return ResultUtil.success(objectKey);
     }
 
 }
-
