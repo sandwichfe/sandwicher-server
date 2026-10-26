@@ -49,8 +49,14 @@ public class RustfsStorageAdapter implements StorageAdapter {
         rustfsUtil.createBucket(bucket);
     }
 
+    @Override
+    public String getDefaultBucket() {
+        return defaultBucket;
+    }
+
     /**
-     * 上传文件，返回桶内对象 key；桶信息不回传，由调用方从请求参数或配置中获取。
+     * 上传文件，返回桶内对象 key，例如 2026/10/26/xxx.png；不含桶名、域名和前导斜杠。
+     * 桶名由调用方从请求参数或配置中获取，访问地址由调用方按「前缀 + key」拼装，不要把地址入库。
      */
     @Override
     public String uploadFile(MultipartFile uploadFile, String bucket, String dir) {
@@ -58,8 +64,8 @@ public class RustfsStorageAdapter implements StorageAdapter {
         String targetBucket = StringUtils.hasText(bucket) ? bucket : defaultBucket;
         rustfsUtil.createBucket(targetBucket);
 
-        // 生成对象 key，唯一标识保证不重名，无需上传前查重
-        String objectName = buildObjectName(dir, resolveFileName(uploadFile));
+        // 生成对象 key，唯一标识保证不重名，无需上传前查重；dir 先归一化，避免桶名混进 key
+        String objectName = buildObjectName(normalizeDir(dir, targetBucket), resolveFileName(uploadFile));
 
         try (InputStream inputStream = uploadFile.getInputStream()) {
             rustfsUtil.uploadFile(
@@ -72,6 +78,7 @@ public class RustfsStorageAdapter implements StorageAdapter {
         } catch (IOException exception) {
             throw new AppException("Upload file stream failed, objectName=" + objectName + ", reason=" + exception.getMessage());
         }
+        // 返回裸 key：前导 / 是 URL 语义，不属于对象 key
         return objectName;
     }
 
@@ -87,7 +94,7 @@ public class RustfsStorageAdapter implements StorageAdapter {
 
     @Override
     public InputStream download(String bucket, String objectName) {
-        return rustfsUtil.download(bucket, objectName);
+        return rustfsUtil.download(bucket, stripLeadingSlash(objectName));
     }
 
     @Override
@@ -97,22 +104,40 @@ public class RustfsStorageAdapter implements StorageAdapter {
 
     @Override
     public void deleteObject(String bucket, String objectName) {
-        rustfsUtil.deleteObject(bucket, objectName);
+        rustfsUtil.deleteObject(bucket, stripLeadingSlash(objectName));
     }
 
+    /**
+     * 获取预签名地址，未指定桶时与上传保持一致，回落到默认桶。
+     */
     @Override
     public String getPresignedUrl(String bucket, String objectName, Duration duration) {
-        return rustfsUtil.getPresignedUrl(bucket, objectName, duration);
+        String targetBucket = StringUtils.hasText(bucket) ? bucket : defaultBucket;
+        return rustfsUtil.getPresignedUrl(targetBucket, stripLeadingSlash(objectName), duration);
     }
 
     @Override
     public FileInfo statObject(String bucket, String objectName) {
-        return rustfsUtil.statObject(bucket, objectName);
+        return rustfsUtil.statObject(bucket, stripLeadingSlash(objectName));
     }
 
     @Override
     public boolean objectExists(String bucket, String objectName) {
-        return rustfsUtil.objectExists(bucket, objectName);
+        return rustfsUtil.objectExists(bucket, stripLeadingSlash(objectName));
+    }
+
+    /**
+     * 对外统一使用带前导 / 的 key，调用存储 SDK 前去掉，避免出现 //2026/... 这样的双斜杠路径。
+     */
+    private String stripLeadingSlash(String objectName) {
+        if (!StringUtils.hasText(objectName)) {
+            return objectName;
+        }
+        String normalized = objectName.trim();
+        while (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+        return normalized;
     }
 
     /**
@@ -125,6 +150,39 @@ public class RustfsStorageAdapter implements StorageAdapter {
             return originalFilename;
         }
         return uploadFile.getName();
+    }
+
+    /**
+     * 业务目录归一化：去掉首尾斜杠；若调用方误把桶名当成业务目录传入（例如 dir=yiru），直接剥掉，
+     * 保证返回的对象 key 只包含桶内路径，调用方拼访问地址时不会出现 /桶名/桶名/...。
+     *
+     * @param dir    业务目录，例如 avatar、contract
+     * @param bucket 目标桶名
+     * @author lww
+     * @since 2026-10-26
+     */
+    private String normalizeDir(String dir, String bucket) {
+        if (!StringUtils.hasText(dir)) {
+            return dir;
+        }
+        String normalized = dir.trim();
+        while (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+        while (normalized.endsWith("/")) {
+            normalized = normalized.substring(0, normalized.length() - 1);
+        }
+        if (normalized.contains("..")) {
+            throw new AppException("业务目录不合法：" + dir);
+        }
+        if (!StringUtils.hasText(bucket)) {
+            return normalized;
+        }
+        if (normalized.equals(bucket)) {
+            return "";
+        }
+        String bucketPrefix = bucket + "/";
+        return normalized.startsWith(bucketPrefix) ? normalized.substring(bucketPrefix.length()) : normalized;
     }
 
     /**

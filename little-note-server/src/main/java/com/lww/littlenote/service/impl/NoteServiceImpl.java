@@ -1,14 +1,10 @@
 package com.lww.littlenote.service.impl;
 
-import java.time.LocalDateTime;
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lww.auth.resources_server.utils.SecurityUserUtils;
-import com.lww.web.support.utils.CustomBeanUtils;
-import com.lww.web.support.exception.AppException;
 import com.lww.littlenote.entity.Note;
 import com.lww.littlenote.mapper.NoteMapper;
 import com.lww.littlenote.req.NoteQueryReq;
@@ -17,14 +13,16 @@ import com.lww.littlenote.service.NoteEsService;
 import com.lww.littlenote.service.NoteIndexTaskService;
 import com.lww.littlenote.service.NoteService;
 import com.lww.littlenote.vo.NoteVo;
+import com.lww.web.support.exception.AppException;
+import com.lww.web.support.utils.CustomBeanUtils;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import static com.lww.littlenote.service.NoteIndexTaskService.ACTION_CREATE;
-import static com.lww.littlenote.service.NoteIndexTaskService.ACTION_DELETE;
-import static com.lww.littlenote.service.NoteIndexTaskService.ACTION_UPDATE;
+import java.time.LocalDateTime;
+
+import static com.lww.littlenote.service.NoteIndexTaskService.*;
 
 /**
  * <p>
