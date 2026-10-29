@@ -54,8 +54,8 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
         }
 
         LambdaQueryWrapper<Note> wrapper = new LambdaQueryWrapper<>();
-        wrapper
-                .select(Note::getId, Note::getTitle, Note::getCreateTime, Note::getUpdateTime, Note::getGroupId, Note::getUserId)
+        wrapper.select(Note::getId, Note::getTitle, Note::getContent, Note::getCreateTime, Note::getUpdateTime,
+                        Note::getGroupId, Note::getUserId)
                 .eq(noteQueryReq.getGroupId() != null, Note::getGroupId, noteQueryReq.getGroupId())
                 .eq(Note::getUserId, userId)
                 .orderByDesc(Note::getUpdateTime);
