@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lww.littlenote.entity.Note;
 import com.lww.littlenote.req.NoteQueryReq;
 import com.lww.littlenote.req.NoteReq;
+import com.lww.littlenote.vo.NoteCountVo;
 import com.lww.littlenote.vo.NoteVo;
 
 /**
@@ -24,6 +25,13 @@ public interface NoteService extends IService<Note> {
      * @return Page
      */
     IPage<NoteVo> listNote(NoteQueryReq pageVo);
+
+    /**
+     * 统计当前用户笔记总数量以及各分组下的笔记数量
+     *
+     * @return 总数量与各分组数量
+     */
+    NoteCountVo countNoteByGroup();
 
     /**
      * 获取笔记详情

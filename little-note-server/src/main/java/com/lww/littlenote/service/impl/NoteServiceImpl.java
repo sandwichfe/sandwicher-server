@@ -13,6 +13,7 @@ import com.lww.littlenote.service.NoteEsService;
 import com.lww.littlenote.service.NoteIndexTaskService;
 import com.lww.littlenote.service.NoteService;
 import com.lww.littlenote.utils.NoteContentEncryptUtil;
+import com.lww.littlenote.vo.NoteCountVo;
 import com.lww.littlenote.vo.NoteVo;
 import com.lww.web.support.exception.AppException;
 import com.lww.web.support.utils.CustomBeanUtils;
@@ -74,6 +75,17 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
             noteVo.setContent(null);
             return noteVo;
         });
+    }
+
+    @Override
+    public NoteCountVo countNoteByGroup() {
+        Long userId = SecurityUserUtils.getUserId();
+        NoteCountVo noteCountVo = new NoteCountVo();
+        // 总数取当前用户全部笔记，包含未分组笔记
+        noteCountVo.setTotalCount(this.count(new LambdaQueryWrapper<Note>().eq(Note::getUserId, userId)));
+        // 分组数量由一次分组查询得出，避免逐个分组查库
+        noteCountVo.setGroupCounts(noteMapper.countGroupNote(userId));
+        return noteCountVo;
     }
 
     @Override

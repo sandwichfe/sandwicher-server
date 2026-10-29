@@ -7,6 +7,7 @@ import com.lww.littlenote.config.api.ApiLittleNoteRestController;
 import com.lww.littlenote.req.NoteQueryReq;
 import com.lww.littlenote.req.NoteReq;
 import com.lww.littlenote.service.NoteService;
+import com.lww.littlenote.vo.NoteCountVo;
 import com.lww.littlenote.vo.NoteVo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
@@ -28,6 +29,14 @@ public class NoteController {
     @PostMapping("/listNote")
     public ResponseResult<IPage<NoteVo>> listNote(@Valid NoteQueryReq noteQueryReq) {
         return ResultUtil.success(noteService.listNote(noteQueryReq));
+    }
+
+    /**
+     * 统计笔记总数量以及各分组下的笔记数量
+     */
+    @GetMapping("/countNoteByGroup")
+    public ResponseResult<NoteCountVo> countNoteByGroup() {
+        return ResultUtil.success(noteService.countNoteByGroup());
     }
 
     @GetMapping("/getNote")
