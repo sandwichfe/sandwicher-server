@@ -54,4 +54,11 @@ public interface NoteService extends IService<Note> {
      * @param id 笔记请求参数
      */
     void deleteNote(Long id);
+
+    /**
+     * 一次性数据迁移：把历史加密存储的笔记正文解密后回写数据库，并触发 ES 索引刷新。
+     *
+     * @return 成功解密的笔记数量
+     */
+    int decryptAllNoteContent();
 }

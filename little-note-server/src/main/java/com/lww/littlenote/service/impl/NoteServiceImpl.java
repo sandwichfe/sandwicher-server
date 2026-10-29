@@ -12,10 +12,12 @@ import com.lww.littlenote.req.NoteReq;
 import com.lww.littlenote.service.NoteEsService;
 import com.lww.littlenote.service.NoteIndexTaskService;
 import com.lww.littlenote.service.NoteService;
+import com.lww.littlenote.utils.NoteContentEncryptUtil;
 import com.lww.littlenote.vo.NoteVo;
 import com.lww.web.support.exception.AppException;
 import com.lww.web.support.utils.CustomBeanUtils;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -32,8 +34,14 @@ import static com.lww.littlenote.service.NoteIndexTaskService.*;
  * @author lww
  * @since 2024-06-13
  */
+@Slf4j
 @Service
 public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements NoteService {
+
+    /**
+     * 正文解密迁移的分页大小，避免一次性把全部笔记加载进内存。
+     */
+    private static final int DECRYPT_PAGE_SIZE = 500;
 
     @Resource
     private NoteMapper noteMapper;
@@ -107,6 +115,56 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
         }
         // 删除动作同样异步处理，ES 文档不存在时后台任务会按成功处理。
         noteIndexTaskService.createTask(id, ACTION_DELETE);
+    }
+
+    @Override
+    public int decryptAllNoteContent() {
+        int pageNum = 1;
+        int successCount = 0;
+        while (true) {
+            // 走投影查询只取必要字段，且不查总数，减少迁移时的数据库压力。
+            Page<Note> notePage = noteMapper.selectPage(new Page<>(pageNum, DECRYPT_PAGE_SIZE, false),
+                    new LambdaQueryWrapper<Note>().select(Note::getId, Note::getContent));
+            if (notePage.getRecords().isEmpty()) {
+                break;
+            }
+            for (Note note : notePage.getRecords()) {
+                if (decryptAndUpdateContent(note)) {
+                    successCount++;
+                }
+            }
+            pageNum++;
+        }
+        log.info("笔记正文解密迁移完成，成功解密 {} 条", successCount);
+        return successCount;
+    }
+
+    /**
+     * 解密单条笔记正文并回写数据库，同时投递 ES 索引刷新任务。
+     *
+     * @return 是否发生了实际的解密更新
+     */
+    private boolean decryptAndUpdateContent(Note note) {
+        String plainContent;
+        try {
+            plainContent = NoteContentEncryptUtil.decryptContent(note.getContent());
+        } catch (Exception e) {
+            // 已是明文的笔记解密会失败，属于正常情况；脏数据同理跳过，不影响其余记录。
+            log.debug("笔记 {} 正文无需解密，跳过", note.getId());
+            return false;
+        }
+        if (!StringUtils.hasText(plainContent) || plainContent.equals(note.getContent())) {
+            return false;
+        }
+        // 只更新正文，避免把其他字段覆盖成空值。
+        Note updateNote = new Note();
+        updateNote.setId(note.getId());
+        updateNote.setContent(plainContent);
+        noteMapper.updateById(updateNote);
+        updateNote.setUpdateTime(note.getUpdateTime());
+        // 复用 outbox 任务，由定时任务重新读取数据库最新正文刷新 ES 索引。
+        noteIndexTaskService.createTask(note.getId(), ACTION_UPDATE);
+        return true;
     }
 
     private Note getCurrentUserNote(Long id) {

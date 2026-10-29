@@ -53,4 +53,13 @@ public class NoteController {
         return ResultUtil.success();
     }
 
+    /**
+     * 一次性数据迁移：历史加密存储的笔记正文解密后回写，并刷新 ES 索引。
+     * 迁移完成后可删除该接口。
+     */
+    @PostMapping("/decryptAllContent")
+    public ResponseResult<Integer> decryptAllContent() {
+        return ResultUtil.success(noteService.decryptAllNoteContent());
+    }
+
 }
