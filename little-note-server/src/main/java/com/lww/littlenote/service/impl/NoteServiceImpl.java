@@ -67,7 +67,13 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements No
                 .orderByDesc(Note::getUpdateTime);
 
         Page<Note> notePage = noteMapper.selectPage(new Page<>(noteQueryReq.getPageNum(), noteQueryReq.getPageSize()), wrapper);
-        return notePage.convert(note -> CustomBeanUtils.copyProperties(note, NoteVo.class));
+        return notePage.convert(note -> {
+            NoteVo noteVo = CustomBeanUtils.copyProperties(note, NoteVo.class);
+            // 列表只返回正文摘要，正文本身不下发，避免大字段随分页结果传输。
+            noteVo.setSummary(NoteVo.summaryOf(note.getContent()));
+            noteVo.setContent(null);
+            return noteVo;
+        });
     }
 
     @Override

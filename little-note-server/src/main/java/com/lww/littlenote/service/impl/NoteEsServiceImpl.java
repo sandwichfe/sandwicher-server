@@ -168,7 +168,8 @@ public class NoteEsServiceImpl implements NoteEsService {
         NoteVo noteVo = new NoteVo();
         noteVo.setId(document.getId());
         noteVo.setTitle(document.getTitle());
-        noteVo.setContent(document.getContent());
+        // 与数据库列表保持一致：只返回正文摘要，不下发完整正文。
+        noteVo.setSummary(NoteVo.summaryOf(document.getContent()));
         noteVo.setGroupId(document.getGroupId());
         noteVo.setUserId(document.getUserId());
         noteVo.setCreateTime(LocalDateTime.parse(document.getCreateTime(), DateTimeFormatter.ofPattern(PATTERN_DATE_TIME)));
