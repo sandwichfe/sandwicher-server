@@ -11,7 +11,6 @@ import com.lww.littlenote.entity.Note;
 import com.lww.littlenote.entity.es.NoteEsDocument;
 import com.lww.littlenote.req.NoteQueryReq;
 import com.lww.littlenote.service.NoteEsService;
-import com.lww.littlenote.utils.NoteContentEncryptUtil;
 import com.lww.littlenote.vo.NoteVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -156,8 +155,8 @@ public class NoteEsServiceImpl implements NoteEsService {
         NoteEsDocument document = new NoteEsDocument();
         document.setId(note.getId());
         document.setTitle(note.getTitle());
-        // ES 需要写入明文正文，保证关键词可以命中前端加密后的笔记内容。
-        document.setContent(NoteContentEncryptUtil.decryptContent(note.getContent()));
+        // 正文已按明文存储，直接写入 ES 供全文检索和关键词高亮使用。
+        document.setContent(note.getContent());
         document.setGroupId(note.getGroupId());
         document.setUserId(note.getUserId());
         document.setCreateTime(note.getCreateTime().format(DateTimeFormatter.ofPattern(PATTERN_DATE_TIME)));
