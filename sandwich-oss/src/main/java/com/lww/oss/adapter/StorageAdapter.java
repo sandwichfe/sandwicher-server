@@ -18,10 +18,15 @@ public interface StorageAdapter {
     void createBucket(String bucket);
 
     /**
+     * 获取未指定桶时使用的默认桶，业务侧拼接或校验对象路径时使用
+     */
+    String getDefaultBucket();
+
+    /**
      * 上传文件
      *
      * @param dir 业务目录，例如 avatar、contract；为空时按日期直接归档
-     * @return 桶内对象 key（不含桶名），由业务侧入库保存，不要存完整访问地址
+     * @return 桶内对象 key（不含桶名、域名和前导斜杠），例如 2026/10/26/xxx.png，由业务侧入库保存，不要存访问地址
      */
     String uploadFile(MultipartFile uploadFile, String bucket, String dir);
 

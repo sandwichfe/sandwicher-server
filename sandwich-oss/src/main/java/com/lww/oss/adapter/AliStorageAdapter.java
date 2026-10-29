@@ -21,6 +21,11 @@ public class AliStorageAdapter implements StorageAdapter {
     }
 
     @Override
+    public String getDefaultBucket() {
+        return "aliyun";
+    }
+
+    @Override
     public String uploadFile(MultipartFile uploadFile, String bucket, String dir) {
         return null;
     }
